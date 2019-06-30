@@ -42,34 +42,6 @@ export default {
   mutations: {
     setHideMenu (state, menuAccess) {
       setHideMenuByRule(routers, menuAccess)
-
-      // routers[2].children[0].meta.hideInMenu = (menuAccess.findIndex((val) => { return val === 'bms_employeemng_infoimport_empsync' }) === -1) // "员工信息同步"
-      // routers[2].children[1].children[0].meta.hideInMenu = (menuAccess.findIndex((val) => { return val === 'bms_employeemng_infoimport_annualincome' }) === -1) // "本行的年收入"
-      // routers[2].children[1].children[1].meta.hideInMenu = (menuAccess.findIndex((val) => { return val === 'bms_employeemng_infoimport_outlinepoint' }) === -1) // "违规积分信息"
-      // routers[2].children[1].children[2].meta.hideInMenu = (menuAccess.findIndex((val) => { return val === 'bms_employeemng_infoimport_weightyoutline' }) === -1) // "严重违规信息"
-      // routers[2].children[1].children[3].meta.hideInMenu = (menuAccess.findIndex((val) => { return val === 'bms_employeemng_infoimport_bussinfo' }) === -1) // "经商信息"
-      // routers[2].children[1].children[4].meta.hideInMenu = (menuAccess.findIndex((val) => { return val === 'bms_employeemng_infoimport_suspectlawsuit' }) === -1) // "涉诉信息"
-      // routers[2].children[1].children[5].meta.hideInMenu = (menuAccess.findIndex((val) => { return val === 'bms_employeemng_infoimport_homevisit' }) === -1) // "家访信息"
-      // routers[2].children[1].children[6].meta.hideInMenu = (menuAccess.findIndex((val) => { return val === 'bms_employeemng_infoimport_economicpunish' }) === -1) // "经济处罚"
-
-      // routers[2].children[2].meta.hideInMenu = (menuAccess.findIndex((val) => { return val === 'bms_employeemng_credconfirm' }) === -1) // "征信信息确认"
-      // routers[2].children[3].meta.hideInMenu = (menuAccess.findIndex((val) => { return val === 'bms_employeemng_infoquery' }) === -1) // "员工信息查询"
-      // routers[2].children[4].meta.hideInMenu = (menuAccess.findIndex((val) => { return val === 'bms_employeemng_focusadjust' }) === -1) // "调整关注类别"
-
-      // routers[3].children[0].meta.hideInMenu = (menuAccess.findIndex((val) => { return val === 'bms_myinfo_personalfill' }) === -1) // "个人信息填报"
-      // routers[3].children[1].meta.hideInMenu = (menuAccess.findIndex((val) => { return val === 'bms_myinfo_personalquery' }) === -1) // "个人信息查询"
-
-      // routers[4].children[0].meta.hideInMenu = (menuAccess.findIndex((val) => { return val === 'bms_statquery_risklevel' }) === -1) // "风险级别统计"
-      // routers[4].children[1].meta.hideInMenu = (menuAccess.findIndex((val) => { return val === 'bms_statquery_toauditcred' }) === -1) // "待审核征信统计"
-      // routers[4].children[2].meta.hideInMenu = (menuAccess.findIndex((val) => { return val === 'bms_statquery_focusperson' }) === -1) // "关注人员情况统计"
-
-      // // 设置父级菜单是否隐藏
-      // routers[2].children[1].meta.hideInMenu = (routers[2].children[1].children.findIndex((val) => { return val.meta.hideInMenu === false }) === -1)
-      // routers[2].meta.hideInMenu = (routers[2].children.findIndex((val) => { return val.meta.hideInMenu === false }) === -1)
-
-      // routers[3].meta.hideInMenu = (routers[3].children.findIndex((val) => { return val.meta.hideInMenu === false }) === -1)
-
-      // routers[4].meta.hideInMenu = (routers[4].children.findIndex((val) => { return val.meta.hideInMenu === false }) === -1)
     },
     setBreadCrumb (state, route) {
       state.breadCrumbList = getBreadCrumbList(route, state.homeRoute)
