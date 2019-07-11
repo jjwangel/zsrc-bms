@@ -38,6 +38,8 @@ export default {
             duration: 5
           })
           callback(new Error(''))
+        } else {
+          callback()
         }
       } else {
         if (value.length > 100) {

@@ -174,7 +174,7 @@ export default {
       this.detail_search = true
 
       this.date_value = getStartToLastDate('year')
-      if (charVal) {
+      if (typeof (charVal) === 'object') {
         this.current_deptCode = charVal.data.deptCode
         this.current_focusType = charVal.data.focusType
       }

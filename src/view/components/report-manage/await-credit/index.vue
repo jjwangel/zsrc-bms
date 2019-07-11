@@ -102,7 +102,7 @@ export default {
       if (this.searching_detail) return
       this.searching_detail = true
 
-      if (row) {
+      if (typeof (row) === 'object') {
         this.current_deptCode = row.deptCode
       }
       const condition = {
