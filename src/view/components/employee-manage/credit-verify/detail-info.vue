@@ -46,6 +46,7 @@
           :on-success="handleUploadSuccess"
           :show-upload-list="false"
           :before-upload="handleBefUpload"
+          :on-error="handleUploadErr"
           :format="['rar','zip','pdf']">
           <Button type="primary" icon="md-cloud-upload" :disabled="this.dataSaving">审核通过并上传征信报告</Button>
         </Upload>
@@ -58,6 +59,7 @@
 <script>
 import { col_debt, col_badrec, col_assu, col_force, col_file } from './common.js'
 import { getEmpCreditDetailInfo, getCreditFile } from '@/api/emp-manage/credit-verify'
+import { setToken } from '@/libs/util'
 import config from '@/config'
 export default {
   props: [
@@ -172,11 +174,29 @@ export default {
         })
       } else {
         this.dataSaving = false
-        this.$Message.error({
-          content: `征信报告审核失败：${data.message}(${data.code})`,
-          duration: 3
-        })
+        if (res.code === '003101') {
+          this.$Message.warning({
+            content: '登录超时，请重新登录',
+            duration: 5
+          })
+          setToken('')
+          this.$router.push({
+            name: 'login'
+          })
+        } else {
+          this.$Message.error({
+            content: `上传征信报告失败：${res.message}(${res.code})`,
+            duration: 3
+          })
+        }
       }
+    },
+    handleUploadErr (err) {
+      console.log(err)
+      this.$Message.error({
+        content: '上传征信报告失败！',
+        duration: 3
+      })
     }
   },
 

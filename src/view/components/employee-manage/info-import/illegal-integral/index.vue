@@ -38,6 +38,7 @@
         :show-upload-list="false"
         :on-progress="handleFileProgress"
         :before-upload="handleBefUpload"
+        :on-error="handleUploadErr"
         :format="['xlsx','xls']">
       </Upload>
 
@@ -59,6 +60,7 @@
 import { mapGetters } from 'vuex'
 import { getMainImportList } from '@/api/emp-manage/emp-import'
 import { getStartToLastDate, getFormatDate } from '@/libs/j-tools.js'
+import { setToken } from '@/libs/util'
 import { col_ii } from './common.js'
 import config from '@/config'
 export default {
@@ -154,14 +156,32 @@ export default {
           duration: 3
         })
       } else {
-        this.$Message.error({
-          content: `上传文件失败：${data.message}(${data.code})`,
-          duration: 3
-        })
+        if (res.code === '003101') {
+          this.$Message.warning({
+            content: '登录超时，请重新登录',
+            duration: 5
+          })
+          setToken('')
+          this.$router.push({
+            name: 'login'
+          })
+        } else {
+          this.$Message.error({
+            content: `上传文件失败：${res.message}(${res.code})`,
+            duration: 3
+          })
+        }
       }
 
       this.file_uploading = false
       this.load_data = false
+    },
+    handleUploadErr (err) {
+      console.log(err)
+      this.$Message.error({
+        content: '上传文件失败！',
+        duration: 3
+      })
     },
     handleFileFormatErr (file) {
       this.data_ii.splice(0, 1)
