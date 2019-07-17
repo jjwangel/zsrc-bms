@@ -12,7 +12,7 @@ export const col_family = [
   },
   {
     title: '是否异常',
-    key: 'unconvType',
+    key: 'unconvTypeText',
     width: 120,
     tooltip: true
   },

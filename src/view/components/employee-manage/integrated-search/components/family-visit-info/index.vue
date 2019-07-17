@@ -20,8 +20,8 @@
           <FormItem label="与员工关系" prop="hocaCon" class="info_title">
             <Input type="text" v-model="formData.hocaCon" :readonly="true" style="width: 150px"></Input>
           </FormItem>
-          <FormItem label="是否存在异常情况" prop="unconvType" class="info_title">
-            <Input type="text" v-model="formData.unconvType" :readonly="true" style="width: 150px"></Input>
+          <FormItem label="是否存在异常情况" prop="unconvTypeText" class="info_title">
+            <Input type="text" v-model="formData.unconvTypeText" :readonly="true" style="width: 150px"></Input>
           </FormItem>
           <FormItem label="导入批次号" prop="batNum" class="info_title">
             <Input type="text" v-model="formData.batNum" :readonly="true" style="width: 150px"></Input>
@@ -102,6 +102,7 @@ export default {
         hocaName: '',
         hocaCon: '',
         unconvType: '',
+        unconvTypeText: '',
         unconvDesc: '',
         takeSept: '',
         recnCom: '',
@@ -130,6 +131,7 @@ export default {
       this.formData.hocaName = row.hocaName
       this.formData.hocaCon = row.hocaCon
       this.formData.unconvType = row.unconvType
+      this.formData.unconvTypeText = row.unconvTypeText
       this.formData.unconvDesc = row.unconvDesc
       this.formData.takeSept = row.takeSept
       this.formData.recnCom = row.recnCom
