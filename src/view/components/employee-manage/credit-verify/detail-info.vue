@@ -39,7 +39,7 @@
       </Table>
 
       <div style="margin: 20px; text-align:center;">
-        <Upload :action="this.file_upload_url"
+        <Upload :action="this.file_upload_url" ref="upCredit"
           :with-credentials="true"
           :data="uploadData"
           :on-format-error="handleFileFormatErr"
@@ -146,8 +146,16 @@ export default {
         this.refreshing = false
       })
     },
-    handleBefUpload () {
-      this.dataSaving = true
+    handleBefUpload (file) {
+      this.$Modal.confirm({
+        title: '上传征信文件',
+        content: `确定上传文件：${file.name} 吗？`,
+        onOk: () => {
+          this.dataSaving = true
+          this.$refs.upCredit.post(file)
+        }
+      })
+      return false
     },
     handleFileFormatErr (file) {
       this.$Notice.warning({

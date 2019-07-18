@@ -85,9 +85,33 @@ export const changeLoginPwd = (data) => {
   })
 }
 
+export const resetLoginPwd = (data) => {
+  let url = '/account/password/reset'
+  return axios.request({
+    url,
+    data,
+    method: 'put'
+  })
+}
+
 export const getPurviewCtrlList = (menuCode) => {
   let url = '/purview/controls'
   const params = { menuCode }
+  return axios.request({
+    url,
+    params,
+    method: 'get'
+  })
+}
+
+/**
+ * @description 获取人员详细数据
+ * @param {*} formData
+ * @returns
+ */
+export const getEmployeesDetail = (formData) => {
+  let url = '/employees/page'
+  const params = { ...formData }
   return axios.request({
     url,
     params,
@@ -105,5 +129,7 @@ export default {
   getSelectOptionData,
   getInstEmpList,
   getInstList,
-  changeLoginPwd
+  changeLoginPwd,
+  resetLoginPwd,
+  getEmployeesDetail
 }

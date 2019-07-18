@@ -3,17 +3,17 @@
     <Card dis-hover>
       <div slot="title">
         <Form ref="formIllegal" :label-width="140" inline>
-          <FormItem label="本年度已积" class="info_title">
+          <FormItem :label="label1" class="info_title">
             <Input type="text" v-model="getBNDJF" :readonly="true">
               <p slot="append">分</p>
             </Input>
           </FormItem>
-          <FormItem label="本年度严重违规" class="info_title">
+          <FormItem :label="label2" class="info_title">
             <Input type="text" v-model="getBNDWG" :readonly="true">
               <p slot="append">次</p>
             </Input>
           </FormItem>
-          <FormItem label="本年度已经济处罚" class="info_title">
+          <FormItem :label="label3" class="info_title">
             <Input type="text" v-model="getBNDJJCF" :readonly="true">
               <p slot="append">元</p>
             </Input>
@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { accAdd, getStartToLastDate } from '@/libs/j-tools.js'
+import { accAdd } from '@/libs/j-tools.js'
 import { getEmpIllegalInfo } from '@/api/emp-manage/emp-search'
 import { col_integral, col_illegal, col_punish } from './common.js'
 export default {
@@ -78,6 +78,9 @@ export default {
     return {
       main_data: this.mainData,
       refreshing: false,
+      label1: '',
+      label2: '',
+      label3: '',
       col_integral,
       data_integral: [],
       col_illegal,
@@ -90,8 +93,8 @@ export default {
     handleRefreshData () {
       this.refreshing = true
       const condition = {
-        employeeNo: this.main_data.employeeNo,
-        date_value: getStartToLastDate('year', new Date(`${this.main_data.year}-01-01`))
+        employeeNo: this.main_data.employeeNo
+        // date_value: getStartToLastDate('year', new Date(`${this.main_data.year}-01-01`))
       }
       getEmpIllegalInfo(condition).then(res => {
         let { inteData, illeData, punishData } = res
@@ -120,6 +123,9 @@ export default {
   watch: {
     mainData (val) {
       this.main_data = val
+      this.label1 = `${val.year}年度积`
+      this.label2 = `${val.year}年度严重违规`
+      this.label3 = `${val.year}年度已经济处罚`
     },
     loadData (val) {
       if (val) this.handleRefreshData()

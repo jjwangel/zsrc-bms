@@ -136,10 +136,21 @@ export default {
     handleDateChange (val) {
       this.formData.date_value = val
     },
-    handleBefUpload () {
-      this.file_uploading = true
-      this.load_data = true
-      this.data_ii.unshift({ batNum: '', impStatusText: '上传中' })
+    handleBefUpload (file) {
+      this.$Modal.confirm({
+        title: '上传批量文件',
+        content: `确定上传文件：${file.name} 吗？`,
+        onOk: () => {
+          this.$refs.batImp.post(file)
+          this.file_uploading = true
+          this.load_data = true
+          this.data_ii.unshift({ batNum: '', impStatusText: '上传中' })
+        }
+      })
+      return false
+      // this.file_uploading = true
+      // this.load_data = true
+      // this.data_ii.unshift({ batNum: '', impStatusText: '上传中' })
     },
     handleFileProgress (event, file, fileList) {
       this.fileUploadPercnet = event.percent
