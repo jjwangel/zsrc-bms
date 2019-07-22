@@ -57,19 +57,29 @@ export default {
   },
   computed: {
     getBNDJF () {
-      let money = 0
+      let jf = 0
       for (let val of this.data_integral.values()) {
-        money = accAdd(money, val.inteCent)
+        if (val.inteDate.substring(0, 4) === this.mainData.year) {
+          jf = accAdd(jf, val.inteCent)
+        }
       }
-      return money
+      return jf
     },
     getBNDWG () {
-      return this.data_illegal.length
+      let timers = 0
+      for (let val of this.data_illegal.values()) {
+        if (val.pushDate.substring(0, 4) === this.mainData.year) {
+          timers++
+        }
+      }
+      return timers
     },
     getBNDJJCF () {
       let money = 0
       for (let val of this.data_punish.values()) {
-        money = accAdd(money, val.pushBal)
+        if (val.pushDate.substring(0, 4) === this.mainData.year) {
+          money = accAdd(money, val.pushBal)
+        }
       }
       return this.formatMoney(money)
     }

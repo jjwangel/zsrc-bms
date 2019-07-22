@@ -3,7 +3,7 @@
  * @Date: 2019-04-12 16:24:19
  * @Description: 员工管理-员工信息查询
  * @Last Modified by: jjw
- * @Last Modified time: 2019-06-14 19:26:11
+ * @Last Modified time: 2019-07-18 17:29:03
  */
 
 import baseAPI from '../../base'
@@ -161,24 +161,41 @@ export const getEmpInvestInfo = async (formData) => {
  * @returns
  */
 export const getEmpIllegalInfo = async (formData) => {
-  const params = {
-    employeeNo: formData.employeeNo
+  const params1 = {
+    employeeNo: formData.employeeNo,
+    orderBy: 'inte_date',
+    orderType: 'desc'
   }
 
-  const inteData = await baseAPI.getListData('/empoutlinegeninfos', Object.assign({}, params,
+  const params2 = {
+    employeeNo: formData.employeeNo,
+    orderBy: 'push_date',
+    orderType: 'desc'
+  }
+
+  const params3 = {
+    employeeNo: formData.employeeNo,
+    orderBy: 'push_date',
+    orderType: 'desc'
+  }
+
+  if (formData.date_value) {
+
+  }
+  const inteData = await baseAPI.getListData('/empoutlinegeninfos', formData.date_value ? Object.assign({}, params1,
     { inteDateStart: formData.date_value[0],
       inteDateEnd: formData.date_value[1]
-    })) // 积分
+    }) : params1) // 积分
 
-  const illeData = await baseAPI.getListData('/empoutlinelayinfos', Object.assign({}, params,
+  const illeData = await baseAPI.getListData('/empoutlinelayinfos', formData.date_value ? Object.assign({}, params2,
     { pushDateStart: formData.date_value[0],
       pushDateEnd: formData.date_value[1]
-    })) // 严重违规
+    }) : params2) // 严重违规
 
-  const punishData = await baseAPI.getListData('/emppushinfos', Object.assign({}, params,
+  const punishData = await baseAPI.getListData('/emppushinfos', formData.date_value ? Object.assign({}, params3,
     { pushDateStart: formData.date_value[0],
       pushDateEnd: formData.date_value[1]
-    })) // 处罚
+    }) : params3) // 处罚
 
   return {
     inteData,
