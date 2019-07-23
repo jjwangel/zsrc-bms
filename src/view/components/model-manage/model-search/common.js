@@ -28,7 +28,7 @@ export const mixinInfo = {
         },
         {
           title: '风险级别',
-          key: 'riskLvl',
+          key: 'riskLvlText',
           tooltip: true
         }
       ],

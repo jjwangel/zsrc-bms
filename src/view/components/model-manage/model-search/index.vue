@@ -39,7 +39,7 @@
                   </Col>
                   <Col span="12">
                     <FormItem label="风险级别" prop="riskLvl" class="info_title">
-                      <Input v-model="formData.riskLvl" :readonly="true"></Input>
+                      <Input v-model="formData.riskLvlText" :readonly="true"></Input>
                     </FormItem>
                   </Col>
                 </Row>
@@ -111,7 +111,7 @@ export default {
         vriskid: '',
         riskNm: '',
         freq: '',
-        riskLvl: '',
+        riskLvlText: '',
         ctlDis: '',
         riskDis: ''
       },
@@ -191,7 +191,7 @@ export default {
       this.formData.vriskid = ''
       this.formData.riskNm = ''
       this.formData.freq = ''
-      this.formData.riskLvl = ''
+      this.formData.riskLvlText = ''
       this.formData.ctlDis = ''
       this.formData.riskDis = ''
       this.data_model_para = []
@@ -200,7 +200,7 @@ export default {
       this.formData.vriskid = row.vriskid
       this.formData.riskNm = row.riskNm
       this.formData.freq = row.freq
-      this.formData.riskLvl = row.riskLvl
+      this.formData.riskLvlText = row.riskLvlText
       this.formData.ctlDis = row.ctlDis
       this.formData.riskDis = row.riskDis
 
