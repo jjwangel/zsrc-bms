@@ -133,7 +133,11 @@ export const charOption = {
   xAxis: [
     {
       type: 'category',
-      data: []
+      data: [],
+      axisLabel: {
+        interval: 0,
+        rotate: 30
+      }
     }
   ],
   yAxis: [
