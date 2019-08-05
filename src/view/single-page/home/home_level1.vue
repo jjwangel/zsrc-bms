@@ -72,7 +72,7 @@
         <Card shadow>
           <div style="height: 544px;text-align: center">
             <!-- <img v-if="showZsMap" :src="zsMap" style="height: 544px;width: 100%;" alt=""> -->
-            <iframe :src="mapSrc" id="zs_map" scrolling="no" frameborder="0" style="top:0px;left: 0px;width: 100%;height: 100%;"></iframe>
+            <iframe :src="mapSrc" v-if="showZsMap" scrolling="no" frameborder="0" style="top:0px;left: 0px;width: 100%;height: 100%;"></iframe>
           </div>
         </Card>
       </Col>
@@ -91,7 +91,6 @@ import RiskLine from '_c/charts/risk-line'
 import RiskPie from '_c/charts/risk-pie'
 import DebtPie from '_c/charts/debt-pie'
 import { mixinInfoLevel1 } from './common.js'
-import zsMap from '@/assets/images/map.jpg'
 
 import ToDo from './components/todo'
 export default {
@@ -116,7 +115,6 @@ export default {
       showZsMap: this.rolesCodeShort().findIndex((val) => val === 'bms_admin' || val === 'bms_01' || val === 'bms_02') !== -1,
       data_fz: [],
       data_sx: [],
-      zsMap,
       mapSrc: 'http://125.0.165.182:3838/proc-apps/focusperson_01/'
     }
   },
