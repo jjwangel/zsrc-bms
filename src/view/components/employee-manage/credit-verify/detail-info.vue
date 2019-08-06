@@ -2,11 +2,12 @@
   <div>
     <Card dis-hover>
       <div slot="title">
-          <span style='font-weight:bold;color: #464c5b'>征信报告日期：{{ this.formData.credDate }}</span>
-          <Divider type="vertical" />
-          <span style='font-weight:bold;color: #464c5b'>{{ this.formData.employeeNo }}</span>
-          <Divider type="vertical" />
-          <span style='font-weight:bold;color: #464c5b'>{{ this.formData.name }}</span>
+        <span style='font-weight:bold;color: #464c5b'>征信报告日期：{{ this.formData.credDate }}</span>
+        <Divider type="vertical" />
+        <span style='font-weight:bold;color: #464c5b'>{{ this.formData.employeeNo }}</span>
+        <Divider type="vertical" />
+        <span style='font-weight:bold;color: #464c5b'>{{ this.formData.name }}</span>
+        <Button style="margin-left: 10px" type="error" icon="md-remove-circle" :disabled="this.disableUnaudit" @click='handleUnauditCredit'>弃审征信</Button>
       </div>
 
       <Divider><font color='red'>负债信息区</font></Divider>
@@ -58,7 +59,7 @@
 
 <script>
 import { col_debt, col_badrec, col_assu, col_force, col_file } from './common.js'
-import { getEmpCreditDetailInfo, getCreditFile } from '@/api/emp-manage/credit-verify'
+import { getEmpCreditDetailInfo, getCreditFile, unauditCredit } from '@/api/emp-manage/credit-verify'
 import { setToken } from '@/libs/util'
 import config from '@/config'
 export default {
@@ -71,6 +72,7 @@ export default {
         employeeNo: this.rowData.employeeNo,
         credDate: this.rowData.credDate
       },
+      disUnaudit: false,
       formData: this.rowData,
       dataSaving: false,
       refreshing: false,
@@ -88,7 +90,45 @@ export default {
       data_file: []
     }
   },
+  computed: {
+    disableUnaudit () {
+      return !(this.formData.credStatu === 2)
+    }
+  },
   methods: {
+    handleUnauditCredit () {
+      this.$Modal.confirm({
+        title: '弃审征信报告',
+        content: `确定弃审当前征信报告吗？`,
+        onOk: () => {
+          this.doUnauditCredit()
+        }
+      })
+    },
+    doUnauditCredit () {
+      if (this.dataSaving) return
+      this.disUnaudit = false
+      this.dataSaving = true
+
+      const condition = {
+        id: this.formData.id
+      }
+
+      unauditCredit(condition).then(res => {
+        if (res.data.code === '000000') {
+          this.$Message.success({
+            content: '弃审征信成功！',
+            duration: 3
+          })
+          this.formData.credStatu = 1
+          this.$emit('unVerifySuccess', this.formData._index)
+          this.dataSaving = false
+        }
+      }).catch(() => {
+        this.disUnaudit = true
+        this.dataSaving = false
+      })
+    },
     handleRefreshData () {
       this.refreshing = true
 
@@ -174,6 +214,7 @@ export default {
           loadDatetime: res.data.loadDatetime
         })
 
+        this.formData.credStatu = 2
         this.$emit('verifySuccess', this.formData._index)
         this.dataSaving = false
         this.$Message.success({
@@ -215,6 +256,7 @@ export default {
   watch: {
     rowData (val) {
       this.formData = Object.assign({}, val)
+      this.disUnaudit = !(this.formData.credStatu === 2)
       this.uploadData.employeeNo = val.employeeNo
       this.uploadData.credDate = val.credDate
       this.handleRefreshData()

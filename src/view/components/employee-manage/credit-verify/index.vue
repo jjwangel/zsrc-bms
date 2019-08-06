@@ -41,7 +41,7 @@
     </Card>
 
     <Modal v-model="show_detail" scrollable :title="detail_title" fullscreen footer-hide>
-      <DetailInfo @verifySuccess="handleVerifySuccess" :row-data="this.detail_row"></DetailInfo>
+      <DetailInfo @verifySuccess="handleVerifySuccess" @unVerifySuccess="handleUnVerifySuccess" :row-data="this.detail_row"></DetailInfo>
     </Modal>
   </div>
 </template>
@@ -99,7 +99,13 @@ export default {
     },
     handleVerifySuccess (rowIndex) {
       this.data_credit[rowIndex].credStatuText = '已审核'
+      this.data_credit[rowIndex].credStatu = 2
       this.detail_title = '征信报告详细内容 （已审核）'
+    },
+    handleUnVerifySuccess (rowIndex) {
+      this.data_credit[rowIndex].credStatuText = '未审核'
+      this.data_credit[rowIndex].credStatu = 1
+      this.detail_title = '征信报告详细内容 （未审核）'
     },
     handleInstChange (item) {
       if (item[0]) {

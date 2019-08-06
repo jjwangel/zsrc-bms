@@ -3,7 +3,7 @@
  * @Date: 2019-04-29 17:21:36
  * @Description: 员工征信报告确认
  * @Last Modified by: jjw
- * @Last Modified time: 2019-05-28 17:23:16
+ * @Last Modified time: 2019-08-06 11:31:58
  */
 
 import baseAPI from '../../base'
@@ -48,4 +48,15 @@ export const getCreditFile = async (formData) => {
   const url = `/empcredstau/${formData.id}`
 
   return baseAPI.getOneRowData(url)
+}
+
+/**
+ * @description 弃审征信报告
+ * @param {*} formData
+ * @returns
+ */
+export const unauditCredit = async (formData) => {
+  let data = { ...formData }
+  const res = await baseAPI.modifyData('/empcredstau/undoaudit', data)
+  return res
 }
