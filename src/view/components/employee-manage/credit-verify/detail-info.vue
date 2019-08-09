@@ -7,7 +7,7 @@
         <span style='font-weight:bold;color: #464c5b'>{{ this.formData.employeeNo }}</span>
         <Divider type="vertical" />
         <span style='font-weight:bold;color: #464c5b'>{{ this.formData.name }}</span>
-        <Button style="margin-left: 10px" type="error" icon="md-remove-circle" :disabled="this.disableUnaudit" @click='handleUnauditCredit'>弃审征信</Button>
+        <Button style="margin-left: 10px" type="error" icon="md-remove-circle" :disabled="this.disableUnaudit" @click='handleUnauditCredit'>撤销审核 </Button>
       </div>
 
       <Divider><font color='red'>负债信息区</font></Divider>
@@ -62,6 +62,7 @@ import { col_debt, col_badrec, col_assu, col_force, col_file } from './common.js
 import { getEmpCreditDetailInfo, getCreditFile, unauditCredit } from '@/api/emp-manage/credit-verify'
 import { setToken } from '@/libs/util'
 import config from '@/config'
+import { mapGetters } from 'vuex'
 export default {
   props: [
     'rowData'
@@ -92,14 +93,17 @@ export default {
   },
   computed: {
     disableUnaudit () {
-      return !(this.formData.credStatu === 2)
+      return !(this.formData.credStatu === 2) || !(this.rolesCodeShort().findIndex((val) => val === 'bms_admin' || val === 'bms_03') !== -1)
     }
   },
   methods: {
+    ...mapGetters([
+      'rolesCodeShort'
+    ]),
     handleUnauditCredit () {
       this.$Modal.confirm({
-        title: '弃审征信报告',
-        content: `确定弃审当前征信报告吗？`,
+        title: '撤销审核征信报告',
+        content: `确定撤销吗？`,
         onOk: () => {
           this.doUnauditCredit()
         }
@@ -117,7 +121,7 @@ export default {
       unauditCredit(condition).then(res => {
         if (res.data.code === '000000') {
           this.$Message.success({
-            content: '弃审征信成功！',
+            content: '撤销审核成功！',
             duration: 3
           })
           this.formData.credStatu = 1
