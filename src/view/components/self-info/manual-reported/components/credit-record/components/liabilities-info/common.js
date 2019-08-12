@@ -20,7 +20,7 @@ export const col_liab = [
     tooltip: true
   },
   {
-    title: '负债金额合计(元)',
+    title: '负债余额合计(元)',
     key: 'overDeptBal',
     slot: 'overDeptBal',
     tooltip: true
