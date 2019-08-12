@@ -41,7 +41,7 @@
     </Card>
 
     <Modal v-model="show_detail" scrollable :title="detail_title" fullscreen footer-hide>
-      <DetailInfo @verifySuccess="handleVerifySuccess" @unVerifySuccess="handleUnVerifySuccess" :row-data="this.detail_row"></DetailInfo>
+      <DetailInfo @verifySuccess="handleVerifySuccess" @unVerifySuccess="handleUnVerifySuccess" :row-data="this.detail_row" :user-opt-auth="this.userOperationAuth"></DetailInfo>
     </Modal>
   </div>
 </template>
@@ -49,7 +49,7 @@
 <script>
 import { mixinInfo } from './common.js'
 import { getCreditByVerify } from '@/api/emp-manage/credit-verify'
-import { getInstEmpList } from '@/api/base'
+import { getInstEmpList, getUserOperationAuth } from '@/api/base'
 import DetailInfo from './detail-info.vue'
 export default {
   components: {
@@ -75,7 +75,8 @@ export default {
       showSelectEmp: false,
       data_inst: [],
       data_credit: [],
-      windowHeight: 0
+      windowHeight: 0,
+      userOperationAuth: []
     }
   },
   methods: {
@@ -87,6 +88,15 @@ export default {
       getInstEmpList(condition).then(res => {
         if (res.data.code === '000000') {
           this.data_inst = res.data.data
+        }
+      }).catch(() => {
+
+      })
+
+      // 获取用户操作权限
+      getUserOperationAuth({ menuCode: 'bms_employeemng_credconfirm' }).then(res => {
+        if (res.data.code === '000000') {
+          this.userOperationAuth = res.data.data
         }
       }).catch(() => {
 

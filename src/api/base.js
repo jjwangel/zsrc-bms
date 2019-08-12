@@ -119,6 +119,21 @@ export const getEmployeesDetail = (formData) => {
   })
 }
 
+/**
+ * @description 获取用户操作权限
+ * @param {*} formData
+ * @returns
+ */
+export const getUserOperationAuth = (formData) => {
+  let url = '/purview/controls'
+  const params = { ...formData }
+  return axios.request({
+    url,
+    params,
+    method: 'get'
+  })
+}
+
 export default {
   getListData,
   getOneRowData,
@@ -131,5 +146,6 @@ export default {
   getInstList,
   changeLoginPwd,
   resetLoginPwd,
-  getEmployeesDetail
+  getEmployeesDetail,
+  getUserOperationAuth
 }

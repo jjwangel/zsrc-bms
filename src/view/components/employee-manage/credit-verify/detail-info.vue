@@ -49,7 +49,7 @@
           :before-upload="handleBefUpload"
           :on-error="handleUploadErr"
           :format="['rar','zip','pdf']">
-          <Button type="primary" icon="md-cloud-upload" :disabled="this.dataSaving">审核通过并上传征信报告</Button>
+          <Button type="primary" icon="md-cloud-upload" :disabled="this.dataSaving || this.disableAudit">审核通过并上传征信报告</Button>
         </Upload>
       </div>
 
@@ -62,10 +62,10 @@ import { col_debt, col_badrec, col_assu, col_force, col_file } from './common.js
 import { getEmpCreditDetailInfo, getCreditFile, unauditCredit } from '@/api/emp-manage/credit-verify'
 import { setToken } from '@/libs/util'
 import config from '@/config'
-import { mapGetters } from 'vuex'
 export default {
   props: [
-    'rowData'
+    'rowData',
+    'userOptAuth'
   ],
   data () {
     return {
@@ -93,13 +93,13 @@ export default {
   },
   computed: {
     disableUnaudit () {
-      return !(this.formData.credStatu === 2) || !(this.rolesCodeShort().findIndex((val) => val === 'bms_admin' || val === 'bms_03') !== -1)
+      return !(this.formData.credStatu === 2) || !(this.userOptAuth.findIndex((val) => val.code === 'bms_employeemng_credconfirm_undoaudit') !== -1)
+    },
+    disableAudit () {
+      return !(this.formData.credStatu === 1) || !(this.userOptAuth.findIndex((val) => val.code === 'bms_employeemng_credconfirm_auditupload') !== -1)
     }
   },
   methods: {
-    ...mapGetters([
-      'rolesCodeShort'
-    ]),
     handleUnauditCredit () {
       this.$Modal.confirm({
         title: '撤销审核征信报告',
@@ -264,6 +264,9 @@ export default {
       this.uploadData.employeeNo = val.employeeNo
       this.uploadData.credDate = val.credDate
       this.handleRefreshData()
+    },
+    userOptAuth (val) {
+
     }
   }
 }
