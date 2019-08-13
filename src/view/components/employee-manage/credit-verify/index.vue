@@ -27,6 +27,7 @@
         @on-row-dblclick="handleShowDetail">
 
         <div slot="footer" style="width:100%;text-align: center">
+          <span style="float: left; margin-left: 10px;">双击任意记录，进入审核</span>
           <Page :total="pageData.total" :current.sync="pageData.current"
             @on-change="searchRpt"
             @on-page-size-change="handleChgPageSize"

@@ -126,8 +126,24 @@ export default {
           })
           this.formData.credStatu = 1
           this.$emit('unVerifySuccess', this.formData._index)
-          this.dataSaving = false
+        } else {
+          if (res.data.code === '003901') {
+            this.$Message.warning({
+              content: '该员工有其他待审核的征信，当前征信不能撤销审核！',
+              duration: 5
+            })
+          } else {
+            if (res.data.code === '003904') {
+              this.$Message.warning({
+                content: '当前征信不是最新，不能撤销审核！',
+                duration: 5
+              })
+            }
+          }
         }
+
+        this.disUnaudit = true
+        this.dataSaving = false
       }).catch(() => {
         this.disUnaudit = true
         this.dataSaving = false

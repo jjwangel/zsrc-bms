@@ -6,7 +6,8 @@ import { Message } from 'iview'
 const noMsgCode = [
   '003304',
   '003903',
-  '003901'
+  '003901',
+  '003904'
 ]
 class HttpRequest {
   constructor (baseUrl = baseURL) {
