@@ -51,11 +51,18 @@ class HttpRequest {
             name: 'login'
           })
         } else {
-          if (!noMsgCode.includes(data.code)) {
-            Message.error({
-              content: `有错误产生：${data.message}(${data.code})`,
+          if (data.code === '003905') {
+            Message.warning({
+              content: `${data.message}(${data.code})`,
               duration: 5
             })
+          } else {
+            if (!noMsgCode.includes(data.code)) {
+              Message.error({
+                content: `有错误产生：${data.message}(${data.code})`,
+                duration: 5
+              })
+            }
           }
         }
       }
