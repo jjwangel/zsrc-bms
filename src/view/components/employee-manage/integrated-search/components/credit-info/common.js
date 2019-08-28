@@ -20,7 +20,7 @@ export const col_debt = [
     tooltip: true
   },
   {
-    title: '负债金额(元)',
+    title: '负债余额(元)',
     key: 'overDeptBal',
     slot: 'overDeptBal',
     tooltip: true

@@ -55,7 +55,7 @@ export default [
             name: 'bms_employeemng_infoimport_weightyoutline',
             meta: {
               icon: 'ios-copy-outline',
-              title: '严重违规信息',
+              title: '违规违纪信息',
               hideInMenu: false
             },
             component: () => import('@/view/components/employee-manage/info-import/discipline/index.vue')

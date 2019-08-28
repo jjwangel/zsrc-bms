@@ -3,7 +3,7 @@
  * @Date: 2019-04-12 16:24:19
  * @Description: 员工管理-员工信息查询
  * @Last Modified by: jjw
- * @Last Modified time: 2019-07-18 17:29:03
+ * @Last Modified time: 2019-08-28 14:40:22
  */
 
 import baseAPI from '../../base'
@@ -190,7 +190,7 @@ export const getEmpIllegalInfo = async (formData) => {
   const illeData = await baseAPI.getListData('/empoutlinelayinfos', formData.date_value ? Object.assign({}, params2,
     { pushDateStart: formData.date_value[0],
       pushDateEnd: formData.date_value[1]
-    }) : params2) // 严重违规
+    }) : params2) // 违规违纪
 
   const punishData = await baseAPI.getListData('/emppushinfos', formData.date_value ? Object.assign({}, params3,
     { pushDateStart: formData.date_value[0],

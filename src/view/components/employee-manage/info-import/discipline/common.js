@@ -5,7 +5,7 @@ export const col_discipline = [
     align: 'center'
   },
   {
-    title: '批次号（员工严重违规信息）',
+    title: '批次号（员工违规违纪信息）',
     key: 'batNum',
     tooltip: 'true'
   },

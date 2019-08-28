@@ -26,7 +26,7 @@
             </Table>
         </div>
 
-      <Divider><font color='red'>严重违规</font></Divider>
+      <Divider><font color='red'>违规违纪</font></Divider>
         <div style="margin:10px;">
           <Table size="small" :loading="this.refreshing" :stripe="true" border ref="table-illegal" :columns="col_illegal" :data="data_illegal">
           </Table>
@@ -134,7 +134,7 @@ export default {
     mainData (val) {
       this.main_data = val
       this.label1 = `${val.year}年度积`
-      this.label2 = `${val.year}年度严重违规`
+      this.label2 = `${val.year}年度违规违纪`
       this.label3 = `${val.year}年度已经济处罚`
     },
     loadData (val) {

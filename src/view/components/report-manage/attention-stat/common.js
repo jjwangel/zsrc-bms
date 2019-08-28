@@ -72,7 +72,7 @@ export const mixinInfo = {
           tooltip: true
         },
         {
-          title: '年度严重违规(次)',
+          title: '年度违规违纪(次)',
           key: 'yearOutlineCnt',
           tooltip: true
         },
