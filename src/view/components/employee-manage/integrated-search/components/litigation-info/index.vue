@@ -30,8 +30,10 @@ export default {
       let _date = getStartToLastDate('year', new Date(`${this.main_data.year}-01-01`))
       const condition = {
         employeeNo: this.main_data.employeeNo,
-        wadeDateStart: _date[0],
-        wadeDateEnd: _date[1]
+        orderBy: 'wade_date',
+        orderType: 'desc'
+        // wadeDateStart: _date[0],
+        // wadeDateEnd: _date[1]
       }
 
       getEmpLitigationList(condition).then(res => {
