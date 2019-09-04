@@ -61,6 +61,8 @@ export default {
   },
   methods: {
     handleSubmit () {
+      if (this.logining) return
+
       this.logining = true
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
