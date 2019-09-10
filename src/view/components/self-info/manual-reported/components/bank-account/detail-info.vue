@@ -59,7 +59,7 @@ export default {
           })
           callback(new Error(''))
         } else {
-          const pattern = /^([1-9]{1})(\d{10,29})$/
+          const pattern = /^([0-9]{1})(\d{10,29})$/
           if (!pattern.test(value)) {
             this.$Message.warning({
               content: '请正确输入账号/卡号！',
