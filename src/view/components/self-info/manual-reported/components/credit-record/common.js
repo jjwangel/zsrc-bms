@@ -18,7 +18,7 @@ export const col_credit = [
     key: 'overdue'
   },
   {
-    title: '总担保金额(元)',
+    title: '总担保余额(元)',
     slot: 'assuBal',
     key: 'assuBal'
   },

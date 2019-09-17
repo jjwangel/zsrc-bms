@@ -119,7 +119,7 @@ export const col_assu = [
     tooltip: true
   },
   {
-    title: '担保金额(元)',
+    title: '担保余额(元)',
     key: 'assuBal',
     slot: 'assuBal',
     tooltip: true

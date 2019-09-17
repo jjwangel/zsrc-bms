@@ -82,7 +82,7 @@ export const mixinInfo = {
           tooltip: 'true'
         },
         {
-          title: '担保金额(元)',
+          title: '担保余额(元)',
           key: 'yearAssuBal',
           slot: 'yearAssuBal',
           tooltip: 'true'

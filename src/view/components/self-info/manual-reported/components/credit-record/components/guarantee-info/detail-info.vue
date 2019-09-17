@@ -6,7 +6,7 @@
         </FormItem>
         <Row :gutter="20">
           <Col span="12">
-            <FormItem label="担保金额" prop="assuBal" class="info_title">
+            <FormItem label="担保余额" prop="assuBal" class="info_title">
               <div>
                 <InputNumber style='width:80%' v-model="formData.assuBal" :min="0" :precision="2" :active-change="false" @on-change="handleBalChange" :readonly="this.operate==='view'"></InputNumber>
                 <span style="margin-left: 10px">元</span>
@@ -117,7 +117,7 @@ export default {
     const validateAssuBal = (rule, value, callback) => {
       if (!value || value === 0) {
         this.$Message.warning({
-          content: '担保金额必需大于0 ！',
+          content: '担保余额必需大于0 ！',
           duration: 5
         })
         callback(new Error(''))
