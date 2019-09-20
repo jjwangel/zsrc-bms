@@ -174,6 +174,7 @@ export default {
   watch: {
     mainData (val) {
       this.main_data = val
+      this.show_family_info = false
     },
     loadData (val) {
       if (val) this.handleRefreshData()
