@@ -2,7 +2,7 @@ export default {
   /**
    * @description 生产版本号
    */
-  bmsVersion: '1.1.5',
+  bmsVersion: '1.1.6',
   /**
    * @description 配置显示在浏览器标签的title
    */
