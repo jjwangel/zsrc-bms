@@ -11,7 +11,7 @@ const resolve = dir => {
 // 如果您的应用程序部署在子路径中，则需要在这指定子路径
 // 例如：https://www.foobar.com/bms/
 // 需要将它改为'/bms/'
-// iview-admin线上演示打包路径： https://file.iviewui.com/admin-dist/
+// ViewUI-admin线上演示打包路径： https://file.iviewui.com/admin-dist/
 const BASE_URL = process.env.NODE_ENV === 'production'
   ? '/'
   : '/'

@@ -1,6 +1,6 @@
 {
   "name": "zsrc-bms",
-  "version": "1.0.0",
+  "version": "1.1.6",
   "author": "JJW<93108@qq.com>",
   "private": false,
   "scripts": {
@@ -49,6 +49,7 @@
     "lint-staged": "^6.0.0",
     "lodash": "^4.17.15",
     "mockjs": "^1.0.1-beta3",
+    "view-design": "^4.0.0",
     "vue-template-compiler": "^2.6.10"
   },
   "browserslist": [

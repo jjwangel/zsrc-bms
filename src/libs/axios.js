@@ -1,7 +1,7 @@
 import axios from 'axios'
 import router from '@/router'
 import { setToken } from '@/libs/util'
-import { Message } from 'iview'
+import { Message } from 'view-design'
 
 const noMsgCode = [
   '003304',

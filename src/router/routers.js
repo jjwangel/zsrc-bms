@@ -7,7 +7,7 @@ import manageRoute from './manage-router'
 import globalRoute from './global-router'
 
 /**
- * iview-admin中meta除了原生参数外可配置的参数:
+ * ViewUI-admin中meta除了原生参数外可配置的参数:
  * meta: {
  *  title: { String|Number|Function }
  *         显示在侧边栏、面包屑和标签栏的文字
