@@ -123,14 +123,158 @@ export default [
         component: () => import('@/view/components/employee-manage/integrated-search/index.vue')
       },
       {
-        path: 'emp_chg_atte',
-        name: 'bms_employeemng_focusadjust',
+        path: 'chg_att_type',
+        name: 'chg_att_type',
         meta: {
-          icon: 'md-ribbon',
-          title: '调整关注类别',
+          icon: 'md-cloud-download',
+          title: '调整关注类别'
+        },
+        component: parentView,
+        children: [
+          {
+            path: 'launch_chg_att',
+            name: 'bms_employeemng_lanuch_change_attention',
+            meta: {
+              icon: 'ios-copy-outline',
+              title: '发起调整',
+              hideInMenu: false
+            },
+            component: () => import('@/view/components/employee-manage/chg-attention/sponsor-attention/index.vue')
+          },
+          {
+            path: 'chg_att_sch_search',
+            name: 'bms_employeemng_change_attention_schedule_search',
+            meta: {
+              icon: 'ios-copy-outline',
+              title: '调整进度查询',
+              hideInMenu: false
+            },
+            component: () => import('@/view/components/employee-manage/chg-attention/schedule-search/index.vue')
+          }
+        ]
+      },
+      {
+        path: 'att_follow',
+        name: 'att_follow',
+        meta: {
+          icon: 'md-cloud-download',
+          title: '关注人员跟进'
+        },
+        component: parentView,
+        children: [
+          {
+            path: 'launch_follow',
+            name: 'bms_employeemng_lanuch_follow',
+            meta: {
+              icon: 'ios-copy-outline',
+              title: '发起跟进',
+              hideInMenu: false
+            },
+            component: () => import('@/view/components/employee-manage/chg-attention/index.vue')
+          },
+          {
+            path: 'follow_sch_search',
+            name: 'bms_employeemng_follow_schedule_search',
+            meta: {
+              icon: 'ios-copy-outline',
+              title: '跟进进度查询',
+              hideInMenu: false
+            },
+            component: () => import('@/view/components/employee-manage/chg-attention/index.vue')
+          }
+        ]
+      },
+      {
+        path: 'process_manage',
+        name: 'process_manage',
+        meta: {
+          icon: 'md-cloud-download',
+          title: '流程管理'
+        },
+        component: parentView,
+        children: [
+          {
+            path: 'process_pending',
+            name: 'bms_employeemng_process_pending',
+            meta: {
+              icon: 'ios-copy-outline',
+              title: '待办流程',
+              hideInMenu: false
+            },
+            component: () => import('@/view/components/employee-manage/process-manage/process-pending/index.vue')
+          },
+          {
+            path: 'process_submitted',
+            name: 'bms_employeemng_process_submitted',
+            meta: {
+              icon: 'ios-copy-outline',
+              title: '已办流程',
+              hideInMenu: false
+            },
+            component: () => import('@/view/components/employee-manage/chg-attention/index.vue')
+          }
+        ]
+      },
+      {
+        path: 'special_archives_manage',
+        name: 'special_archives_manage',
+        meta: {
+          icon: 'ios-people',
+          title: '专项排查档案管理',
           hideInMenu: false
         },
         component: () => import('@/view/components/employee-manage/chg-attention/index.vue')
+      },
+      {
+        path: 'att_standing_book_search',
+        name: 'att_standing_book_search',
+        meta: {
+          icon: 'ios-people',
+          title: '关注台账查询',
+          hideInMenu: false
+        },
+        component: () => import('@/view/components/employee-manage/chg-attention/index.vue')
+      },
+      {
+        path: 'emp_behavior_inspection',
+        name: 'emp_behavior_inspection',
+        meta: {
+          icon: 'md-cloud-download',
+          title: '员工行为排查'
+        },
+        component: parentView,
+        children: [
+          {
+            path: 'inspection_project_manage',
+            name: 'bms_employeemng_inspection_project_manage',
+            meta: {
+              icon: 'ios-copy-outline',
+              title: '排查项目管理',
+              hideInMenu: false
+            },
+            component: () => import('@/view/components/employee-manage/chg-attention/index.vue')
+          },
+          {
+            path: 'inspection_input',
+            name: 'bms_employeemng_inspection_input',
+            meta: {
+              icon: 'ios-copy-outline',
+              title: '排查登记',
+              hideInMenu: false
+            },
+            component: () => import('@/view/components/employee-manage/chg-attention/index.vue')
+          },
+          {
+            path: 'inspection_search',
+            name: 'bms_employeemng_inspection_search',
+            meta: {
+              icon: 'ios-copy-outline',
+              title: '排查情况查询',
+              hideInMenu: false
+            },
+            component: () => import('@/view/components/employee-manage/chg-attention/index.vue')
+          }
+        ]
       }
     ]
   }
