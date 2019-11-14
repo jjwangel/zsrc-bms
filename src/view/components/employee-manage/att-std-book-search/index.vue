@@ -2,37 +2,55 @@
   <div>
     <Card dis-hover>
       <div slot="title">
-        <Form ref ="form-ss" :model="formData" inline>
-          <FormItem label="工号" prop="employeeNo" :label-width="50">
+        <Form ref ="form-sbs" :model="formData" inline>
+          <FormItem label="工号" prop="employeeNo" :label-width="80">
             <Input type="text" v-model="formData.employeeNo" :readonly="this.loadData" style="width:100px;"></Input>
           </FormItem>
-          <FormItem label="姓名" prop="name" :label-width="50">
+          <FormItem label="姓名" prop="name" :label-width="80">
             <Input type="text" v-model="formData.name" :readonly="this.loadData" style="width:130px;">
               <Button slot="append" icon="md-apps" @click="handleSelectEmp" :disabled="this.loadData"></Button>
             </Input>
           </FormItem>
-          <FormItem label="当前状态" prop="dqzt" :label-width="80">
-            <Select v-model="formData.dqzt" style="width:100px" :disable="this.loadData">
-              <Option :value="1">复核 </Option>
-              <Option :value="2">审核</Option>
-              <Option :value="3">审批</Option>
+          <FormItem label="所属机构" prop="dqzt" :label-width="80">
+            <Cascader style="width: 300px" :data="dept_list" v-model="formData.deptCode" trigger="hover" :disabled="this.loadData"></Cascader>
+          </FormItem>
+        </Form>
+        <Form ref ="form-sbs1" :model="formData" inline>
+          <FormItem label="关注类别" prop="gzlb" :label-width="80">
+            <Select v-model="formData.gzlb" style="width:100px" :disable="this.loadData">
+              <Option :value="1">重点关注 </Option>
+              <Option :value="2">一般关注</Option>
             </Select>
           </FormItem>
-          <FormItem label="操作结果" prop="czjg" :label-width="80">
-            <Select v-model="formData.czjg" style="width:100px" :disable="this.loadData">
-              <Option :value="1">同意 </Option>
-              <Option :value="2">不同意</Option>
+          <FormItem label="台账状态" prop="tzzt" :label-width="80">
+            <Select v-model="formData.tzzt" style="width:130px" :disable="this.loadData">
+              <Option :value="1">激活 </Option>
+              <Option :value="2">关闭</Option>
             </Select>
           </FormItem>
-          <FormItem label="发起调整日期" prop="fqtzrq" class="info_title" :label-width="110">
-            <DatePicker type="daterange" placement="bottom-start"
-              style="width: 200px;margin-right: 10px"
-              :clearable="false"
-              :value="formData.fqtzrq"
-              @on-change="handleDateChange"
-              :editable='false'></DatePicker>
+          <FormItem label="关注类型" prop="gzlx" :label-width="80">
+            <Select v-model="formData.gzlx" style="width:300px" multiple :max-tag-count="2" :max-tag-placeholder="maxTagPlaceholder" :disable="this.loadData">
+              <Option :value="1">负债过高 </Option>
+              <Option :value="2">担保额度过高</Option>
+              <Option :value="3">被强制执行 </Option>
+              <Option :value="4">不良贷款</Option>
+              <Option :value="5">贷款使用异常 </Option>
+              <Option :value="6">经商办企业</Option>
+              <Option :value="7">涉诉 </Option>
+              <Option :value="8">涉黄</Option>
+              <Option :value="9">涉赌 </Option>
+              <Option :value="10">涉毒</Option>
+              <Option :value="11">工作态度 </Option>
+              <Option :value="12">业务差错</Option>
+              <Option :value="13">个人性格 </Option>
+              <Option :value="14">生活作风</Option>
+              <Option :value="15">精神问题 </Option>
+              <Option :value="16">家庭原因</Option>
+              <Option :value="17">社交圈子 </Option>
+              <Option :value="18">其他关注原因</Option>
+              <Option :value="19">重点关注 </Option>
+            </Select>
           </FormItem>
-
           <FormItem :label-width="20">
             <Button type="primary" icon="ios-search" @click="handleSearchRd" :loading="this.loadData">查询</Button>
             <Button type="primary" icon="ios-search" @click="handleCreateAttention" :loading="this.loadData">详细</Button>
@@ -62,19 +80,19 @@
       :mask-closable="this.actionType === 'view'"
       :footer-hide="this.actionType === 'view'"
       @on-ok="handleSaveChange">
-      <AttentionAuditView @saveCancel="handleSaveCancel" @saveSuccess="handleSaveSuccess" :saveNow_="saveNow" :rowData="{}" :selOption="{}" :actionType="this.actionType"></AttentionAuditView>
+      <AttStdBookContent @saveCancel="handleSaveCancel" @saveSuccess="handleSaveSuccess" :saveNow_="saveNow" :rowData="{}" :selOption="{}" :actionType="this.actionType"></AttStdBookContent>
     </Modal>
   </div>
 </template>
 
 <script>
-import { getInstEmpList } from '@/api/base'
+import { getInstEmpList, getInstList } from '@/api/base'
 import { mixinInfo } from './common.js'
-import AttentionAuditView from '_c/chg-attention/attention-audit-view'
+import AttStdBookContent from '_c/att-std-book-search'
 
 export default {
   components: {
-    AttentionAuditView
+    AttStdBookContent
   },
   mixins: [ mixinInfo ],
   data () {
@@ -97,7 +115,8 @@ export default {
       dataSaving: true,
       actionTitle: '',
       actionType: '', // view || create || modify
-      saveNow: false
+      saveNow: false,
+      dept_list: []
     }
   },
   methods: {
@@ -113,13 +132,21 @@ export default {
       }).catch(() => {
 
       })
+
+      getInstList().then(res => {
+        if (res.data.code === '000000') {
+          this.dept_list = res.data.data
+        }
+      }).catch(() => {
+
+      })
     },
     handleDateChange () {
 
     },
     handleCreateAttention () {
       this.actionType = 'create'
-      this.actionTitle = '调整关注类别复核/审批'
+      this.actionTitle = '关注台账内容'
       this.showAttentionAction = true
     },
     handleSponsorAttention (row, index) {
@@ -166,6 +193,9 @@ export default {
     },
     setWindowHeight () {
       this.windowHeight = window.innerHeight - 230
+    },
+    maxTagPlaceholder (num) {
+      return '+' + num
     }
   },
   mounted () {

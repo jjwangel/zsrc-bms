@@ -2,24 +2,25 @@
   <div>
     <Card dis-hover>
       <div slot="title">
-        <Form ref ="form-pp" :model="formData" inline>
-          <FormItem label="流程类型" prop="lqlx" :label-width="80">
-            <Select v-model="formData.lqlx" style="width:100px" :disable="this.loadData">
-              <Option :value="0">全部</Option>
-              <Option :value="1">关注调整</Option>
-              <Option :value="2">跟进录入</Option>
-            </Select>
+        <Form ref ="form-sa" :model="formData" inline>
+          <FormItem label="工号" prop="employeeNo" :label-width="50">
+            <Input type="text" v-model="formData.employeeNo" :readonly="this.loadData" style="width:100px;"></Input>
+          </FormItem>
+          <FormItem label="姓名" prop="name" :label-width="50">
+            <Input type="text" v-model="formData.name" :readonly="this.loadData" style="width:130px;">
+              <Button slot="append" icon="md-apps" @click="handleSelectEmp" :disabled="this.loadData"></Button>
+            </Input>
           </FormItem>
           <FormItem :label-width="20">
             <Button type="primary" icon="ios-search" @click="handleSearchRd" :loading="this.loadData">查询</Button>
-            <Button type="primary" icon="ios-search" @click="handleCreateAttention" :loading="this.loadData">详细</Button>
+            <Button type="primary" icon="ios-search" @click="handleCreateAttention" :loading="this.loadData">创建</Button>
           </FormItem>
         </Form>
       </div>
 
       <Table size="small" :height="windowHeight" @on-row-dblclick="handleShowDetail" :stripe="true" border ref="table-sa" :loading="this.loadData" :columns="cols" :data="dataSet">
         <template slot-scope="{ row, index }" slot="action">
-          <Button type="error" size="small" @click="handleSponsorAttention (row, index)">删除</Button>
+          <Button type="primary" size="small" @click="handleSponsorAttention (row, index)">调整</Button>
         </template>
 
         <div slot="footer" style="width:100%;text-align: center">
@@ -29,24 +30,29 @@
             size="small" show-elevator show-sizer />
         </div>
       </Table>
+
+      <Drawer title="选择员工" :closable="false" v-model="showSelectEmp" :transfer="false" inner placement="left">
+        <Tree :data="deptEmpList" @on-select-change="handleInstChange"></Tree>
+      </Drawer>
     </Card>
 
-    <Modal v-model="showAttentionAction" :loading="dataSaving" scrollable :title="actionTitle" width="1000" ok-text="提交" :styles="{top: '10px'}"
+    <Modal v-model="showAttentionAction" :loading="dataSaving" scrollable :title="actionTitle" width="900" ok-text="提交" :styles="{top: '10px'}"
       :mask-closable="this.actionType === 'view'"
       :footer-hide="this.actionType === 'view'"
       @on-ok="handleSaveChange">
-      <AttentionAuditView @saveCancel="handleSaveCancel" @saveSuccess="handleSaveSuccess" :saveNow_="saveNow" :rowData="{}" :selOption="{}" :actionType="this.actionType"></AttentionAuditView>
+      <FollowAction @saveCancel="handleSaveCancel" @saveSuccess="handleSaveSuccess" :saveNow_="saveNow" :rowData="{}" :selOption="{}" :actionType="this.actionType"></FollowAction>
     </Modal>
   </div>
 </template>
 
 <script>
+import { getInstEmpList } from '@/api/base'
 import { mixinInfo } from './common.js'
-import AttentionAuditView from '_c/chg-attention/attention-audit-view'
+import FollowAction from '_c/att-follow/follow-action'
 
 export default {
   components: {
-    AttentionAuditView
+    FollowAction
   },
   mixins: [ mixinInfo ],
   data () {
@@ -61,8 +67,10 @@ export default {
         name: ''
       },
       loadData: false,
+      showSelectEmp: false,
       windowHeight: 0,
       dataSet: [],
+      deptEmpList: [],
       showAttentionAction: false,
       dataSaving: true,
       actionTitle: '',
@@ -72,14 +80,21 @@ export default {
   },
   methods: {
     initInfo () {
+      const condition = {
+        employee: true
+      }
 
-    },
-    handleDateChange () {
+      getInstEmpList(condition).then(res => {
+        if (res.data.code === '000000') {
+          this.deptEmpList = res.data.data
+        }
+      }).catch(() => {
 
+      })
     },
     handleCreateAttention () {
       this.actionType = 'create'
-      this.actionTitle = '关注类别复核/审核'
+      this.actionTitle = '发起跟进登录'
       this.showAttentionAction = true
     },
     handleSponsorAttention (row, index) {
@@ -111,6 +126,18 @@ export default {
     },
     handleSelectEmp () {
       this.showSelectEmp = true
+    },
+    handleInstChange (item) {
+      if (item[0]) {
+        item[0].expand = !item[0].expand
+        item[0].selected = !item[0].selected
+
+        if (item[0].is_emp) {
+          this.formData.name = item[0].title
+          this.formData.employeeNo = item[0].num
+          this.showSelectEmp = false
+        }
+      }
     },
     setWindowHeight () {
       this.windowHeight = window.innerHeight - 230

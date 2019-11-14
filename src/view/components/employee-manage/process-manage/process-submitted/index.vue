@@ -10,6 +10,14 @@
               <Option :value="2">跟进录入</Option>
             </Select>
           </FormItem>
+          <FormItem label="接收时间" prop="jssj" class="info_title" :label-width="80">
+            <DatePicker type="daterange" placement="bottom-start"
+              style="width: 200px;margin-right: 10px"
+              :clearable="false"
+              :value="formData.jssj"
+              @on-change="handleDateChange"
+              :editable='false'></DatePicker>
+          </FormItem>
           <FormItem :label-width="20">
             <Button type="primary" icon="ios-search" @click="handleSearchRd" :loading="this.loadData">查询</Button>
             <Button type="primary" icon="ios-search" @click="handleCreateAttention" :loading="this.loadData">详细</Button>

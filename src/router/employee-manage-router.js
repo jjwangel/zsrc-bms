@@ -170,7 +170,7 @@ export default [
               title: '发起跟进',
               hideInMenu: false
             },
-            component: () => import('@/view/components/employee-manage/chg-attention/index.vue')
+            component: () => import('@/view/components/employee-manage/att-follow/sponsor-follow/index.vue')
           },
           {
             path: 'follow_sch_search',
@@ -180,7 +180,7 @@ export default [
               title: '跟进进度查询',
               hideInMenu: false
             },
-            component: () => import('@/view/components/employee-manage/chg-attention/index.vue')
+            component: () => import('@/view/components/employee-manage/att-follow/schedule-search/index.vue')
           }
         ]
       },
@@ -211,7 +211,7 @@ export default [
               title: '已办流程',
               hideInMenu: false
             },
-            component: () => import('@/view/components/employee-manage/chg-attention/index.vue')
+            component: () => import('@/view/components/employee-manage/process-manage/process-submitted/index.vue')
           }
         ]
       },
@@ -233,7 +233,7 @@ export default [
           title: '关注台账查询',
           hideInMenu: false
         },
-        component: () => import('@/view/components/employee-manage/chg-attention/index.vue')
+        component: () => import('@/view/components/employee-manage/att-std-book-search/index.vue')
       },
       {
         path: 'emp_behavior_inspection',

@@ -2,14 +2,37 @@
   <div>
     <Card dis-hover>
       <div slot="title">
-        <Form ref ="form-pp" :model="formData" inline>
-          <FormItem label="流程类型" prop="lqlx" :label-width="80">
-            <Select v-model="formData.lqlx" style="width:100px" :disable="this.loadData">
-              <Option :value="0">全部</Option>
-              <Option :value="1">关注调整</Option>
-              <Option :value="2">跟进录入</Option>
+        <Form ref ="form-ss" :model="formData" inline>
+          <FormItem label="工号" prop="employeeNo" :label-width="50">
+            <Input type="text" v-model="formData.employeeNo" :readonly="this.loadData" style="width:100px;"></Input>
+          </FormItem>
+          <FormItem label="姓名" prop="name" :label-width="50">
+            <Input type="text" v-model="formData.name" :readonly="this.loadData" style="width:130px;">
+              <Button slot="append" icon="md-apps" @click="handleSelectEmp" :disabled="this.loadData"></Button>
+            </Input>
+          </FormItem>
+          <FormItem label="当前状态" prop="dqzt" :label-width="80">
+            <Select v-model="formData.dqzt" style="width:100px" :disable="this.loadData">
+              <Option :value="1">复核 </Option>
+              <Option :value="2">审核</Option>
+              <Option :value="3">审批</Option>
             </Select>
           </FormItem>
+          <FormItem label="操作结果" prop="czjg" :label-width="80">
+            <Select v-model="formData.czjg" style="width:100px" :disable="this.loadData">
+              <Option :value="1">同意 </Option>
+              <Option :value="2">不同意</Option>
+            </Select>
+          </FormItem>
+          <FormItem label="情况跟进登记日期" prop="fqtzrq" class="info_title" :label-width="130">
+            <DatePicker type="daterange" placement="bottom-start"
+              style="width: 200px;margin-right: 10px"
+              :clearable="false"
+              :value="formData.fqtzrq"
+              @on-change="handleDateChange"
+              :editable='false'></DatePicker>
+          </FormItem>
+
           <FormItem :label-width="20">
             <Button type="primary" icon="ios-search" @click="handleSearchRd" :loading="this.loadData">查询</Button>
             <Button type="primary" icon="ios-search" @click="handleCreateAttention" :loading="this.loadData">详细</Button>
@@ -29,24 +52,29 @@
             size="small" show-elevator show-sizer />
         </div>
       </Table>
+
+      <Drawer title="选择员工" :closable="false" v-model="showSelectEmp" :transfer="false" inner placement="left">
+        <Tree :data="deptEmpList" @on-select-change="handleInstChange"></Tree>
+      </Drawer>
     </Card>
 
     <Modal v-model="showAttentionAction" :loading="dataSaving" scrollable :title="actionTitle" width="1000" ok-text="提交" :styles="{top: '10px'}"
       :mask-closable="this.actionType === 'view'"
       :footer-hide="this.actionType === 'view'"
       @on-ok="handleSaveChange">
-      <AttentionAuditView @saveCancel="handleSaveCancel" @saveSuccess="handleSaveSuccess" :saveNow_="saveNow" :rowData="{}" :selOption="{}" :actionType="this.actionType"></AttentionAuditView>
+      <FollowAuditView @saveCancel="handleSaveCancel" @saveSuccess="handleSaveSuccess" :saveNow_="saveNow" :rowData="{}" :selOption="{}" :actionType="this.actionType"></FollowAuditView>
     </Modal>
   </div>
 </template>
 
 <script>
+import { getInstEmpList } from '@/api/base'
 import { mixinInfo } from './common.js'
-import AttentionAuditView from '_c/chg-attention/attention-audit-view'
+import FollowAuditView from '_c/att-follow/follow-audit-view'
 
 export default {
   components: {
-    AttentionAuditView
+    FollowAuditView
   },
   mixins: [ mixinInfo ],
   data () {
@@ -61,8 +89,10 @@ export default {
         name: ''
       },
       loadData: false,
+      showSelectEmp: false,
       windowHeight: 0,
       dataSet: [],
+      deptEmpList: [],
       showAttentionAction: false,
       dataSaving: true,
       actionTitle: '',
@@ -72,14 +102,24 @@ export default {
   },
   methods: {
     initInfo () {
+      const condition = {
+        employee: true
+      }
 
+      getInstEmpList(condition).then(res => {
+        if (res.data.code === '000000') {
+          this.deptEmpList = res.data.data
+        }
+      }).catch(() => {
+
+      })
     },
     handleDateChange () {
 
     },
     handleCreateAttention () {
       this.actionType = 'create'
-      this.actionTitle = '关注类别复核/审核'
+      this.actionTitle = '关注跟进复核/审批'
       this.showAttentionAction = true
     },
     handleSponsorAttention (row, index) {
@@ -111,6 +151,18 @@ export default {
     },
     handleSelectEmp () {
       this.showSelectEmp = true
+    },
+    handleInstChange (item) {
+      if (item[0]) {
+        item[0].expand = !item[0].expand
+        item[0].selected = !item[0].selected
+
+        if (item[0].is_emp) {
+          this.formData.name = item[0].title
+          this.formData.employeeNo = item[0].num
+          this.showSelectEmp = false
+        }
+      }
     },
     setWindowHeight () {
       this.windowHeight = window.innerHeight - 230
