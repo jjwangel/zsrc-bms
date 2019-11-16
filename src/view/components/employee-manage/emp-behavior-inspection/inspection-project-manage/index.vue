@@ -2,15 +2,15 @@
   <div>
     <Card dis-hover>
       <div slot="title">
-        <Form ref ="form-pp" :model="formData" inline>
-          <FormItem label="年度" prop="lqlx" :label-width="50">
-            <DatePicker type="year" :options="optSelDate"
-            @on-change="handleDateChange"
-            :disabled="this.loadData"
-            :clearable="false"
-            :value="this.formData.date_value"
-            style="width: 100px;margin-right: 10px;margin-left: 18px"
-            :editable='false'></DatePicker>
+        <Form ref ="form" :model="formData" :label-width="50" inline>
+          <FormItem label="年度" prop="lqlx">
+            <DatePicker type="year" :options="optDate"
+              @on-change="handleDateChange"
+              :disabled="this.loadData"
+              :clearable="false"
+              :value="this.formData.date_value"
+              style="width: 100px;margin-right: 10px;margin-left: 18px"
+              :editable='false'></DatePicker>
           </FormItem>
           <FormItem label="状态" prop="lqlx" :label-width="50">
             <Select v-model="formData.lqlx" style="width:100px" :disable="this.loadData">
@@ -20,9 +20,9 @@
               <Option :value="3">关闭</Option>
             </Select>
           </FormItem>
-          <FormItem :label-width="20">
+          <FormItem :label-width="10">
             <ButtonGroup>
-              <Button type="primary" icon="ios-search" @click="handleSearchRd" :loading="this.loadData">查询</Button>
+              <Button type="primary" icon="ios-search" @click="handleChgPageSize(1)" :loading="this.loadData">查询</Button>
               <Button type="primary" icon="ios-search" @click="handleCreateInspection" :loading="this.loadData">发起</Button>
               <Button type="primary" icon="ios-search" @click="handleParameterMng" :loading="this.loadData">参数管理</Button>
             </ButtonGroup>
@@ -37,7 +37,7 @@
 
         <div slot="footer" style="width:100%;text-align: center">
           <Page :total="pageData.total" :current.sync="pageData.current" :disabled="this.dataSet.length > 0 ? false: true"
-            @on-change="searchRd"
+            @on-change="handleSearchRd"
             @on-page-size-change="handleChgPageSize"
             size="small" show-elevator show-sizer />
         </div>
@@ -73,7 +73,7 @@ export default {
   mixins: [ mixinInfo ],
   data () {
     return {
-      optSelDate: {
+      optDate: {
         disabledDate (date) {
           return date && date.valueOf() > Date.now()
         }
@@ -87,15 +87,15 @@ export default {
         employeeNo: '',
         name: ''
       },
-      loadData: false,
-      windowHeight: 0,
       dataSet: [],
+      loadData: false,
       showInspectionAction: false,
       showInsParaMng: false,
       dataSaving: true,
       actionTitle: '',
       actionType: '', // view || create || modify
-      saveNow: false
+      saveNow: false,
+      windowHeight: 0
     }
   },
   methods: {
@@ -128,7 +128,7 @@ export default {
     handleChgPageSize (val) {
       this.pageData.size = val
       this.$nextTick(() => {
-        this.searchRd()
+        this.handleSearchRd()
       })
     },
     handleSearchRd () {
@@ -139,9 +139,6 @@ export default {
     },
     handleShowDetail () {
 
-    },
-    handleSelectEmp () {
-      this.showSelectEmp = true
     },
     setWindowHeight () {
       this.windowHeight = window.innerHeight - 230

@@ -27,10 +27,8 @@
     "v-org-tree": "^1.0.12",
     "vue": "^2.6.10",
     "vue-i18n": "^7.8.0",
-    "vue-router": "^3.1.3",
     "vuedraggable": "^2.23.0",
     "vuex": "^3.1.1",
-    "wangeditor": "^3.1.1",
     "xlsx": "^0.13.3"
   },
   "devDependencies": {
@@ -50,6 +48,7 @@
     "lodash": "^4.17.15",
     "mockjs": "^1.0.1-beta3",
     "view-design": "^4.0.2",
+    "vue-router": "^3.1.3",
     "vue-template-compiler": "^2.6.10"
   },
   "browserslist": [

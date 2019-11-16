@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Form ref="formAttentionAV" :show-message="false" :model="formData" :label-width="80">
+    <Form ref="form" :show-message="false" :model="formData" :label-width="80">
       <Row :gutter="10">
         <Col span="6">
           <FormItem label="员工工号" prop="yggh" class="info_title">
@@ -42,9 +42,9 @@
       </Row>
     </Form>
     <Divider style="margin-top: 10px;margin-bottom: 10px;" />
-    <Form ref="formAttentionAV2" :show-message="false" :model="formData" label-position="top">
+    <Form ref="form1" :show-message="false" :model="formData" label-position="top">
       <FormItem label="关注原因描述" prop="yyms" style="margin-left: 10px;" class="info_title">
-        <Input type="textarea" show-word-limit :maxlength="1000" v-model="formData.yyms" :rows="2" :autosize='{ minRows: 4, maxRows: 4 }' :readonly="this.actionType==='view'"></Input>
+        <Input type="textarea" show-word-limit :maxlength="1000" v-model="formData.yyms" :rows="2" :autosize='{ minRows: 4, maxRows: 4 }' readonly></Input>
       </FormItem>
     </Form>
 
@@ -58,7 +58,7 @@
       <Table size="small" :height="400" @on-row-dblclick="handleShowDetail" :stripe="true" border ref="table-sa" :loading="this.loadData" :columns="cols" :data="dataSet">
         <div slot="footer" style="width:100%;text-align: center">
           <Page :total="pageData.total" :current.sync="pageData.current" :disabled="this.dataSet.length > 0 ? false: true"
-            @on-change="searchRd"
+            @on-change="handleSearchRd"
             @on-page-size-change="handleChgPageSize"
             size="small" show-elevator show-sizer />
         </div>
@@ -87,10 +87,7 @@ export default {
   },
   mixins: [ mixinInfo ],
   props: [
-    'actionType',
-    'selOption',
-    'rowData',
-    'saveData'
+    'rowData'
   ],
   data () {
     return {
@@ -99,13 +96,11 @@ export default {
         current: 1,
         size: 10
       },
-      loadData: false,
       dataSet: [],
+      loadData: false,
       formData: this.rowData,
-      sel_option: this.selOption,
       showAttentionDetail: false,
-      showShowAttached: false,
-      ruleAttention: {
+      rules: {
 
       }
     }
@@ -114,13 +109,10 @@ export default {
     handleChgPageSize (val) {
       this.pageData.size = val
       this.$nextTick(() => {
-        this.searchRd()
+        this.handleSearchRd()
       })
     },
     handleSearchRd () {
-
-    },
-    searchRd () {
 
     },
     handleHTypeChg () {
@@ -128,9 +120,6 @@ export default {
     },
     handleShowDetail () {
       this.showAttentionDetail = true
-    },
-    handleShowAttached () {
-      this.showShowAttached = true
     }
   }
 }

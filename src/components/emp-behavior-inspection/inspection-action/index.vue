@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Form ref="formAttentionAV" :show-message="false" :model="formData" :label-width="80">
+    <Form ref="form" :rules="rules" :show-message="false" :model="formData" :label-width="80">
       <Row :gutter="20">
         <Col span="12">
           <FormItem label="项目名称" prop="xmmc" class="info_title">
@@ -8,8 +8,8 @@
           </FormItem>
         </Col>
         <Col span="12">
-          <FormItem label="年度" prop="nd" class="info_title">
-            <DatePicker type="year" :options="optSelDate"
+          <FormItem label="年度" prop="nd" :label-width="50" class="info_title">
+            <DatePicker type="year" :options="optDate"
             @on-change="handleDateChange"
             :disabled="this.saveData"
             :clearable="false"
@@ -59,22 +59,18 @@ export default {
   },
   props: [
     'actionType',
-    'selOption',
     'rowData',
     'saveData'
   ],
   data () {
     return {
-      optSelDate: {
+      optDate: {
         disabledDate (date) {
           return date && date.valueOf() > Date.now()
         }
       },
       formData: this.rowData,
-      sel_option: this.selOption,
-      showAttentionDetail: false,
-      showShowAttached: false,
-      ruleAttentionAV4: {
+      rules: {
 
       }
     }

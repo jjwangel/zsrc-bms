@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Form ref="formAttentionAV" :show-message="false" :model="formData" :label-width="80">
+    <Form ref="form" :show-message="false" :model="formData" :label-width="80">
       <Row :gutter="20">
         <Col span="8">
           <FormItem label="排查类型" prop="yggh" class="info_title">
@@ -24,7 +24,7 @@
         </Col>
         <Col span="8">
           <ButtonGroup>
-            <Button type="primary" icon="ios-search" @click="handleSearchRd" :loading="this.loadData">查询</Button>
+            <Button type="primary" icon="ios-search" @click="handleChgPageSize(1)" :loading="this.loadData">查询</Button>
             <Button type="primary" icon="ios-search" @click="handleCreatePara" :loading="this.loadData">增加</Button>
           </ButtonGroup>
         </Col>
@@ -35,7 +35,7 @@
       <Table size="small" :height="400" @on-row-dblclick="handleShowDetail" :stripe="true" border ref="table-sa" :loading="this.loadData" :columns="cols" :data="dataSet">
         <div slot="footer" style="width:100%;text-align: center">
           <Page :total="pageData.total" :current.sync="pageData.current" :disabled="this.dataSet.length > 0 ? false: true"
-            @on-change="searchRd"
+            @on-change="handleSearchRd"
             @on-page-size-change="handleChgPageSize"
             size="small" show-elevator show-sizer />
         </div>
@@ -77,22 +77,22 @@ export default {
         current: 1,
         size: 10
       },
-      loadData: false,
+      rules: {
+
+      },
       dataSet: [],
+      loadData: false,
       formData: this.rowData,
       sel_option: this.selOption,
       showInsParaDetail: false,
-      showShowAttached: false,
-      ruleAttention: {
-
-      }
+      showShowAttached: false
     }
   },
   methods: {
     handleChgPageSize (val) {
       this.pageData.size = val
       this.$nextTick(() => {
-        this.searchRd()
+        this.handleSearchRd()
       })
     },
     handleCreatePara () {
@@ -109,9 +109,6 @@ export default {
     },
     handleShowDetail () {
       this.showAttentionDetail = true
-    },
-    handleShowAttached () {
-      this.showShowAttached = true
     }
   }
 }

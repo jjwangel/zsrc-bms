@@ -2,32 +2,34 @@
   <div>
     <Card dis-hover>
       <div slot="title">
-        <Form ref ="form-sa" :model="formData" inline>
-          <FormItem label="工号" prop="employeeNo" :label-width="50">
+        <Form ref ="form" :model="formData" inline>
+          <FormItem label="员工工号" prop="employeeNo" :label-width="80">
             <Input type="text" v-model="formData.employeeNo" :readonly="this.loadData" style="width:100px;"></Input>
           </FormItem>
-          <FormItem label="姓名" prop="name" :label-width="50">
+          <FormItem label="员工姓名" prop="name" :label-width="80">
             <Input type="text" v-model="formData.name" :readonly="this.loadData" style="width:130px;">
               <Button slot="append" icon="md-apps" @click="handleSelectEmp" :disabled="this.loadData"></Button>
             </Input>
           </FormItem>
           <FormItem :label-width="20">
-            <Button type="primary" icon="ios-search" @click="handleSearchRd" :loading="this.loadData">查询</Button>
-            <Button type="primary" icon="ios-search" @click="handleCreateAttention" :loading="this.loadData">创建</Button>
+            <Button type="primary" icon="ios-search" @click="handleChgPageSize(1)" :loading="this.loadData">查询</Button>
+            <Button type="primary" icon="ios-search" @click="handleSponsorAttention" :loading="this.loadData">创建（临时）</Button>
           </FormItem>
         </Form>
       </div>
 
-      <Table size="small" :height="windowHeight" @on-row-dblclick="handleShowDetail" :stripe="true" border ref="table-sa" :loading="this.loadData" :columns="cols" :data="dataSet">
+      <Table size="small" :height="windowHeight" :stripe="true" border ref="table" :loading="this.loadData" :columns="cols" :data="dataSet">
         <template slot-scope="{ row, index }" slot="action">
           <Button type="primary" size="small" @click="handleSponsorAttention (row, index)">调整</Button>
         </template>
 
         <div slot="footer" style="width:100%;text-align: center">
-          <Page :total="pageData.total" :current.sync="pageData.current" :disabled="this.dataSet.length > 0 ? false: true"
-            @on-change="searchRd"
-            @on-page-size-change="handleChgPageSize"
-            size="small" show-elevator show-sizer />
+          <Page size="small" show-elevator show-sizer
+            :total="pageData.total"
+            :current.sync="pageData.current"
+            :disabled="this.dataSet.length > 0 ? false: true"
+            @on-change="handleSearchRd"
+            @on-page-size-change="handleChgPageSize"/>
         </div>
       </Table>
 
@@ -36,11 +38,11 @@
       </Drawer>
     </Card>
 
-    <Modal v-model="showAttentionAction" :loading="dataSaving" scrollable :title="actionTitle" width="700" ok-text="提交"
-      :mask-closable="this.actionType === 'view'"
-      :footer-hide="this.actionType === 'view'"
+    <Modal v-model="showAttentionAction" :loading="dataSaving" scrollable title="发起调整关注类别" width="700" ok-text="提交"
+      :styles="{top: '10px'}"
+      :mask-closable="false"
       @on-ok="handleSaveChange">
-      <AttentionAction @saveCancel="handleSaveCancel" @saveSuccess="handleSaveSuccess" :saveNow_="saveNow" :rowData="{}" :selOption="{}" :actionType="this.actionType"></AttentionAction>
+      <AttentionAction @saveCancel="handleSaveCancel" @saveSuccess="handleSaveSuccess" :saveData="saveNow" :rowData="{}" :selOption="{}"></AttentionAction>
     </Modal>
   </div>
 </template>
@@ -66,16 +68,14 @@ export default {
         employeeNo: '',
         name: ''
       },
-      loadData: false,
-      showSelectEmp: false,
-      windowHeight: 0,
       dataSet: [],
       deptEmpList: [],
+      loadData: false,
+      showSelectEmp: false,
       showAttentionAction: false,
+      saveNow: false,
       dataSaving: true,
-      actionTitle: '',
-      actionType: '', // view || create || modify
-      saveNow: false
+      windowHeight: 0
     }
   },
   methods: {
@@ -91,17 +91,18 @@ export default {
       }).catch(() => {
 
       })
-    },
-    handleCreateAttention () {
-      this.actionType = 'create'
-      this.actionTitle = '发起调整关注类别'
-      this.showAttentionAction = true
+
+      // 获取关注类型字选项
     },
     handleSponsorAttention (row, index) {
-
+      // 发起调整
+      this.showAttentionAction = true
     },
     handleSaveChange () {
-
+      this.saveNow = true
+      this.$nextTick(() => {
+        this.saveNow = false
+      })
     },
     handleSaveCancel () {
 
@@ -112,17 +113,12 @@ export default {
     handleChgPageSize (val) {
       this.pageData.size = val
       this.$nextTick(() => {
-        this.searchRd()
+        this.handleSearchRd()
       })
     },
     handleSearchRd () {
-
-    },
-    searchRd () {
-
-    },
-    handleShowDetail () {
-
+      if (this.loadData) return
+      this.loadData = true
     },
     handleSelectEmp () {
       this.showSelectEmp = true

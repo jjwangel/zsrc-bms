@@ -2,8 +2,8 @@
   <div>
     <Card dis-hover>
       <div slot="title">
-        <Form ref ="form-pp" :model="formData" inline>
-          <FormItem label="排查项目" prop="pcxm" :label-width="80">
+        <Form ref ="form" :model="formData" :label-width="80" inline>
+          <FormItem label="排查项目" prop="pcxm">
             <Select v-model="formData.pcxm" style="width:150px" :disable="this.loadData">
               <Option :value="0">全部</Option>
               <Option :value="1">待启动</Option>
@@ -13,28 +13,26 @@
           </FormItem>
         </Form>
         <Input type="textarea" v-model="formData.xmsm" style="width: 95%;margin-left: 80px;margin-top: 10px;margin-bottom: 10px;" :rows="2" :autosize='{ minRows: 4, maxRows: 4 }' readonly></Input>
-        <Form ref ="form-sbs" :model="formData" inline>
-          <FormItem label="工号" prop="employeeNo" :label-width="80">
+        <Form ref ="form1" :model="formData" :label-width="80" inline>
+          <FormItem label="员工工号" prop="employeeNo">
             <Input type="text" v-model="formData.employeeNo" :readonly="this.loadData" style="width:100px;"></Input>
           </FormItem>
-          <FormItem label="姓名" prop="name" :label-width="80">
+          <FormItem label="员工姓名" prop="name">
             <Input type="text" v-model="formData.name" :readonly="this.loadData" style="width:130px;">
               <Button slot="append" icon="md-apps" @click="handleSelectEmp" :disabled="this.loadData"></Button>
             </Input>
           </FormItem>
-          <FormItem label="所属机构" prop="dqzt" :label-width="80">
+          <FormItem label="所属机构" prop="dqzt">
             <Cascader style="width: 200px" :data="dept_list" v-model="formData.deptCode" trigger="hover" :disabled="this.loadData"></Cascader>
           </FormItem>
-          <FormItem label="排查情况" prop="pczt" :label-width="80">
+          <FormItem label="排查情况" prop="pczt">
               <Select v-model="formData.pczt" style="width:100px" :disable="this.loadData">
                 <Option :value="0">全部</Option>
                 <Option :value="1">正常</Option>
                 <Option :value="2">异常</Option>
               </Select>
             </FormItem>
-          <ButtonGroup>
-            <Button type="primary" icon="ios-search" @click="handleSearchRd" :loading="this.loadData">查询</Button>
-          </ButtonGroup>
+          <Button type="primary" icon="ios-search" @click="handleChgPageSize(1)" :loading="this.loadData">查询</Button>
         </Form>
       </div>
 
@@ -45,7 +43,7 @@
 
         <div slot="footer" style="width:100%;text-align: center">
           <Page :total="pageData.total" :current.sync="pageData.current" :disabled="this.dataSet.length > 0 ? false: true"
-            @on-change="searchRd"
+            @on-change="handleSearchRd"
             @on-page-size-change="handleChgPageSize"
             size="small" show-elevator show-sizer />
         </div>
@@ -57,10 +55,9 @@
     </Card>
 
     <Modal v-model="showInspectionCheckin" :loading="dataSaving" scrollable title="排查登记" width="1000" ok-text="提交" :styles="{top: '10px'}"
-      :mask-closable="this.actionType === 'view'"
-      :footer-hide="this.actionType === 'view'"
-      @on-ok="handleSaveChange">
-      <InspectionCheckin @saveCancel="handleSaveCancel" @saveSuccess="handleSaveSuccess" :saveNow_="saveNow" :rowData="{}" :selOption="{}" :actionType="this.actionType"></InspectionCheckin>
+      :mask-closable="true"
+      :footer-hide="true">
+      <InspectionCheckin :rowData="{}" :actionType="this.actionType"></InspectionCheckin>
     </Modal>
   </div>
 </template>
@@ -77,11 +74,6 @@ export default {
   mixins: [ mixinInfo ],
   data () {
     return {
-      optSelDate: {
-        disabledDate (date) {
-          return date && date.valueOf() > Date.now()
-        }
-      },
       pageData: {
         total: 0,
         current: 1,
@@ -91,19 +83,19 @@ export default {
         employeeNo: '',
         name: ''
       },
-      loadData: false,
-      windowHeight: 0,
       dataSet: [],
       dept_list: [],
       deptEmpList: [],
+      loadData: false,
       showSelectEmp: false,
       showInspectionAction: false,
       showAddNonEmp: false,
       showInspectionCheckin: false,
       dataSaving: true,
+      saveNow: false,
       actionTitle: '',
       actionType: '', // view || create || modify
-      saveNow: false
+      windowHeight: 0
     }
   },
   methods: {
@@ -157,25 +149,13 @@ export default {
     handleSponsorAttention (row, index) {
 
     },
-    handleSaveChange () {
-
-    },
-    handleSaveCancel () {
-
-    },
-    handleSaveSuccess () {
-
-    },
     handleChgPageSize (val) {
       this.pageData.size = val
       this.$nextTick(() => {
-        this.searchRd()
+        this.handleSearchRd()
       })
     },
     handleSearchRd () {
-
-    },
-    searchRd () {
 
     },
     handleShowDetail () {

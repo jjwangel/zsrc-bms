@@ -76,12 +76,6 @@ export const mixinInfo = {
           title: '下一步计划',
           key: 'dqgzlb',
           tooltip: 'true'
-        },
-        {
-          title: '操作',
-          slot: 'action',
-          width: 100,
-          align: 'center'
         }
       ]
     }

@@ -2,30 +2,30 @@
   <div>
     <Card dis-hover>
       <div slot="title">
-        <Form ref ="form-sa" :model="formData" inline>
-          <FormItem label="工号" prop="employeeNo" :label-width="50">
+        <Form ref ="form" :model="formData" :label-width="80" inline>
+          <FormItem label="员工工号" prop="employeeNo">
             <Input type="text" v-model="formData.employeeNo" :readonly="this.loadData" style="width:100px;"></Input>
           </FormItem>
-          <FormItem label="姓名" prop="name" :label-width="50">
+          <FormItem label="员工姓名" prop="name">
             <Input type="text" v-model="formData.name" :readonly="this.loadData" style="width:130px;">
               <Button slot="append" icon="md-apps" @click="handleSelectEmp" :disabled="this.loadData"></Button>
             </Input>
           </FormItem>
           <FormItem :label-width="20">
-            <Button type="primary" icon="ios-search" @click="handleSearchRd" :loading="this.loadData">查询</Button>
-            <Button type="primary" icon="ios-search" @click="handleCreateAttention" :loading="this.loadData">创建</Button>
+            <Button type="primary" icon="ios-search" @click="handleChgPageSize(1)" :loading="this.loadData">查询</Button>
+            <Button type="primary" icon="ios-search" @click="handleCreateFollow" :loading="this.loadData">创建（临时）</Button>
           </FormItem>
         </Form>
       </div>
 
       <Table size="small" :height="windowHeight" @on-row-dblclick="handleShowDetail" :stripe="true" border ref="table-sa" :loading="this.loadData" :columns="cols" :data="dataSet">
         <template slot-scope="{ row, index }" slot="action">
-          <Button type="primary" size="small" @click="handleSponsorAttention (row, index)">调整</Button>
+          <Button type="primary" size="small" @click="handleSponsorAttention (row, index)">登记</Button>
         </template>
 
         <div slot="footer" style="width:100%;text-align: center">
           <Page :total="pageData.total" :current.sync="pageData.current" :disabled="this.dataSet.length > 0 ? false: true"
-            @on-change="searchRd"
+            @on-change="handleSearchRd"
             @on-page-size-change="handleChgPageSize"
             size="small" show-elevator show-sizer />
         </div>
@@ -36,7 +36,7 @@
       </Drawer>
     </Card>
 
-    <Modal v-model="showAttentionAction" :loading="dataSaving" scrollable :title="actionTitle" width="900" ok-text="提交" :styles="{top: '10px'}"
+    <Modal v-model="showAttentionFollw" :loading="dataSaving" scrollable :title="actionTitle" width="1000" ok-text="提交" :styles="{top: '10px'}"
       :mask-closable="this.actionType === 'view'"
       :footer-hide="this.actionType === 'view'"
       @on-ok="handleSaveChange">
@@ -66,16 +66,16 @@ export default {
         employeeNo: '',
         name: ''
       },
-      loadData: false,
-      showSelectEmp: false,
-      windowHeight: 0,
       dataSet: [],
       deptEmpList: [],
-      showAttentionAction: false,
+      loadData: false,
+      showSelectEmp: false,
+      showAttentionFollw: false,
       dataSaving: true,
+      saveNow: false,
       actionTitle: '',
       actionType: '', // view || create || modify
-      saveNow: false
+      windowHeight: 0
     }
   },
   methods: {
@@ -92,10 +92,10 @@ export default {
 
       })
     },
-    handleCreateAttention () {
+    handleCreateFollow () {
       this.actionType = 'create'
       this.actionTitle = '发起跟进登录'
-      this.showAttentionAction = true
+      this.showAttentionFollw = true
     },
     handleSponsorAttention (row, index) {
 
@@ -112,14 +112,12 @@ export default {
     handleChgPageSize (val) {
       this.pageData.size = val
       this.$nextTick(() => {
-        this.searchRd()
+        this.handleSearchRd()
       })
     },
     handleSearchRd () {
-
-    },
-    searchRd () {
-
+      if (this.loadData) return
+      this.loadData = true
     },
     handleShowDetail () {
 

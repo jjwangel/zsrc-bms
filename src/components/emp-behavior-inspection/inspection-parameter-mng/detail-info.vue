@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Form ref="formAttentionAV" :show-message="false" :model="formData" :label-width="80">
+    <Form ref="form" :show-message="false" :model="formData" :label-width="80">
       <Row :gutter="20">
         <Col span="8">
           <FormItem label="排查类型" prop="yggh" class="info_title">
@@ -43,34 +43,18 @@ export default {
   data () {
     return {
       loadData: false,
-      dataSet: [],
       formData: this.rowData,
       sel_option: this.selOption,
       showInsParaDetail: false,
       showShowAttached: false,
-      ruleAttention: {
+      rules: {
 
       }
     }
   },
   methods: {
-    handleCreatePara () {
-      this.showInsParaDetail = true
-    },
-    handleSearchRd () {
-
-    },
-    searchRd () {
-
-    },
     handleHTypeChg () {
 
-    },
-    handleShowDetail () {
-      this.showAttentionDetail = true
-    },
-    handleShowAttached () {
-      this.showShowAttached = true
     }
   }
 }

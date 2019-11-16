@@ -17,6 +17,13 @@ const whiteRountName = [
   'error_404'
 ] // 路由白名单，不需要鉴权
 
+// Vue-Router升级导致的Uncaught (in promise)问题
+const originalPush = Router.prototype.push
+Router.prototype.push = function push (location, onResolve, onReject) {
+  if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject)
+  return originalPush.call(this, location).catch(err => err)
+}
+
 Vue.use(Router)
 const router = new Router({
   routes,

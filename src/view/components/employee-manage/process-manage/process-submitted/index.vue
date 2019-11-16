@@ -2,7 +2,7 @@
   <div>
     <Card dis-hover>
       <div slot="title">
-        <Form ref ="form-pp" :model="formData" inline>
+        <Form ref ="form" :model="formData" inline>
           <FormItem label="流程类型" prop="lqlx" :label-width="80">
             <Select v-model="formData.lqlx" style="width:100px" :disable="this.loadData">
               <Option :value="0">全部</Option>
@@ -19,20 +19,16 @@
               :editable='false'></DatePicker>
           </FormItem>
           <FormItem :label-width="20">
-            <Button type="primary" icon="ios-search" @click="handleSearchRd" :loading="this.loadData">查询</Button>
-            <Button type="primary" icon="ios-search" @click="handleCreateAttention" :loading="this.loadData">详细</Button>
+            <Button type="primary" icon="ios-search" @click="handleChgPageSize(1)" :loading="this.loadData">查询</Button>
+            <Button type="primary" icon="ios-search" @click="handleCreateAttention" :loading="this.loadData">详细（临时）</Button>
           </FormItem>
         </Form>
       </div>
 
-      <Table size="small" :height="windowHeight" @on-row-dblclick="handleShowDetail" :stripe="true" border ref="table-sa" :loading="this.loadData" :columns="cols" :data="dataSet">
-        <template slot-scope="{ row, index }" slot="action">
-          <Button type="error" size="small" @click="handleSponsorAttention (row, index)">删除</Button>
-        </template>
-
+      <Table size="small" :height="windowHeight" @on-row-dblclick="handleShowDetail" :stripe="true" border ref="table" :loading="this.loadData" :columns="cols" :data="dataSet">
         <div slot="footer" style="width:100%;text-align: center">
           <Page :total="pageData.total" :current.sync="pageData.current" :disabled="this.dataSet.length > 0 ? false: true"
-            @on-change="searchRd"
+            @on-change="handleSearchRd"
             @on-page-size-change="handleChgPageSize"
             size="small" show-elevator show-sizer />
         </div>
@@ -68,14 +64,14 @@ export default {
         employeeNo: '',
         name: ''
       },
-      loadData: false,
-      windowHeight: 0,
       dataSet: [],
+      loadData: false,
       showAttentionAction: false,
       dataSaving: true,
+      saveNow: false,
       actionTitle: '',
       actionType: '', // view || create || modify
-      saveNow: false
+      windowHeight: 0
     }
   },
   methods: {
@@ -90,9 +86,6 @@ export default {
       this.actionTitle = '关注类别复核/审核'
       this.showAttentionAction = true
     },
-    handleSponsorAttention (row, index) {
-
-    },
     handleSaveChange () {
 
     },
@@ -105,20 +98,15 @@ export default {
     handleChgPageSize (val) {
       this.pageData.size = val
       this.$nextTick(() => {
-        this.searchRd()
+        this.handleSearchRd()
       })
     },
     handleSearchRd () {
-
-    },
-    searchRd () {
-
+      if (this.loadData) return
+      this.loadData = true
     },
     handleShowDetail () {
 
-    },
-    handleSelectEmp () {
-      this.showSelectEmp = true
     },
     setWindowHeight () {
       this.windowHeight = window.innerHeight - 230

@@ -44,12 +44,6 @@ export const mixinInfo = {
           key: 'deptName',
           width: 200,
           tooltip: 'true'
-        },
-        {
-          title: '操作',
-          slot: 'action',
-          width: 100,
-          align: 'center'
         }
       ]
     }

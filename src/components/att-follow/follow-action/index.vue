@@ -1,54 +1,51 @@
 <template>
   <div>
-    <Form ref="formAttention" :rules="ruleAttention" :show-message="false" :model="formData" :label-width="80">
+    <Form ref="form" :rules="rules" :show-message="false" :model="formData" :label-width="80">
       <Row :gutter="20">
-        <Col span="12">
+        <Col span="6">
           <FormItem label="员工工号" prop="yggh" class="info_title">
             <Input v-model="formData.yggh" readonly></Input>
           </FormItem>
         </Col>
-        <Col span="12">
+        <Col span="6">
           <FormItem label="员工姓名" prop="ygxm" class="info_title">
             <Input v-model="formData.ygxm" readonly></Input>
           </FormItem>
         </Col>
-      </Row>
-      <Row :gutter="20">
-        <Col span="12">
+        <Col span="6">
           <FormItem label="所属单位" prop="ssdw" class="info_title">
             <Input v-model="formData.ssdw" readonly></Input>
           </FormItem>
         </Col>
-        <Col span="12">
+        <Col span="6">
           <FormItem label="部室网点" prop="bswd" class="info_title">
             <Input v-model="formData.bswd" readonly></Input>
           </FormItem>
         </Col>
       </Row>
       <Row :gutter="20">
-        <Col span="12">
+        <Col span="6">
           <FormItem label="岗位" prop="xrzw" class="info_title">
             <Input v-model="formData.xrzw" readonly></Input>
           </FormItem>
         </Col>
-        <Col span="12">
+        <Col span="6">
           <FormItem label="职务" prop="xrzw" class="info_title">
             <Input v-model="formData.xrzw" readonly></Input>
           </FormItem>
         </Col>
-      </Row>
-      <Row :gutter="20">
-        <Col span="12">
-          <FormItem label="当前关注类别" prop="xrzw" class="info_title" :label-width="110">
+        <Col span="6">
+          <FormItem label="关注类别" prop="xrzw" class="info_title" :label-width="110">
             <Input v-model="formData.xrzw" readonly></Input>
           </FormItem>
         </Col>
-        <Col span="12">
+        <Col span="6">
           <FormItem label="关注类型" prop="xrzw" class="info_title">
             <Input v-model="formData.xrzw" readonly></Input>
           </FormItem>
         </Col>
       </Row>
+
       <Row :gutter="20">
         <Col span="12">
           <FormItem label="开始关注日期" prop="xrzw" class="info_title" :label-width="110">
@@ -63,9 +60,9 @@
       </Row>
     </Form>
     <Divider style="margin-top: 10px;margin-bottom: 10px;" />
-    <Form ref="formAttention2" :rules="ruleAttention" :show-message="false" :model="formData" label-position="top">
+    <Form ref="form2" :rules="rules" :show-message="false" :model="formData" label-position="top">
       <FormItem label="关注原因描述" prop="yyms" style="margin-left: 10px;" class="info_title">
-        <Input type="textarea" show-word-limit :maxlength="1000" v-model="formData.yyms" :rows="2" :autosize='{ minRows: 4, maxRows: 4 }' readonly></Input>
+        <Input type="textarea" show-word-limit v-model="formData.yyms" :rows="2" :autosize='{ minRows: 4, maxRows: 4 }' readonly></Input>
       </FormItem>
       <FormItem label="采取措施" prop="yyms" style="margin-left: 10px;" class="info_title">
         <Input type="textarea" show-word-limit :maxlength="500" v-model="formData.yyms" :rows="2" :autosize='{ minRows: 4, maxRows: 4 }' :readonly="this.actionType==='view'"></Input>
@@ -90,27 +87,19 @@ export default {
   },
   props: [
     'actionType',
-    'selOption',
     'rowData',
     'saveData'
   ],
   data () {
     return {
       formData: this.rowData,
-      sel_option: this.selOption,
-      showAttentionDetail: false,
-      ruleAttention: {
+      rules: {
 
       }
     }
   },
   methods: {
-    handleHTypeChg () {
 
-    },
-    handleShowDetail () {
-      this.showAttentionDetail = true
-    }
   }
 }
 </script>

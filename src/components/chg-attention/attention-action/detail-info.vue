@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Form ref="formDetailInfo" :model="formData" :show-message="false" :label-width="120">
+    <Form ref="form" :model="formData" :show-message="false" :label-width="120">
       <Row :gutter="20">
         <Col span="12">
           <FormItem label="员工工号" prop="yggh" class="info_title">
@@ -39,12 +39,12 @@
       </Row>
     </Form>
     <Divider style="margin-top: 10px;margin-bottom: 10px;" />
-    <Form ref="formDetailInfo" :model="formData" :show-message="false" label-position="top">
+    <Form ref="form2" :model="formData" :show-message="false" label-position="top">
       <FormItem label="关注（调整）原因描述" prop="gztzyyms" style="margin-left: 10px;" class="info_title">
-        <Input type="textarea" v-model="formData.gztzyyms" :rows="2" :autosize='{ minRows: 6, maxRows: 6 }'></Input>
+        <Input type="textarea" v-model="formData.gztzyyms" :rows="2" :autosize='{ minRows: 6, maxRows: 6 }' readonly></Input>
       </FormItem>
       <FormItem label="跟进情况登记" prop="gjqkdj" style="margin-left: 10px;" class="info_title">
-        <Input type="textarea" v-model="formData.gjqkdj" :rows="2" :autosize='{ minRows: 6, maxRows: 6 }'></Input>
+        <Input type="textarea" v-model="formData.gjqkdj" :rows="2" :autosize='{ minRows: 6, maxRows: 6 }' readonly></Input>
       </FormItem>
     </Form>
   </div>
@@ -58,6 +58,13 @@ export default {
   data () {
     return {
       formData: this.rowData
+    }
+  },
+  watch: {
+    rowData (val) {
+      this.$refs['form'].resetFields()
+      this.$refs['form2'].resetFields()
+      this.formData = val
     }
   }
 }

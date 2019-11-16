@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Form ref="formAttentionAV" :show-message="false" :model="formData" :label-width="80">
+    <Form ref="form" :show-message="false" :model="formData" :label-width="80">
       <Row :gutter="10">
         <Col span="6">
           <FormItem label="员工工号" prop="yggh" class="info_title">
@@ -42,18 +42,18 @@
       </Row>
     </Form>
     <Divider style="margin-top: 10px;margin-bottom: 10px;" />
-    <Form ref="formFollowView1" :show-message="false" :model="formData" label-position="top">
+    <Form ref="form1" :show-message="false" :model="formData" label-position="top">
       <FormItem label="关注原因描述" prop="yyms" style="margin-left: 10px;" class="info_title">
         <Input type="textarea" show-word-limit :maxlength="1000" v-model="formData.yyms" :rows="2" :autosize='{ minRows: 5, maxRows: 5 }' readonly></Input>
       </FormItem>
       <FormItem label="采取措施" prop="yyms" style="margin-left: 10px;" class="info_title">
-        <Input type="textarea" show-word-limit :maxlength="500" v-model="formData.yyms" :rows="2" :autosize='{ minRows: 5, maxRows: 5 }' :readonly="this.actionType==='view'"></Input>
+        <Input type="textarea" show-word-limit :maxlength="500" v-model="formData.yyms" :rows="2" :autosize='{ minRows: 5, maxRows: 5 }' readonly></Input>
       </FormItem>
       <FormItem label="跟进情况登记" prop="yyms" style="margin-left: 10px;" class="info_title">
-        <Input type="textarea" show-word-limit :maxlength="1000" v-model="formData.yyms" :rows="2" :autosize='{ minRows: 5, maxRows: 5 }' :readonly="this.actionType==='view'"></Input>
+        <Input type="textarea" show-word-limit :maxlength="1000" v-model="formData.yyms" :rows="2" :autosize='{ minRows: 5, maxRows: 5 }' readonly></Input>
       </FormItem>
       <FormItem label="下一步计划" prop="yyms" style="margin-left: 10px;" class="info_title">
-        <Input type="textarea" show-word-limit :maxlength="500" v-model="formData.yyms" :rows="2" :autosize='{ minRows: 5, maxRows: 5 }' :readonly="this.actionType==='view'"></Input>
+        <Input type="textarea" show-word-limit :maxlength="500" v-model="formData.yyms" :rows="2" :autosize='{ minRows: 5, maxRows: 5 }' readonly></Input>
       </FormItem>
     </Form>
     <Divider style="margin-top: 10px;margin-bottom: 10px;" />
@@ -88,18 +88,12 @@ export default {
 
   },
   props: [
-    'actionType',
-    'selOption',
-    'rowData',
-    'saveData'
+    'rowData'
   ],
   data () {
     return {
       formData: this.rowData,
-      sel_option: this.selOption,
-      showAttentionDetail: false,
-      showShowAttached: false,
-      ruleAttention: {
+      rules: {
 
       }
     }
@@ -107,12 +101,6 @@ export default {
   methods: {
     handleHTypeChg () {
 
-    },
-    handleShowDetail () {
-      this.showAttentionDetail = true
-    },
-    handleShowAttached () {
-      this.showShowAttached = true
     }
   }
 }

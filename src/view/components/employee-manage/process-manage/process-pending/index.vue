@@ -2,40 +2,40 @@
   <div>
     <Card dis-hover>
       <div slot="title">
-        <Form ref ="form-pp" :model="formData" inline>
+        <Form ref ="form" :model="formData" inline>
           <FormItem label="流程类型" prop="lqlx" :label-width="80">
-            <Select v-model="formData.lqlx" style="width:100px" :disable="this.loadData">
+            <Select v-model="formData.lqlx" style="width:120px" :disable="this.loadData">
               <Option :value="0">全部</Option>
               <Option :value="1">关注调整</Option>
               <Option :value="2">跟进录入</Option>
             </Select>
           </FormItem>
           <FormItem :label-width="20">
-            <Button type="primary" icon="ios-search" @click="handleSearchRd" :loading="this.loadData">查询</Button>
-            <Button type="primary" icon="ios-search" @click="handleCreateAttention" :loading="this.loadData">详细</Button>
+            <Button type="primary" icon="ios-search" @click="handleChgPageSize(1)" :loading="this.loadData">查询</Button>
+            <Button type="primary" icon="ios-search" @click="handleVerifyAttention" :loading="this.loadData">复核/审批（临时）</Button>
           </FormItem>
         </Form>
       </div>
 
-      <Table size="small" :height="windowHeight" @on-row-dblclick="handleShowDetail" :stripe="true" border ref="table-sa" :loading="this.loadData" :columns="cols" :data="dataSet">
+      <Table size="small" :height="windowHeight" @on-row-dblclick="handleVerifyAttention" :stripe="true" border ref="table" :loading="this.loadData" :columns="cols" :data="dataSet">
         <template slot-scope="{ row, index }" slot="action">
-          <Button type="error" size="small" @click="handleSponsorAttention (row, index)">删除</Button>
+          <Button type="error" size="small" @click="handleVerifyAttention (row, index)">办理</Button>
         </template>
 
         <div slot="footer" style="width:100%;text-align: center">
           <Page :total="pageData.total" :current.sync="pageData.current" :disabled="this.dataSet.length > 0 ? false: true"
-            @on-change="searchRd"
+            @on-change="handleSearchRd"
             @on-page-size-change="handleChgPageSize"
             size="small" show-elevator show-sizer />
         </div>
       </Table>
     </Card>
 
-    <Modal v-model="showAttentionAction" :loading="dataSaving" scrollable :title="actionTitle" width="1000" ok-text="提交" :styles="{top: '10px'}"
-      :mask-closable="this.actionType === 'view'"
-      :footer-hide="this.actionType === 'view'"
+    <Modal v-model="showVerifyAttention" :loading="dataSaving" scrollable :title="actionTitle" width="1000" ok-text="提交" :styles="{top: '10px'}"
+      :mask-closable="false"
+      :footer-hide="false"
       @on-ok="handleSaveChange">
-      <AttentionAuditView @saveCancel="handleSaveCancel" @saveSuccess="handleSaveSuccess" :saveNow_="saveNow" :rowData="{}" :selOption="{}" :actionType="this.actionType"></AttentionAuditView>
+      <AttentionAuditView @saveCancel="handleSaveCancel" @saveSuccess="handleSaveSuccess" :saveData="saveNow" :rowData="{}" :selOption="{}" :actionType="this.actionType"></AttentionAuditView>
     </Modal>
   </div>
 </template>
@@ -60,27 +60,24 @@ export default {
         employeeNo: '',
         name: ''
       },
-      loadData: false,
-      windowHeight: 0,
       dataSet: [],
-      showAttentionAction: false,
-      dataSaving: true,
+      loadData: false,
+      showVerifyAttention: false,
+      dataSaving: false,
+      saveNow: false,
       actionTitle: '',
       actionType: '', // view || create || modify
-      saveNow: false
+      windowHeight: 0
     }
   },
   methods: {
     initInfo () {
 
     },
-    handleDateChange () {
-
-    },
-    handleCreateAttention () {
+    handleVerifyAttention (row, index) {
       this.actionType = 'create'
       this.actionTitle = '关注类别复核/审核'
-      this.showAttentionAction = true
+      this.showVerifyAttention = true
     },
     handleSponsorAttention (row, index) {
 
@@ -97,20 +94,12 @@ export default {
     handleChgPageSize (val) {
       this.pageData.size = val
       this.$nextTick(() => {
-        this.searchRd()
+        this.handleSearchRd()
       })
     },
     handleSearchRd () {
-
-    },
-    searchRd () {
-
-    },
-    handleShowDetail () {
-
-    },
-    handleSelectEmp () {
-      this.showSelectEmp = true
+      if (this.loadData) return
+      this.loadData = true
     },
     setWindowHeight () {
       this.windowHeight = window.innerHeight - 230
