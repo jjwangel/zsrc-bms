@@ -223,7 +223,7 @@ export default [
           title: '专项排查档案管理',
           hideInMenu: false
         },
-        component: () => import('@/view/components/employee-manage/chg-attention/index.vue')
+        component: () => import('@/view/components/employee-manage/emp-behavior-inspection/inspection-project-manage/index.vue')
       },
       {
         path: 'att_standing_book_search',
@@ -252,17 +252,17 @@ export default [
               title: '排查项目管理',
               hideInMenu: false
             },
-            component: () => import('@/view/components/employee-manage/chg-attention/index.vue')
+            component: () => import('@/view/components/employee-manage/emp-behavior-inspection/inspection-project-manage/index.vue')
           },
           {
             path: 'inspection_input',
-            name: 'bms_employeemng_inspection_input',
+            name: 'bms_employeemng_inspection_checkin',
             meta: {
               icon: 'ios-copy-outline',
               title: '排查登记',
               hideInMenu: false
             },
-            component: () => import('@/view/components/employee-manage/chg-attention/index.vue')
+            component: () => import('@/view/components/employee-manage/emp-behavior-inspection/inspection-checkin/index.vue')
           },
           {
             path: 'inspection_search',
@@ -272,7 +272,7 @@ export default [
               title: '排查情况查询',
               hideInMenu: false
             },
-            component: () => import('@/view/components/employee-manage/chg-attention/index.vue')
+            component: () => import('@/view/components/employee-manage/emp-behavior-inspection/inspection-search/index.vue')
           }
         ]
       }
