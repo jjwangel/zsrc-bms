@@ -58,6 +58,15 @@ export const getSelectOptionData = (params) => {
   })
 }
 
+export const getSingleSelectOptionData = (params) => {
+  let url = '/menums'
+  return axios.request({
+    url,
+    params,
+    method: 'get'
+  })
+}
+
 export const getInstEmpList = (data) => {
   let url = '/deptemployee/tree'
   const params = { employee: data.employee }

@@ -42,6 +42,22 @@ export const formatSelectOption = (selOpt) => {
 }
 
 /**
+ * @param {object} selOpt 传入表单选项对像
+ * @description 返回格式化后的表单选项
+ */
+export const formatSingleSelectOption = (selOpt) => {
+  let result = []
+  for (let elem of selOpt.values()) {
+    result.push({
+      'key': Number.parseInt(elem.value),
+      'value': elem.name
+    })
+  }
+
+  return result
+}
+
+/**
  * @param {String} startType 传入'year'则返回年头和年尾的日期字符串数组，否则返回月头和月尾的日期字符串数组
  * @description 返回起始日期与结束日期字符串数组
  */
@@ -79,6 +95,22 @@ export const getStartToLastDate = (startType, initDate) => {
 export const getFormatDate = (fmt) => {
   const today = new Date()
   return today.Format(fmt)
+}
+
+/**
+ * @param {String} fmt 传入格式化字符串，如：yyyy-MM-dd
+ * @description 返回格式化后的字符串
+ */
+export const vaildForm = (self, formName) => {
+  return new Promise((resolve, reject) => {
+    self.$refs[formName].validate((valid) => {
+      if (valid) {
+        resolve()
+      } else {
+        reject(new Error('校验数据失败！'))
+      }
+    })
+  })
 }
 
 export const accAdd = (arg1, arg2) => {

@@ -133,7 +133,7 @@ export default [
         children: [
           {
             path: 'launch_chg_att',
-            name: 'bms_employeemng_lanuch_change_attention',
+            name: 'bms_employeemng_focusadjust_startadjust',
             meta: {
               icon: 'ios-copy-outline',
               title: '发起调整',
@@ -143,7 +143,7 @@ export default [
           },
           {
             path: 'chg_att_sch_search',
-            name: 'bms_employeemng_change_attention_schedule_search',
+            name: 'bms_employeemng_focusadjust_progressquery',
             meta: {
               icon: 'ios-copy-outline',
               title: '调整进度查询',
@@ -164,7 +164,7 @@ export default [
         children: [
           {
             path: 'launch_follow',
-            name: 'bms_employeemng_lanuch_follow',
+            name: 'bms_employeemng_focusfollow_startfollow',
             meta: {
               icon: 'ios-copy-outline',
               title: '发起跟进',
@@ -174,7 +174,7 @@ export default [
           },
           {
             path: 'follow_sch_search',
-            name: 'bms_employeemng_follow_schedule_search',
+            name: 'bms_employeemng_focusfollow_progressquery',
             meta: {
               icon: 'ios-copy-outline',
               title: '跟进进度查询',
@@ -195,7 +195,7 @@ export default [
         children: [
           {
             path: 'process_pending',
-            name: 'bms_employeemng_process_pending',
+            name: 'bms_employeemng_flowmanage_todo',
             meta: {
               icon: 'ios-copy-outline',
               title: '待办流程',
@@ -205,7 +205,7 @@ export default [
           },
           {
             path: 'process_submitted',
-            name: 'bms_employeemng_process_submitted',
+            name: 'bms_employeemng_flowmanage_processed',
             meta: {
               icon: 'ios-copy-outline',
               title: '已办流程',
@@ -217,7 +217,7 @@ export default [
       },
       {
         path: 'special_archives_manage',
-        name: 'special_archives_manage',
+        name: 'bms_employeemng_projectcheckmng',
         meta: {
           icon: 'ios-people',
           title: '专项排查档案管理',
@@ -227,7 +227,7 @@ export default [
       },
       {
         path: 'att_standing_book_search',
-        name: 'att_standing_book_search',
+        name: 'bms_employeemng_focusquery',
         meta: {
           icon: 'ios-people',
           title: '关注台账查询',
@@ -246,7 +246,7 @@ export default [
         children: [
           {
             path: 'inspection_project_manage',
-            name: 'bms_employeemng_inspection_project_manage',
+            name: 'bms_employeemng_behaviorcheck_checkprojectmng',
             meta: {
               icon: 'ios-copy-outline',
               title: '排查项目管理',
@@ -256,7 +256,7 @@ export default [
           },
           {
             path: 'inspection_input',
-            name: 'bms_employeemng_inspection_checkin',
+            name: 'bms_employeemng_behaviorcheck_checkrecord',
             meta: {
               icon: 'ios-copy-outline',
               title: '排查登记',
@@ -266,7 +266,7 @@ export default [
           },
           {
             path: 'inspection_search',
-            name: 'bms_employeemng_inspection_search',
+            name: 'bms_employeemng_behaviorcheck_checkquery',
             meta: {
               icon: 'ios-copy-outline',
               title: '排查情况查询',

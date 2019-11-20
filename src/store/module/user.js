@@ -46,8 +46,8 @@ export default {
     },
     setMenuAccess (state, menuAccess) {
       // ##############    临时增加    ####################################
-      let oth = ['bms_employeemng_lanuch_change_attention', 'bms_employeemng_change_attention_schedule_search', 'bms_employeemng_lanuch_follow', 'bms_employeemng_follow_schedule_search', 'bms_employeemng_process_pending', 'bms_employeemng_process_submitted', 'special_archives_manage', 'att_standing_book_search', 'bms_employeemng_inspection_project_manage', 'bms_employeemng_inspection_checkin', 'bms_employeemng_inspection_search'] // 临时测试
-      menuAccess.push(...oth)
+      // let oth = ['bms_employeemng_lanuch_change_attention', 'bms_employeemng_change_attention_schedule_search', 'bms_employeemng_lanuch_follow', 'bms_employeemng_follow_schedule_search', 'bms_employeemng_process_pending', 'bms_employeemng_process_submitted', 'special_archives_manage', 'att_standing_book_search', 'bms_employeemng_inspection_project_manage', 'bms_employeemng_inspection_checkin', 'bms_employeemng_inspection_search'] // 临时测试
+      // menuAccess.push(...oth)
       state.menuAccess = menuAccess
     },
     setHasGetInfo (state, status) {

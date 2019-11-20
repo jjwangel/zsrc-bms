@@ -29,12 +29,12 @@ export const mixinInfo = {
         },
         {
           title: '岗位',
-          key: 'gw',
+          key: 'postName',
           tooltip: 'true'
         },
         {
           title: '现任职务',
-          key: 'xrzw',
+          key: 'duty',
           tooltip: 'true'
         },
         {

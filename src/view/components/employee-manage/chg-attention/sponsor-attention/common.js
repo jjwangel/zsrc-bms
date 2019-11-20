@@ -23,23 +23,28 @@ export const mixinInfo = {
           tooltip: 'true'
         },
         {
+          title: '所属单位',
+          key: 'headSubName',
+          tooltip: 'true'
+        },
+        {
           title: '部室/网点',
           key: 'deptName',
           tooltip: 'true'
         },
         {
           title: '岗位',
-          key: 'gw',
+          key: 'postName',
           tooltip: 'true'
         },
         {
           title: '现任职务',
-          key: 'xrzw',
+          key: 'duty',
           tooltip: 'true'
         },
         {
           title: '当前关注类别',
-          key: 'dqgzlb',
+          key: 'focusTypeText',
           tooltip: 'true'
         },
         {

@@ -41,7 +41,8 @@ export default {
    */
   fileUploadUrl: {
     infoImport: 'file/import', // test/file/import   或   file/import
-    creditImport: 'empcredstau/upload'
+    creditImport: 'empcredstau/upload',
+    uploadFile: 'file/upload'
   },
 
   /**

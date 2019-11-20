@@ -12,15 +12,14 @@
             </Input>
           </FormItem>
           <FormItem :label-width="20">
-            <Button type="primary" icon="ios-search" @click="handleChgPageSize(1)" :loading="this.loadData">查询</Button>
-            <Button type="primary" icon="ios-search" @click="handleSponsorAttention" :loading="this.loadData">创建（临时）</Button>
+            <Button type="primary" icon="ios-search" @click="handleChgPageSize(pageData.size,1)" :loading="this.loadData">查询</Button>
           </FormItem>
         </Form>
       </div>
 
       <Table size="small" :height="windowHeight" :stripe="true" border ref="table" :loading="this.loadData" :columns="cols" :data="dataSet">
         <template slot-scope="{ row, index }" slot="action">
-          <Button type="primary" size="small" @click="handleSponsorAttention (row, index)">调整</Button>
+          <Button type="primary" size="small" :disabled="row.existFlow === 1" @click="handleSponsorAttention (row, index)">调整</Button>
         </template>
 
         <div slot="footer" style="width:100%;text-align: center">
@@ -42,13 +41,15 @@
       :styles="{top: '10px'}"
       :mask-closable="false"
       @on-ok="handleSaveChange">
-      <AttentionAction @saveCancel="handleSaveCancel" @saveSuccess="handleSaveSuccess" :saveData="saveNow" :rowData="{}" :selOption="{}"></AttentionAction>
+      <AttentionAction @saveCancel="handleSaveCancel" @saveSuccess="handleSaveSuccess" :saveNow="saveNow" :rowData="this.selRow" :selOption="this.selOption"></AttentionAction>
     </Modal>
   </div>
 </template>
 
 <script>
-import { getInstEmpList } from '@/api/base'
+import { getInstEmpList, getSingleSelectOptionData } from '@/api/base'
+import { getFocuspersonsList } from '@/api/emp-manage/chg-attention'
+import { formatSingleSelectOption } from '@/libs/j-tools.js'
 import { mixinInfo } from './common.js'
 import AttentionAction from '_c/chg-attention/attention-action'
 
@@ -68,6 +69,8 @@ export default {
         employeeNo: '',
         name: ''
       },
+      selRow: {},
+      selOption: {},
       dataSet: [],
       deptEmpList: [],
       loadData: false,
@@ -92,10 +95,18 @@ export default {
 
       })
 
-      // 获取关注类型字选项
+      getSingleSelectOptionData({ type: 'FOCUS_ITEM' }).then(res => {
+        if (res.data.code === '000000') {
+          this.selOption = {
+            selFocusItem: formatSingleSelectOption(res.data.data)
+          }
+        }
+      }).catch(() => {
+
+      })
     },
     handleSponsorAttention (row, index) {
-      // 发起调整
+      this.selRow = Object.assign({}, row, { focusItem: [], focusItemText: '', focusReason: '', newFocusType: 0 })
       this.showAttentionAction = true
     },
     handleSaveChange () {
@@ -105,13 +116,22 @@ export default {
       })
     },
     handleSaveCancel () {
-
+      this.dataSaving = false
+      this.$nextTick(() => {
+        this.dataSaving = true
+      })
     },
-    handleSaveSuccess () {
-
+    handleSaveSuccess (rowIndex) {
+      this.dataSet[rowIndex].existFlow = 1 // 设置正在走流程的标志
+      this.dataSaving = false
+      this.showAttentionAction = false
+      this.$nextTick(() => {
+        this.dataSaving = true
+      })
     },
-    handleChgPageSize (val) {
-      this.pageData.size = val
+    handleChgPageSize (size, current) {
+      if (current) this.pageData.current = current
+      this.pageData.size = size
       this.$nextTick(() => {
         this.handleSearchRd()
       })
@@ -119,6 +139,30 @@ export default {
     handleSearchRd () {
       if (this.loadData) return
       this.loadData = true
+
+      this.formData.employeeNo = this.trimForText(this.formData.employeeNo).toUpperCase()
+      this.formData.name = this.trimForText(this.formData.name)
+      const condition = {
+        page: this.pageData.current,
+        pageSize: this.pageData.size
+      }
+      if (this.formData.employeeNo !== '') {
+        condition.employeeNo = this.formData.employeeNo
+      }
+      if (this.formData.name !== '') {
+        condition.employeeName = this.formData.name
+      }
+
+      getFocuspersonsList(condition).then(res => {
+        if (res.data.code === '000000') {
+          this.dataSet = res.data.data.rows
+          this.pageData.total = res.data.data.total
+        }
+        this.loadData = false
+      }).catch(() => {
+        this.dataSet = []
+        this.loadData = false
+      })
     },
     handleSelectEmp () {
       this.showSelectEmp = true
