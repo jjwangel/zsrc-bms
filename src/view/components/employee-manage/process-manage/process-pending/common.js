@@ -12,24 +12,35 @@ export const mixinInfo = {
         },
         {
           title: '流程类型',
-          width: 100,
-          key: 'employeeNo',
-          tooltip: 'true'
+          width: 180,
+          tooltip: 'true',
+          render: (h, params) => {
+            const row = params.row
+            let text = ''
+            switch (row.type) {
+              case 1: text = '关注人员调整'
+                break
+              case 2: text = '关注人员情况跟进登记'
+                break
+            }
+
+            return h('p', text)
+          }
         },
         {
           title: '标题',
-          key: 'employeeName',
+          key: 'name',
           tooltip: 'true'
         },
         {
           title: '创建人',
-          key: 'deptName',
+          key: 'createUser',
           width: 100,
           tooltip: 'true'
         },
         {
           title: '接收时间',
-          key: 'gw',
+          key: 'createTime',
           width: 200,
           tooltip: 'true'
         },

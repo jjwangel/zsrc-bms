@@ -290,8 +290,7 @@ export default {
       this.file_uploading = false
       this.load_data = false
     },
-    handleUploadErr (err) {
-      console.log(err)
+    handleUploadErr () {
       this.$Message.error({
         content: '上传文件失败！',
         duration: 3

@@ -48,6 +48,17 @@ export const mixinInfo = {
           tooltip: 'true'
         },
         {
+          title: '流程状态',
+          key: 'existFlow',
+          tooltip: 'true',
+          render: (h, params) => {
+            const row = params.row
+            const text = row.existFlow === 1 ? '调整中' : ''
+
+            return h('p', text)
+          }
+        },
+        {
           title: '操作',
           slot: 'action',
           width: 100,

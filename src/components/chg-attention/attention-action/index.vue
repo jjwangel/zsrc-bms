@@ -75,7 +75,7 @@
       scrollable title="详细信息" width="700"
       :mask-closable="true"
       :footer-hide="true">
-      <AttentionDetailInfo :rowData="{}"></AttentionDetailInfo>
+      <AttentionDetailInfo :rowData="this.detailData"></AttentionDetailInfo>
     </Modal>
 
     <Upload :action="this.fileUploadUrl" ref="upload" v-show="false"
@@ -97,7 +97,7 @@
 import AttentionDetailInfo from '_c/chg-attention/attention-action/detail-info.vue'
 import { deleteDataByOne } from '@/api/base'
 import { vaildForm } from '@/libs/j-tools.js'
-import { addFocusPersonAdjustFlow } from '@/api/emp-manage/chg-attention'
+import { addFocusPersonAdjustFlow, getFocusPersonDetail } from '@/api/emp-manage/chg-attention'
 import config from '@/config'
 
 export default {
@@ -118,7 +118,15 @@ export default {
         })
         callback(new Error(''))
       } else {
-        callback()
+        if (this.formData.focusType === this.formData.newFocusType) {
+          this.$Message.warning({
+            content: '该员工的关注类别调整前后一致，请检查',
+            duration: 5
+          })
+          callback(new Error(''))
+        } else {
+          callback()
+        }
       }
     }
 
@@ -153,6 +161,8 @@ export default {
       fileUploadPercnet: 0,
       fileUploading: false,
       files: [],
+      detailData: {},
+      loadDetail: false,
       rules: {
         newFocusType: [
           { validator: validateNewFocusType, trigger: 'blur' }
@@ -180,7 +190,19 @@ export default {
       }
     },
     handleShowDetail () {
-      this.showAttentionDetail = true
+      if (this.loadingDetail) return
+      this.loadDetail = true
+
+      getFocusPersonDetail({ employeeNo: this.formData.employeeNo }).then(res => {
+        if (res.data.code === '000000') {
+          this.detailData = res.data.data
+        }
+        this.loadDetail = false
+        this.showAttentionDetail = true
+      }).catch(() => {
+        this.detailData = []
+        this.loadDetail = false
+      })
     },
     handleSaveData () {
       this.vaildData().then(res => {
@@ -209,7 +231,6 @@ export default {
       }
 
       addFocusPersonAdjustFlow(data).then(res => {
-        console.log(res)
         if (res.data.code === '000000') {
           this.$Message.success({
             content: '员工关注调整发起成功！',
@@ -259,8 +280,7 @@ export default {
       this.fileUploading = true
       return false
     },
-    handleUploadErr (err) {
-      console.log(err)
+    handleUploadErr () {
       this.$Message.error({
         content: '上传文件失败！',
         duration: 3

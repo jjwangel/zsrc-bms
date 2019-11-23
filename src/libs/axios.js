@@ -69,7 +69,6 @@ class HttpRequest {
       data.data = data.data || {}
       return { data, status }
     }, error => {
-      console.log(error)
       Message.error({
         content: '有异常产生！',
         duration: 5

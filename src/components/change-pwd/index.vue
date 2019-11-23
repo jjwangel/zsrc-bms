@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Form ref="formChgPwd" :rules="rulePwd" :show-message="false" :model="formData" :label-width="80">
+    <Form ref="formChgPwd" :rules="rulePwd" :show-message="false" :model="formData" :label-width="100">
       <FormItem label="旧密码" prop="oldPwd" class="info_title">
         <Input v-model="formData.oldPwd" type="password"></Input>
       </FormItem>

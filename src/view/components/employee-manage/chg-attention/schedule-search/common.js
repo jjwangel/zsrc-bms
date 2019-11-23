@@ -39,28 +39,85 @@ export const mixinInfo = {
         },
         {
           title: '调整前关注类别',
-          key: 'dqgzlb',
-          tooltip: 'true'
+          key: 'focusTypeBefore',
+          tooltip: 'true',
+          render: (h, params) => {
+            const row = params.row
+            let text = ''
+            switch (row.focusTypeBefore) {
+              case 1: text = '重点关注'
+                break
+              case 2: text = '一般关注'
+                break
+              case 3: text = '正常'
+            }
+
+            return h('p', text)
+          }
         },
         {
           title: '调整后关注类别',
-          key: 'dqgzlb',
-          tooltip: 'true'
+          key: 'focusTypeAfter',
+          tooltip: 'true',
+          render: (h, params) => {
+            const row = params.row
+            let text = ''
+            switch (row.focusTypeAfter) {
+              case 1: text = '重点关注'
+                break
+              case 2: text = '一般关注'
+                break
+              case 3: text = '正常'
+            }
+
+            return h('p', text)
+          }
         },
         {
           title: '流程状态',
-          key: 'dqgzlb',
-          tooltip: 'true'
+          key: 'flowNode',
+          tooltip: 'true',
+          render: (h, params) => {
+            const row = params.row
+            let text = ''
+            switch (row.flowNode) {
+              case 1: text = '复核'
+                break
+              case 2: text = '审核'
+                break
+              case 3: text = '审批'
+            }
+
+            return h('p', text)
+          }
         },
         {
           title: '流程进度',
-          key: 'dqgzlb',
-          tooltip: 'true'
+          tooltip: 'true',
+          render: (h, params) => {
+            const row = params.row
+            const text = (row.nodeStatus === 1 || row.nodeStatus === 2) ? '结束' : '流程中'
+
+            return h('p', text)
+          }
         },
         {
           title: '操作结果',
-          key: 'dqgzlb',
-          tooltip: 'true'
+          key: 'nodeStatus',
+          tooltip: 'true',
+          render: (h, params) => {
+            const row = params.row
+            let text = ''
+            switch (row.nodeStatus) {
+              case 1: text = '同意'
+                break
+              case 2: text = '不同意'
+                break
+              default: text = '待处理'
+            }
+
+            return h('p', text)
+          }
         },
         {
           title: '操作',

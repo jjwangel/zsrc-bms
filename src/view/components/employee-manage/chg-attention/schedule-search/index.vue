@@ -6,44 +6,47 @@
           <FormItem label="员工工号" prop="employeeNo">
             <Input type="text" v-model="formData.employeeNo" :readonly="this.loadData" style="width:100px;"></Input>
           </FormItem>
-          <FormItem label="员工姓名" prop="name">
-            <Input type="text" v-model="formData.name" :readonly="this.loadData" style="width:130px;">
+          <FormItem label="员工姓名" prop="employeeName">
+            <Input type="text" v-model="formData.employeeName" :readonly="this.loadData" style="width:130px;">
               <Button slot="append" icon="md-apps" @click="handleSelectEmp" :disabled="this.loadData"></Button>
             </Input>
           </FormItem>
-          <FormItem label="当前状态" prop="dqzt">
-            <Select v-model="formData.dqzt" style="width:100px" :disable="this.loadData">
-              <Option :value="1">复核 </Option>
+          <FormItem label="当前状态" prop="flowNode">
+            <Select v-model="formData.flowNode" clearable style="width:100px" :disable="this.loadData">
+              <Option :value="1">复核</Option>
               <Option :value="2">审核</Option>
               <Option :value="3">审批</Option>
             </Select>
           </FormItem>
-          <FormItem label="操作结果" prop="czjg">
-            <Select v-model="formData.czjg" style="width:100px" :disable="this.loadData">
-              <Option :value="1">同意 </Option>
+          <FormItem label="操作结果" prop="nodeStatus">
+            <Select v-model="formData.nodeStatus" clearable style="width:100px" :disable="this.loadData">
+              <Option :value="1">同意</Option>
               <Option :value="2">不同意</Option>
             </Select>
           </FormItem>
-          <FormItem label="发起调整日期" prop="fqtzrq" class="info_title" :label-width="110">
-            <DatePicker type="daterange" placement="bottom-start"
+          <FormItem label="发起调整日期" prop="sponsorDate" class="info_title" :label-width="110">
+            <DatePicker type="daterange" placement="bottom-start" clearable
               style="width: 200px;margin-right: 10px"
               :options="optDate"
-              :clearable="false"
-              :value="formData.fqtzrq"
+              :value="formData.sponsorDate"
               @on-change="handleDateChange"
               :editable='false'></DatePicker>
           </FormItem>
 
           <FormItem :label-width="10">
-            <Button type="primary" icon="ios-search" @click="handleChgPageSize(1)" :loading="this.loadData">查询</Button>
-            <Button type="primary" icon="ios-search" @click="handleCreateAttention" :loading="this.loadData">详细（临时）</Button>
+            <Button type="primary" icon="ios-search" @click="handleChgPageSize(pageData.size,1)" :loading="this.loadData">查询</Button>
           </FormItem>
         </Form>
       </div>
 
       <Table size="small" :height="windowHeight" @on-row-dblclick="handleShowDetail" :stripe="true" border ref="table" :loading="this.loadData" :columns="cols" :data="dataSet">
         <template slot-scope="{ row, index }" slot="action">
-          <Button type="error" size="small" @click="handleSponsorAttention (row, index)">删除</Button>
+          <Poptip
+            confirm
+            title="你确认删除这条流程吗？"
+            @on-ok="handleDeleteFlow (row, index)">
+            <Button type="error" size="small" :disabled="!(row.flowNode === 1 && row.nodeStatus === 0)">删除</Button>
+          </Poptip>
         </template>
 
         <div slot="footer" style="width:100%;text-align: center">
@@ -59,10 +62,10 @@
       </Drawer>
     </Card>
 
-    <Modal v-model="showAttentionAction" :loading="dataSaving" scrollable :title="actionTitle" width="1000" :styles="{top: '10px'}"
+    <Modal v-model="showAttentionAction" scrollable title="关注人员调整流程" width="1000" :styles="{top: '10px'}"
       :mask-closable="true"
       :footer-hide="true">
-      <AttentionAuditView :rowData="{}" :selOption="{}" :actionType="this.actionType"></AttentionAuditView>
+      <AttentionAuditView :rowData="this.selRow" :actionType="this.actionType"></AttentionAuditView>
     </Modal>
   </div>
 </template>
@@ -70,6 +73,7 @@
 <script>
 import { getInstEmpList } from '@/api/base'
 import { mixinInfo } from './common.js'
+import { getFocusPersonAdjustFlowsList, deleteFocusPersonAdjustFlow } from '@/api/emp-manage/chg-attention'
 import AttentionAuditView from '_c/chg-attention/attention-audit-view'
 
 export default {
@@ -86,7 +90,10 @@ export default {
       },
       formData: {
         employeeNo: '',
-        name: ''
+        employeeName: '',
+        flowNode: 0,
+        nodeStatus: 0,
+        sponsorDate: []
       },
       optDate: {
         disabledDate (date) {
@@ -95,11 +102,11 @@ export default {
       },
       dataSet: [],
       deptEmpList: [],
+      selRow: {},
       loadData: false,
       showSelectEmp: false,
       showAttentionAction: false,
       dataSaving: true,
-      actionTitle: '',
       actionType: '', // view || create || modify
       windowHeight: 0
     }
@@ -118,19 +125,29 @@ export default {
 
       })
     },
-    handleDateChange () {
+    handleDateChange (val) {
+      this.formData.sponsorDate = val
+    },
+    handleDeleteFlow (row, index) {
+      const condition = {
+        id: row.id
+      }
 
-    },
-    handleCreateAttention () {
-      this.actionType = 'create'
-      this.actionTitle = '调整关注类别复核/审批'
-      this.showAttentionAction = true
-    },
-    handleSponsorAttention (row, index) {
+      deleteFocusPersonAdjustFlow(condition).then(res => {
+        if (res.data.code === '000000') {
+          this.$Message.success({
+            content: '所选流程删除成功！',
+            duration: 5
+          })
+          this.dataSet.splice(index, 1)
+        }
+      }).catch(() => {
 
+      })
     },
-    handleChgPageSize (val) {
-      this.pageData.size = val
+    handleChgPageSize (size, current) {
+      if (current) this.pageData.current = current
+      this.pageData.size = size
       this.$nextTick(() => {
         this.handleSearchRd()
       })
@@ -138,9 +155,45 @@ export default {
     handleSearchRd () {
       if (this.loadData) return
       this.loadData = true
-    },
-    handleShowDetail () {
 
+      this.formData.employeeNo = this.trimForText(this.formData.employeeNo).toUpperCase()
+      this.formData.employeeName = this.trimForText(this.formData.employeeName)
+      const condition = {
+        page: this.pageData.current,
+        pageSize: this.pageData.size
+      }
+      if (this.formData.employeeNo !== '') {
+        condition.employeeNo = this.formData.employeeNo
+      }
+      if (this.formData.employeeName !== '') {
+        condition.employeeName = this.formData.employeeName
+      }
+      if (this.formData.flowNode && this.formData.flowNode !== 0) {
+        condition.flowNode = this.formData.flowNode
+      }
+      if (this.formData.nodeStatus && this.formData.nodeStatus !== 0) {
+        condition.nodeStatus = this.formData.nodeStatus
+      }
+      if (this.formData.sponsorDate.length > 0 && this.formData.sponsorDate[0] !== '' && this.formData.sponsorDate[1] !== '') {
+        condition.createTimeStart = this.formData.sponsorDate[0]
+        condition.createTimeEnd = this.formData.sponsorDate[1]
+      }
+
+      getFocusPersonAdjustFlowsList(condition).then(res => {
+        if (res.data.code === '000000') {
+          this.dataSet = res.data.data.rows
+          this.pageData.total = res.data.data.total
+        }
+        this.loadData = false
+      }).catch(() => {
+        this.dataSet = []
+        this.loadData = false
+      })
+    },
+    handleShowDetail (row, index) {
+      this.selRow = Object.assign({}, { relatedId: row.id })
+      this.actionType = 'view'
+      this.showAttentionAction = true
     },
     handleSelectEmp () {
       this.showSelectEmp = true
