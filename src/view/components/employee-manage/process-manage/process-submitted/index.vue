@@ -3,29 +3,27 @@
     <Card dis-hover>
       <div slot="title">
         <Form ref ="form" :model="formData" inline>
-          <FormItem label="流程类型" prop="lqlx" :label-width="80">
-            <Select v-model="formData.lqlx" style="width:100px" :disable="this.loadData">
-              <Option :value="0">全部</Option>
-              <Option :value="1">关注调整</Option>
-              <Option :value="2">跟进录入</Option>
+          <FormItem label="流程类型" prop="type" :label-width="80">
+            <Select v-model="formData.type" clearable style="width:200px" :disable="this.loadData">
+              <Option :value="1">关注人员调整</Option>
+              <Option :value="2">关注人员情况跟进登记</Option>
             </Select>
           </FormItem>
-          <FormItem label="接收时间" prop="jssj" class="info_title" :label-width="80">
+          <FormItem label="接收时间" prop="recDate" class="info_title" :label-width="80">
             <DatePicker type="daterange" placement="bottom-start"
               style="width: 200px;margin-right: 10px"
-              :clearable="false"
-              :value="formData.jssj"
+              :value="formData.recDate"
+              :options="optDate"
               @on-change="handleDateChange"
               :editable='false'></DatePicker>
           </FormItem>
           <FormItem :label-width="20">
-            <Button type="primary" icon="ios-search" @click="handleChgPageSize(1)" :loading="this.loadData">查询</Button>
-            <Button type="primary" icon="ios-search" @click="handleCreateAttention" :loading="this.loadData">详细（临时）</Button>
+            <Button type="primary" icon="ios-search" @click="handleChgPageSize(pageData.size,1)" :loading="this.loadData">查询</Button>
           </FormItem>
         </Form>
       </div>
 
-      <Table size="small" :height="windowHeight" @on-row-dblclick="handleShowDetail" :stripe="true" border ref="table" :loading="this.loadData" :columns="cols" :data="dataSet">
+      <Table size="small" :height="windowHeight" @on-row-dblclick="handleShowProcess" :stripe="true" border ref="table" :loading="this.loadData" :columns="cols" :data="dataSet">
         <div slot="footer" style="width:100%;text-align: center">
           <Page :total="pageData.total" :current.sync="pageData.current" :disabled="this.dataSet.length > 0 ? false: true"
             @on-change="handleSearchRd"
@@ -35,17 +33,17 @@
       </Table>
     </Card>
 
-    <Modal v-model="showAttentionAction" :loading="dataSaving" scrollable :title="actionTitle" width="1000" ok-text="提交" :styles="{top: '10px'}"
-      :mask-closable="this.actionType === 'view'"
-      :footer-hide="this.actionType === 'view'"
-      @on-ok="handleSaveChange">
-      <AttentionAuditView @saveCancel="handleSaveCancel" @saveSuccess="handleSaveSuccess" :saveNow_="saveNow" :rowData="{}" :selOption="{}" :actionType="this.actionType"></AttentionAuditView>
+    <Modal v-model="showVerifyAttention" scrollable title="关注人员调整流程" width="1000" :styles="{top: '10px'}"
+      :mask-closable="true"
+      :footer-hide="true">
+      <AttentionAuditView :rowData="this.selRow" :actionType="this.actionType"></AttentionAuditView>
     </Modal>
   </div>
 </template>
 
 <script>
 import { mixinInfo } from './common.js'
+import { getFlowsList } from '@/api/emp-manage/process-manage'
 import AttentionAuditView from '_c/chg-attention/attention-audit-view'
 
 export default {
@@ -61,39 +59,39 @@ export default {
         size: 10
       },
       formData: {
-        employeeNo: '',
-        name: ''
+        type: 0,
+        recDate: []
+      },
+      optDate: {
+        disabledDate (date) {
+          return date && date.valueOf() > Date.now()
+        }
       },
       dataSet: [],
+      selRow: {},
       loadData: false,
-      showAttentionAction: false,
-      dataSaving: true,
-      saveNow: false,
-      actionTitle: '',
+      showVerifyAttention: false,
+      showVerifyFollow: false,
       actionType: '', // view || create || modify
       windowHeight: 0
     }
   },
   methods: {
     initInfo () {
-
+      this.handleSearchRd()
     },
-    handleDateChange () {
-
+    handleDateChange (val) {
+      this.formData.recDate = val
     },
-    handleCreateAttention () {
-      this.actionType = 'create'
-      this.actionTitle = '关注类别复核/审核'
-      this.showAttentionAction = true
-    },
-    handleSaveChange () {
-
-    },
-    handleSaveCancel () {
-
-    },
-    handleSaveSuccess () {
-
+    handleShowProcess (row, index) {
+      this.selRow = Object.assign({}, row, { _index: index })
+      this.actionType = 'view'
+      switch (row.type) {
+        case 1: this.showVerifyAttention = true
+          break
+        case 2: this.showVerifyFollow = true
+          break
+      }
     },
     handleChgPageSize (val) {
       this.pageData.size = val
@@ -104,9 +102,30 @@ export default {
     handleSearchRd () {
       if (this.loadData) return
       this.loadData = true
-    },
-    handleShowDetail () {
 
+      const condition = {
+        status: 2,
+        page: this.pageData.current,
+        pageSize: this.pageData.size
+      }
+      if (this.formData.type && this.formData.type !== 0) {
+        condition.type = this.formData.type
+      }
+      if (this.formData.recDate.length === 2 && this.formData.recDate[0] !== '' && this.formData.recDate[1] !== '') {
+        condition.createTimeStart = this.formData.recDate[0]
+        condition.createTimeEnd = this.formData.recDate[1]
+      }
+
+      getFlowsList(condition).then(res => {
+        if (res.data.code === '000000') {
+          this.dataSet = res.data.data.rows
+          this.pageData.total = res.data.data.total
+        }
+        this.loadData = false
+      }).catch(() => {
+        this.dataSet = []
+        this.loadData = false
+      })
     },
     setWindowHeight () {
       this.windowHeight = window.innerHeight - 230

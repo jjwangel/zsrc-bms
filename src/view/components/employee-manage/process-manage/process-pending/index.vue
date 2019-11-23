@@ -15,9 +15,9 @@
         </Form>
       </div>
 
-      <Table size="small" :height="windowHeight" @on-row-dblclick="handleVerifyAttention" :stripe="true" border ref="table" :loading="this.loadData" :columns="cols" :data="dataSet">
+      <Table size="small" :height="windowHeight" @on-row-dblclick="handleDealProcess" :stripe="true" border ref="table" :loading="this.loadData" :columns="cols" :data="dataSet">
         <template slot-scope="{ row, index }" slot="action">
-          <Button type="primary" size="small" @click="handleVerifyAttention(row, index)">办理</Button>
+          <Button type="primary" size="small" @click="handleDealProcess(row, index)">办理</Button>
         </template>
 
         <div slot="footer" style="width:100%;text-align: center">
@@ -61,9 +61,9 @@ export default {
       loadData: false,
       selRow: {},
       showVerifyAttention: false,
+      showVerifyFollow: false,
       dataSaving: true,
       saveNow: false,
-      actionTitle: '',
       actionType: '', // view || create || modify
       windowHeight: 0
     }
@@ -72,13 +72,15 @@ export default {
     initInfo () {
       this.handleSearchRd()
     },
-    handleVerifyAttention (row, index) {
+    handleDealProcess (row, index) {
       this.selRow = Object.assign({}, row, { _index: index })
       this.actionType = 'create'
-      this.showVerifyAttention = true
-    },
-    handleSponsorAttention (row, index) {
-
+      switch (row.type) {
+        case 1: this.showVerifyAttention = true
+          break
+        case 2: this.showVerifyFollow = true
+          break
+      }
     },
     handleSaveChange () {
       this.saveNow = true
