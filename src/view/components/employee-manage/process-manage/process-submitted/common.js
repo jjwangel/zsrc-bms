@@ -39,12 +39,6 @@ export const mixinInfo = {
           tooltip: 'true'
         },
         {
-          title: '处理环节',
-          key: 'aaaaaaa',
-          width: 100,
-          tooltip: 'true'
-        },
-        {
           title: '接收时间',
           key: 'createTime',
           width: 200,

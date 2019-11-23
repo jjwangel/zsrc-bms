@@ -23,39 +23,68 @@ export const mixinInfo = {
           tooltip: 'true'
         },
         {
+          title: '所属单位',
+          key: 'headSubName',
+          tooltip: 'true'
+        },
+        {
           title: '部室/网点',
           key: 'deptName',
           tooltip: 'true'
         },
         {
           title: '岗位',
-          key: 'gw',
+          key: 'postName',
           tooltip: 'true'
         },
         {
           title: '现任职务',
-          key: 'xrzw',
+          key: 'duty',
           tooltip: 'true'
         },
         {
           title: '当前关注类别',
-          key: 'dqgzlb',
-          tooltip: 'true'
+          key: 'focusType',
+          tooltip: 'true',
+          render: (h, params) => {
+            const row = params.row
+            let text = ''
+            switch (row.focusType) {
+              case 1: text = '重点关注'
+                break
+              case 2: text = '一般关注'
+                break
+              case 3: text = '正常'
+            }
+
+            return h('p', text)
+          }
         },
         {
           title: '开始关注日期',
-          key: 'dqgzlb',
+          key: 'focusDate',
           tooltip: 'true'
         },
         {
           title: '关注时长',
-          key: 'dqgzlb',
+          key: 'focusDuration',
           tooltip: 'true'
         },
         {
           title: '上次跟进日期',
-          key: 'dqgzlb',
+          key: 'lastFollowDate',
           tooltip: 'true'
+        },
+        {
+          title: '流程状态',
+          key: 'existFlow',
+          tooltip: 'true',
+          render: (h, params) => {
+            const row = params.row
+            const text = row.existFlow === 1 ? '流程中' : ''
+
+            return h('p', text)
+          }
         },
         {
           title: '操作',

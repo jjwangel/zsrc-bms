@@ -226,8 +226,8 @@ export default {
         employeeNo: this.formData.employeeNo,
         focusItem: this.formData.focusItemText,
         focusReason: this.formData.focusReason,
-        focusTypeAfter: this.formData.focusType,
-        focusTypeBefore: this.formData.newFocusType
+        focusTypeAfter: this.formData.newFocusType,
+        focusTypeBefore: this.formData.focusType
       }
 
       addFocusPersonAdjustFlow(data).then(res => {

@@ -3,33 +3,10 @@
  * @Date: 2019-05-03 10:31:49
  * @Description: 调整员工关注类别
  * @Last Modified by: jjw
- * @Last Modified time: 2019-11-22 17:01:39
+ * @Last Modified time: 2019-11-23 14:40:15
  */
 
 import baseAPI from '../../base'
-
-// 旧接口
-// /**
-//  * @description 获取员工关注类别数据
-//  * @param {*} formData
-//  * @returns
-//  */
-// export const getEmpAttentionInfo = (formData) => {
-//   const params = { ...formData }
-
-//   return baseAPI.getOneRowData('/focusperson', params)
-// }
-
-// /**
-//  * @description 修改员工关注类别数据
-//  * @param {*} formData
-//  * @returns
-//  */
-// export const modifyEmpAttentionInfo = async (formData) => {
-//   let data = { ...formData }
-//   const res = await baseAPI.modifyData('focusperson', data)
-//   return res
-// }
 
 /**
  * @description 获取关注人员列表数据

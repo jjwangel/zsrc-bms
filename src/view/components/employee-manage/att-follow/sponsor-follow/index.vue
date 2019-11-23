@@ -12,22 +12,23 @@
             </Input>
           </FormItem>
           <FormItem :label-width="20">
-            <Button type="primary" icon="ios-search" @click="handleChgPageSize(1)" :loading="this.loadData">查询</Button>
-            <Button type="primary" icon="ios-search" @click="handleCreateFollow" :loading="this.loadData">创建（临时）</Button>
+            <Button type="primary" icon="ios-search" @click="handleChgPageSize(pageData.size,1)" :loading="this.loadData">查询</Button>
           </FormItem>
         </Form>
       </div>
 
-      <Table size="small" :height="windowHeight" @on-row-dblclick="handleShowDetail" :stripe="true" border ref="table-sa" :loading="this.loadData" :columns="cols" :data="dataSet">
+      <Table size="small" :height="windowHeight" :stripe="true" border ref="table" :loading="this.loadData" :columns="cols" :data="dataSet">
         <template slot-scope="{ row, index }" slot="action">
-          <Button type="primary" size="small" @click="handleSponsorAttention (row, index)">登记</Button>
+          <Button type="primary" size="small" :disabled="row.existFlow === 1" @click="handleSponsorFollow (row, index)">登记</Button>
         </template>
 
         <div slot="footer" style="width:100%;text-align: center">
-          <Page :total="pageData.total" :current.sync="pageData.current" :disabled="this.dataSet.length > 0 ? false: true"
+          <Page size="small" show-elevator show-sizer
+            :disabled="this.dataSet.length > 0 ? false: true"
+            :total="pageData.total"
+            :current.sync="pageData.current"
             @on-change="handleSearchRd"
-            @on-page-size-change="handleChgPageSize"
-            size="small" show-elevator show-sizer />
+            @on-page-size-change="handleChgPageSize"/>
         </div>
       </Table>
 
@@ -36,17 +37,18 @@
       </Drawer>
     </Card>
 
-    <Modal v-model="showAttentionFollw" :loading="dataSaving" scrollable :title="actionTitle" width="1000" ok-text="提交" :styles="{top: '10px'}"
-      :mask-closable="this.actionType === 'view'"
-      :footer-hide="this.actionType === 'view'"
+    <Modal v-model="showAttentionFollow" :loading="dataSaving" scrollable title="发起关注人员情况跟进登记" width="1000" ok-text="提交"
+      :styles="{top: '10px'}"
+      :mask-closable="false"
       @on-ok="handleSaveChange">
-      <FollowAction @saveCancel="handleSaveCancel" @saveSuccess="handleSaveSuccess" :saveNow_="saveNow" :rowData="{}" :selOption="{}" :actionType="this.actionType"></FollowAction>
+      <FollowAction @saveCancel="handleSaveCancel" @saveSuccess="handleSaveSuccess" :saveNow="saveNow" :rowData="this.selRow"></FollowAction>
     </Modal>
   </div>
 </template>
 
 <script>
 import { getInstEmpList } from '@/api/base'
+import { getFocusPersonFollowsList } from '@/api/emp-manage/follow-attention'
 import { mixinInfo } from './common.js'
 import FollowAction from '_c/att-follow/follow-action'
 
@@ -66,15 +68,14 @@ export default {
         employeeNo: '',
         name: ''
       },
+      selRow: {},
       dataSet: [],
       deptEmpList: [],
       loadData: false,
       showSelectEmp: false,
-      showAttentionFollw: false,
+      showAttentionFollow: false,
       dataSaving: true,
       saveNow: false,
-      actionTitle: '',
-      actionType: '', // view || create || modify
       windowHeight: 0
     }
   },
@@ -92,25 +93,33 @@ export default {
 
       })
     },
-    handleCreateFollow () {
-      this.actionType = 'create'
-      this.actionTitle = '发起跟进登录'
-      this.showAttentionFollw = true
-    },
-    handleSponsorAttention (row, index) {
-
+    handleSponsorFollow (row, index) {
+      this.selRow = Object.assign({}, row, { dispose: '', followCondition: '', nextPlan: '' })
+      this.showAttentionFollow = true
     },
     handleSaveChange () {
-
+      this.saveNow = true
+      this.$nextTick(() => {
+        this.saveNow = false
+      })
     },
     handleSaveCancel () {
-
+      this.dataSaving = false
+      this.$nextTick(() => {
+        this.dataSaving = true
+      })
     },
-    handleSaveSuccess () {
-
+    handleSaveSuccess (rowIndex) {
+      this.dataSet[rowIndex].existFlow = 1 // 设置正在走流程的标志
+      this.dataSaving = false
+      this.showAttentionFollow = false
+      this.$nextTick(() => {
+        this.dataSaving = true
+      })
     },
-    handleChgPageSize (val) {
-      this.pageData.size = val
+    handleChgPageSize (size, current) {
+      if (current) this.pageData.current = current
+      this.pageData.size = size
       this.$nextTick(() => {
         this.handleSearchRd()
       })
@@ -118,6 +127,30 @@ export default {
     handleSearchRd () {
       if (this.loadData) return
       this.loadData = true
+
+      this.formData.employeeNo = this.trimForText(this.formData.employeeNo).toUpperCase()
+      this.formData.name = this.trimForText(this.formData.name)
+      const condition = {
+        page: this.pageData.current,
+        pageSize: this.pageData.size
+      }
+      if (this.formData.employeeNo !== '') {
+        condition.employeeNo = this.formData.employeeNo
+      }
+      if (this.formData.name !== '') {
+        condition.employeeName = this.formData.name
+      }
+
+      getFocusPersonFollowsList(condition).then(res => {
+        if (res.data.code === '000000') {
+          this.dataSet = res.data.data.rows
+          this.pageData.total = res.data.data.total
+        }
+        this.loadData = false
+      }).catch(() => {
+        this.dataSet = []
+        this.loadData = false
+      })
     },
     handleShowDetail () {
 

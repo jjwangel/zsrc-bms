@@ -53,7 +53,7 @@ export const mixinInfo = {
           tooltip: 'true',
           render: (h, params) => {
             const row = params.row
-            const text = row.existFlow === 1 ? '调整中' : ''
+            const text = row.existFlow === 1 ? '流程中' : ''
 
             return h('p', text)
           }

@@ -2,11 +2,11 @@
   <div>
     <Card dis-hover>
       <div slot="title">
-        <Form ref ="form" :model="formData" inline>
-          <FormItem label="员工工号" prop="employeeNo" :label-width="80">
+        <Form ref ="form" :model="formData" :label-width="80" inline>
+          <FormItem label="员工工号" prop="employeeNo">
             <Input type="text" v-model="formData.employeeNo" :readonly="this.loadData" style="width:100px;"></Input>
           </FormItem>
-          <FormItem label="员工姓名" prop="name" :label-width="80">
+          <FormItem label="员工姓名" prop="name">
             <Input type="text" v-model="formData.name" :readonly="this.loadData" style="width:130px;">
               <Button slot="append" icon="md-apps" @click="handleSelectEmp" :disabled="this.loadData"></Button>
             </Input>
