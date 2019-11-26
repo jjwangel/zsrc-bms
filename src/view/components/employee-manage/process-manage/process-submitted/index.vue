@@ -38,6 +38,12 @@
       :footer-hide="true">
       <AttentionAuditView :rowData="this.selRow" :actionType="this.actionType"></AttentionAuditView>
     </Modal>
+
+    <Modal v-model="showVerifyFollow" scrollable title="关注人员跟进登记流程" width="1000" :styles="{top: '10px'}"
+      :mask-closable="true"
+      :footer-hide="true">
+      <FollowAuditView :rowData="this.selFollowRow" :actionType="this.actionType"></FollowAuditView>
+    </Modal>
   </div>
 </template>
 
@@ -45,10 +51,12 @@
 import { mixinInfo } from './common.js'
 import { getFlowsList } from '@/api/emp-manage/process-manage'
 import AttentionAuditView from '_c/chg-attention/attention-audit-view'
+import FollowAuditView from '_c/att-follow/follow-audit-view'
 
 export default {
   components: {
-    AttentionAuditView
+    AttentionAuditView,
+    FollowAuditView
   },
   mixins: [ mixinInfo ],
   data () {
@@ -69,6 +77,7 @@ export default {
       },
       dataSet: [],
       selRow: {},
+      selFollowRow: {},
       loadData: false,
       showVerifyAttention: false,
       showVerifyFollow: false,
@@ -84,17 +93,21 @@ export default {
       this.formData.recDate = val
     },
     handleShowProcess (row, index) {
-      this.selRow = Object.assign({}, row, { _index: index })
       this.actionType = 'view'
       switch (row.type) {
-        case 1: this.showVerifyAttention = true
+        case 1:
+          this.showVerifyAttention = true
+          this.selRow = Object.assign({}, row, { _index: index })
           break
-        case 2: this.showVerifyFollow = true
+        case 2:
+          this.showVerifyFollow = true
+          this.selFollowRow = Object.assign({}, row, { _index: index })
           break
       }
     },
-    handleChgPageSize (val) {
-      this.pageData.size = val
+    handleChgPageSize (size, current) {
+      if (current) this.pageData.current = current
+      this.pageData.size = size
       this.$nextTick(() => {
         this.handleSearchRd()
       })
@@ -106,14 +119,16 @@ export default {
       const condition = {
         status: 2,
         page: this.pageData.current,
-        pageSize: this.pageData.size
+        pageSize: this.pageData.size,
+        orderBy: 'process_time',
+        orderType: 'desc'
       }
       if (this.formData.type && this.formData.type !== 0) {
         condition.type = this.formData.type
       }
       if (this.formData.recDate.length === 2 && this.formData.recDate[0] !== '' && this.formData.recDate[1] !== '') {
-        condition.createTimeStart = this.formData.recDate[0]
-        condition.createTimeEnd = this.formData.recDate[1]
+        condition.receiveTimeStart = this.formData.recDate[0] + ' 00:00:00'
+        condition.receiveTimeEnd = this.formData.recDate[1] + ' 23:59:59'
       }
 
       getFlowsList(condition).then(res => {

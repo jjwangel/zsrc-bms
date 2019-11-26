@@ -34,6 +34,12 @@
       @on-ok="handleSaveChange">
       <AttentionAuditView @saveCancel="handleSaveCancel" @saveSuccess="handleSaveSuccess" :saveNow="saveNow" :rowData="this.selRow" :actionType="this.actionType"></AttentionAuditView>
     </Modal>
+
+    <Modal v-model="showVerifyFollow" :loading="dataSaving" scrollable title="关注人员跟进登记流程" width="1000" ok-text="提交" :styles="{top: '10px'}"
+      :mask-closable="false"
+      @on-ok="handleFollowSaveChange">
+      <FollowAuditView @saveCancel="handleFollowSaveCancel" @saveSuccess="handleFollowSaveSuccess" :saveNow="saveFollowNow" :rowData="this.selFollowRow" :actionType="this.actionType"></FollowAuditView>
+    </Modal>
   </div>
 </template>
 
@@ -41,10 +47,12 @@
 import { mixinInfo } from './common.js'
 import { getFlowsList } from '@/api/emp-manage/process-manage'
 import AttentionAuditView from '_c/chg-attention/attention-audit-view'
+import FollowAuditView from '_c/att-follow/follow-audit-view'
 
 export default {
   components: {
-    AttentionAuditView
+    AttentionAuditView,
+    FollowAuditView
   },
   mixins: [ mixinInfo ],
   data () {
@@ -60,10 +68,12 @@ export default {
       dataSet: [],
       loadData: false,
       selRow: {},
+      selFollowRow: {},
       showVerifyAttention: false,
       showVerifyFollow: false,
       dataSaving: true,
       saveNow: false,
+      saveFollowNow: false,
       actionType: '', // view || create || modify
       windowHeight: 0
     }
@@ -73,12 +83,15 @@ export default {
       this.handleSearchRd()
     },
     handleDealProcess (row, index) {
-      this.selRow = Object.assign({}, row, { _index: index })
       this.actionType = 'create'
       switch (row.type) {
-        case 1: this.showVerifyAttention = true
+        case 1:
+          this.showVerifyAttention = true
+          this.selRow = Object.assign({}, row, { _index: index })
           break
-        case 2: this.showVerifyFollow = true
+        case 2:
+          this.showVerifyFollow = true
+          this.selFollowRow = Object.assign({}, row, { _index: index })
           break
       }
     },
@@ -97,6 +110,26 @@ export default {
     handleSaveSuccess (rowIndex) {
       this.dataSaving = false
       this.showVerifyAttention = false
+      this.$nextTick(() => {
+        this.dataSaving = true
+        this.handleSearchRd()
+      })
+    },
+    handleFollowSaveChange () {
+      this.saveFollowNow = true
+      this.$nextTick(() => {
+        this.saveFollowNow = false
+      })
+    },
+    handleFollowSaveCancel () {
+      this.dataSaving = false
+      this.$nextTick(() => {
+        this.dataSaving = true
+      })
+    },
+    handleFollowSaveSuccess (rowIndex) {
+      this.dataSaving = false
+      this.showVerifyFollow = false
       this.$nextTick(() => {
         this.dataSaving = true
         this.handleSearchRd()

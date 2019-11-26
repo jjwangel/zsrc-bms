@@ -57,13 +57,13 @@
     <div v-show="this.actionType!=='view'">
       <Form ref="form3" :rules="rules" :show-message="false" :model="formData" label-position="top">
         <FormItem :label="getStatusLabel + '意见'" style="margin-left: 10px;" prop="nodeStatus" class="info_title">
-          <Select v-model="formData.nodeStatus" @on-change="handleNodeStatusChg" :label-in-value="true" :disabled="this.actionType==='view'">
+          <Select v-model="formData.nodeStatus" @on-change="handleNodeStatusChg" :label-in-value="true">
             <Option :value="1">同意</Option>
             <Option :value="2">不同意</Option>
           </Select>
         </FormItem>
         <FormItem label="意见内容" prop="nodeComment" style="margin-left: 10px;" class="info_title">
-          <Input type="textarea" show-word-limit :maxlength="1000" v-model="formData.nodeComment" :rows="2" :autosize='{ minRows: 6, maxRows: 6 }' :readonly="this.actionType==='view'"></Input>
+          <Input type="textarea" show-word-limit :maxlength="1000" v-model="formData.nodeComment" :rows="2" :autosize='{ minRows: 6, maxRows: 6 }'></Input>
         </FormItem>
       </Form>
     </div>

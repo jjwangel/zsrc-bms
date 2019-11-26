@@ -29,52 +29,65 @@ export const mixinInfo = {
         },
         {
           title: '岗位',
-          key: 'gw',
+          key: 'postName',
           tooltip: 'true'
         },
         {
           title: '现任职务',
-          key: 'xrzw',
+          key: 'duty',
           tooltip: 'true'
         },
         {
           title: '关注类别',
-          key: 'dqgzlb',
-          tooltip: 'true'
+          key: 'focusType',
+          tooltip: 'true',
+          render: (h, params) => {
+            const row = params.row
+            let text = ''
+            switch (row.focusType) {
+              case 1: text = '重点关注'
+                break
+              case 2: text = '一般关注'
+                break
+              case 3: text = '正常'
+            }
+
+            return h('p', text)
+          }
         },
         {
           title: '关注日期',
-          key: 'dqgzlb',
+          key: 'focusDate',
           tooltip: 'true'
         },
         {
           title: '解除日期',
-          key: 'dqgzlb',
+          key: 'freeDate',
           tooltip: 'true'
         },
         {
           title: '关注时长',
-          key: 'dqgzlb',
+          key: 'focusDuration',
           tooltip: 'true'
         },
         {
           title: '关注原因描述',
-          key: 'dqgzlb',
+          key: 'focusReason',
           tooltip: 'true'
         },
         {
           title: '采取措施',
-          key: 'dqgzlb',
+          key: 'dispose',
           tooltip: 'true'
         },
         {
           title: '跟进情况登记',
-          key: 'dqgzlb',
+          key: 'followCondition',
           tooltip: 'true'
         },
         {
           title: '下一步计划',
-          key: 'dqgzlb',
+          key: 'nextPlan',
           tooltip: 'true'
         }
       ]

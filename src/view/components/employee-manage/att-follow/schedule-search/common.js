@@ -29,47 +29,73 @@ export const mixinInfo = {
         },
         {
           title: '岗位',
-          key: 'gw',
+          key: 'postName',
           tooltip: 'true'
         },
         {
           title: '现任职务',
-          key: 'xrzw',
+          key: 'duty',
           tooltip: 'true'
         },
         {
           title: '关注类别',
-          key: 'dqgzlb',
-          tooltip: 'true'
+          key: 'focusType',
+          tooltip: 'true',
+          render: (h, params) => {
+            const row = params.row
+            let text = ''
+            switch (row.focusType) {
+              case 1: text = '重点关注'
+                break
+              case 2: text = '一般关注'
+                break
+              case 3: text = '正常'
+            }
+
+            return h('p', text)
+          }
         },
         {
           title: '跟进情况登记',
-          key: 'dqgzlb',
+          key: 'followCondition',
           tooltip: 'true'
         },
         {
           title: '登记日期',
-          key: 'dqgzlb',
-          tooltip: 'true'
-        },
-        {
-          title: '流程状态',
-          key: 'dqgzlb',
+          key: 'createDate',
           tooltip: 'true'
         },
         {
           title: '流程进度',
-          key: 'dqgzlb',
-          tooltip: 'true'
+          tooltip: 'true',
+          render: (h, params) => {
+            const row = params.row
+            const text = (row.approveStatus === 0) ? '流程中' : '结束'
+
+            return h('p', text)
+          }
         },
         {
           title: '操作结果',
-          key: 'dqgzlb',
-          tooltip: 'true'
+          key: 'approveStatus',
+          tooltip: 'true',
+          render: (h, params) => {
+            const row = params.row
+            let text = ''
+            switch (row.approveStatus) {
+              case 1: text = '同意'
+                break
+              case 2: text = '不同意'
+                break
+              default: text = '待处理'
+            }
+
+            return h('p', text)
+          }
         },
         {
           title: '意见内容',
-          key: 'dqgzlb',
+          key: 'approveComment',
           tooltip: 'true'
         },
         {

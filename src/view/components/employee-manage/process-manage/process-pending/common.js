@@ -34,13 +34,13 @@ export const mixinInfo = {
         },
         {
           title: '创建人',
-          key: 'createUser',
+          key: 'createUserName',
           width: 100,
           tooltip: 'true'
         },
         {
           title: '接收时间',
-          key: 'createTime',
+          key: 'receiveTime',
           width: 200,
           tooltip: 'true'
         },
