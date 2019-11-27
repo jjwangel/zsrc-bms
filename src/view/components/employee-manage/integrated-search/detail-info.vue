@@ -37,6 +37,9 @@
       <TabPane v-if="this.pvCtrl.findIndex((val) => { return val.code === 'bms_employeemng_infoquery_suspectlawsuitinfo' }) !== -1" label="员工涉诉信息" name="litigation_info" tab="tab-emp-info" :index=12>
         <LitigationInfo :main-data="this.mainData" :load-data="this.load_litigation"></LitigationInfo>
       </TabPane>
+      <TabPane v-if="true" label="员工关注台账" name="attention_info" tab="tab-emp-info" :index=13>
+        <AttBookInfo :rowData="this.mainData" :load-data="this.load_attention"></AttBookInfo>
+      </TabPane>
     </Tabs>
   </div>
 </template>
@@ -54,6 +57,7 @@ import FamilyVisitInfo from './components/family-visit-info'
 import BusinessInfo from './components/business-info'
 import LitigationInfo from './components/litigation-info'
 import InvestInfo from './components/invest-info'
+import AttBookInfo from './components/attention-book'
 
 import { getPurviewCtrlList } from '@/api/base'
 
@@ -74,7 +78,8 @@ export default {
     FamilyVisitInfo,
     BusinessInfo,
     LitigationInfo,
-    InvestInfo
+    InvestInfo,
+    AttBookInfo
   },
   data () {
     return {
@@ -92,7 +97,8 @@ export default {
       load_ba: false,
       load_fv: false,
       load_business: false,
-      load_litigation: false
+      load_litigation: false,
+      load_attention: false
     }
   },
   methods: {
@@ -155,6 +161,10 @@ export default {
           this.load_litigation = true
           break
         }
+        case 'attention_info': {
+          this.load_attention = true
+          break
+        }
       }
     }
   },
@@ -172,6 +182,7 @@ export default {
       this.load_fv = false
       this.load_business = false
       this.load_litigation = false
+      this.load_attention = false
       this.main_data = val
 
       this.$nextTick(function () {

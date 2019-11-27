@@ -49,9 +49,9 @@
     </Form>
     <div style="width: 100%;height: 30px;">
       <ButtonGroup style="float:right">
-        <Button type="primary" @click="handleBackward" :disabled="this.currentIndex === 0 || this.loadData"><Icon type="ios-arrow-back"></Icon>上一条</Button>
-        <Button type="primary" @click="handleForward" :disabled="this.currentIndex === this.bookRecords.length - 1 || this.loadData">下一条<Icon type="ios-arrow-forward"></Icon></Button>
-        <Button Button type="success" icon="md-cloud-download"
+        <Button type="primary" @click="handleBackward" :disabled="this.currentIndex === 0 || this.refreshData"><Icon type="ios-arrow-back"></Icon>上一条</Button>
+        <Button type="primary" @click="handleForward" :disabled="this.currentIndex === this.bookRecords.length - 1 || this.refreshData">下一条<Icon type="ios-arrow-forward"></Icon></Button>
+        <Button Button type="success" icon="md-cloud-download" :disabled="this.formData.adjustFlowId ? false: true"
           :to="downloadUrl + downloadPara" target="_blank"
           @click="handleDownloadFollow"
           :loading="this.downloading">导出跟进情况记录</Button>
@@ -59,7 +59,7 @@
     </div>
 
     <div style="margin-left: 10px;margin-top: 10px;">
-      <Table size="small" :height="400" @on-row-dblclick="handleShowDetail" :stripe="true" border ref="table-sa" :loading="this.loadData" :columns="cols" :data="dataSet">
+      <Table size="small" :height="400" @on-row-dblclick="handleShowDetail" :stripe="true" border ref="table-sa" :loading="this.refreshData" :columns="cols" :data="dataSet">
         <div slot="footer" style="width:100%;text-align: center">
           <Page :total="pageData.total" :current.sync="pageData.current" :disabled="this.dataSet.length > 0 ? false: true"
             @on-change="handleSearchRd"
@@ -93,7 +93,8 @@ export default {
   },
   mixins: [ mixinInfo ],
   props: [
-    'rowData'
+    'rowData',
+    'loadData'
   ],
   data () {
     return {
@@ -103,18 +104,19 @@ export default {
         size: 10
       },
       dataSet: [],
-      loadData: false,
+      refreshData: false,
       bookRecords: [],
       selRow: {},
       formData: {
         employeeNo: '',
         employeeName: '',
-        focusType: 0,
+        focusType: '',
         focusItem: '',
         focusDate: '',
         focusDuration: '',
         freeDate: '',
-        focusReason: ''
+        focusReason: '',
+        adjustFlowId: undefined
       },
       currentIndex: 0,
       showFollowDetail: false,
@@ -128,6 +130,18 @@ export default {
     initInfo (val) {
       this.currentIndex = 0
       this.selRow = {}
+      this.bookRecords = []
+      this.dataSet = []
+      this.formData.employeeNo = val.employeeNo
+      this.formData.employeeName = val.employeeName
+      this.formData.focusType = val.focusTypeText
+      this.formData.focusItem = ''
+      this.formData.focusDate = ''
+      this.formData.focusDuration = ''
+      this.formData.freeDate = ''
+      this.formData.focusReason = ''
+      this.formData.adjustFlowId = undefined
+
       const condition = {
         employeeNo: val.employeeNo
       }
@@ -151,6 +165,7 @@ export default {
     },
     setFormData (index) {
       if (this.bookRecords.length - 1 < index) return
+      if (!this.bookRecords[index].adjustFlowId) return
 
       this.formData.employeeNo = this.bookRecords[index].employeeNo
       this.formData.employeeName = this.bookRecords[index].employeeName
@@ -180,23 +195,22 @@ export default {
       })
     },
     handleSearchRd () {
-      if (this.loadData) return
-      this.loadData = true
+      if (this.refreshData) return
+      this.refreshData = true
       const condition = {
         page: this.pageData.current,
         pageSize: this.pageData.size,
         adjustFlowId: this.formData.adjustFlowId
-
       }
       getFocusPersonFollows(condition).then(res => {
         if (res.data.code === '000000') {
           this.dataSet = res.data.data.rows
           this.pageData.total = res.data.data.total
         }
-        this.loadData = false
+        this.refreshData = false
       }).catch(() => {
         this.dataSet = []
-        this.loadData = false
+        this.refreshData = false
       })
     },
     handleShowDetail (row, index) {
@@ -224,9 +238,8 @@ export default {
     this.downloadUrl = this.base_url + 'focuspersonfollows/export?'
   },
   watch: {
-    rowData (val) {
-      if (Object.keys(val).length === 0) return
-      this.initInfo(val)
+    loadData (val) {
+      if (val) this.initInfo(this.rowData)
     }
   }
 }

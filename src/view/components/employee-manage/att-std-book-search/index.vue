@@ -34,8 +34,13 @@
             </Select>
           </FormItem>
           <FormItem :label-width="10">
-            <Button type="primary" icon="ios-search" @click="handleChgPageSize(pageData.size,1)" :loading="this.loadData">查询</Button>
-            <Button type="primary" icon="ios-search" @click="handleCreateAttention" :loading="this.loadData">详细（临时）</Button>
+            <ButtonGroup>
+              <Button type="primary" icon="ios-search" @click="handleChgPageSize(pageData.size,1)" :loading="this.loadData">查询</Button>
+              <Button type="success" icon="md-cloud-download"
+                :to="downloadUrl + downloadPara" target="_blank"
+                @click="handleDownloadBooks"
+                :loading="this.downloading">导出台账</Button>
+            </ButtonGroup>
           </FormItem>
         </Form>
       </div>
@@ -54,10 +59,10 @@
       </Drawer>
     </Card>
 
-    <Modal v-model="showAttentionAction" :loading="dataSaving" scrollable title="actionTitle" width="1000" :styles="{top: '10px'}"
+    <Modal v-model="showFocusBookRecord" scrollable title="个人关注台账" width="1000" :styles="{top: '10px'}"
       :mask-closable="true"
       :footer-hide="true">
-      <AttStdBookContent :rowData="{}" :selOption="{}"></AttStdBookContent>
+      <AttStdBookContent :rowData="this.selRow"></AttStdBookContent>
     </Modal>
   </div>
 </template>
@@ -89,15 +94,20 @@ export default {
         focusItem: '',
         deptCode: []
       },
+      selRow: {},
       dataSet: [],
       deptEmpList: [],
       dept_list: [],
       selFocusItem: [],
       loadData: false,
       showSelectEmp: false,
-      showAttentionAction: false,
+      showFocusBookRecord: false,
       dataSaving: true,
-      windowHeight: 0
+      windowHeight: 0,
+      downloading: false,
+      downloadUrl: '',
+      base_url: '',
+      downloadPara: ''
     }
   },
   methods: {
@@ -129,14 +139,6 @@ export default {
       }).catch(() => {
 
       })
-    },
-    handleCreateAttention () {
-      // this.actionType = 'create'
-      // this.actionTitle = '关注台账内容'
-      // this.showAttentionAction = true
-    },
-    handleSponsorAttention (row, index) {
-
     },
     handleChgPageSize (size, current) {
       if (current) this.pageData.current = current
@@ -170,11 +172,9 @@ export default {
       if (this.formData.focusItem && this.formData.focusItem !== '') {
         condition.focusItem = this.formData.focusItem
       }
-
       if (this.formData.deptCode && this.formData.deptCode.length > 0) {
         condition.deptCode = this.formData.deptCode[this.formData.deptCode.length - 1]
       }
-      console.log(condition)
 
       getFocusBooksList(condition).then(res => {
         if (res.data.code === '000000') {
@@ -187,8 +187,9 @@ export default {
         this.loadData = false
       })
     },
-    handleShowDetail () {
-
+    handleShowDetail (row, index) {
+      this.selRow = Object.assign({}, row)
+      this.showFocusBookRecord = true
     },
     handleSelectEmp () {
       this.showSelectEmp = true
@@ -205,14 +206,50 @@ export default {
         }
       }
     },
+    handleDownloadBooks () {
+      if (this.downloading) return
+      this.downloading = true
+
+      this.formData.employeeNo = this.trimForText(this.formData.employeeNo).toUpperCase()
+      this.formData.employeeName = this.trimForText(this.formData.employeeName)
+      if (this.formData.employeeNo !== '') {
+        this.downloadPara = `employeeNo=${this.formData.employeeNo}`
+      }
+      if (this.formData.employeeName !== '') {
+        this.downloadPara = `${this.downloadPara}&employeeName=${this.formData.employeeName}`
+      }
+      if (this.formData.focusType) {
+        this.downloadPara = `${this.downloadPara}&focusType=${this.formData.focusType}`
+      }
+      if (this.formData.bookStatus || this.formData.bookStatus === 0) {
+        this.downloadPara = `${this.downloadPara}&bookStatus=${this.formData.bookStatus}`
+      }
+      if (this.formData.focusItem && this.formData.focusItem !== '') {
+        this.downloadPara = `${this.downloadPara}&bookStatus=${this.formData.focusItem}`
+      }
+      if (this.formData.deptCode && this.formData.deptCode.length > 0) {
+        this.downloadPara = `${this.downloadPara}&deptCode=${this.formData.deptCode[this.formData.deptCode.length - 1]}`
+      }
+
+      this.$Message.info({
+        content: '正在生成数据，请稍候......',
+        duration: 5
+      })
+
+      setTimeout(() => {
+        this.downloading = false
+      }, 5000)
+    },
     setWindowHeight () {
-      this.windowHeight = window.innerHeight - 230
+      this.windowHeight = window.innerHeight - 260
     },
     maxTagPlaceholder (num) {
       return '+' + num
     }
   },
   mounted () {
+    this.base_url = (process.env.NODE_ENV === 'production' ? this.$config.baseUrl.pro : this.$config.baseUrl.dev)
+    this.downloadUrl = this.base_url + 'focusbooks/export?'
     this.initInfo()
   },
   created () {
