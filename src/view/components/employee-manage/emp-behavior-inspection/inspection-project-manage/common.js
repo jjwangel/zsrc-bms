@@ -13,38 +13,51 @@ export const mixinInfo = {
         {
           title: '项目名称',
           width: 200,
-          key: 'employeeNo',
+          key: 'describe',
           tooltip: 'true'
         },
         {
           title: '年度',
-          key: 'employeeName',
+          key: 'year',
           tooltip: 'true'
         },
         {
           title: '开始时间',
-          key: 'deptName',
+          key: 'startTime',
           tooltip: 'true'
         },
         {
           title: '结束时间',
-          key: 'gw',
+          key: 'endTime',
           tooltip: 'true'
         },
         {
           title: '启动时间 ',
-          key: 'gw',
+          key: 'projectStartTime',
           tooltip: 'true'
         },
         {
           title: '关闭时间',
-          key: 'gw',
+          key: 'projectCloseTime',
           tooltip: 'true'
         },
         {
           title: '状态',
-          key: 'gw',
-          tooltip: 'true'
+          key: 'status',
+          tooltip: 'true',
+          render: (h, params) => {
+            const row = params.row
+            let text = ''
+            switch (row.status) {
+              case 0: text = '待启动'
+                break
+              case 1: text = '正常'
+                break
+              case 2: text = '关闭'
+            }
+
+            return h('p', text)
+          }
         },
         {
           title: '操作',

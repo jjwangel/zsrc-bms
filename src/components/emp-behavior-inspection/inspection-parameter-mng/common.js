@@ -12,25 +12,37 @@ export const mixinInfo = {
         },
         {
           title: '排查类型',
-          key: 'employeeNo',
+          key: 'typeText',
           width: 120,
           tooltip: 'true'
         },
         {
           title: '内容',
-          key: 'employeeName',
+          key: 'content',
           tooltip: 'true'
         },
         {
           title: '状态',
-          key: 'deptName',
+          key: 'status',
           width: 80,
-          tooltip: 'true'
+          tooltip: 'true',
+          render: (h, params) => {
+            const row = params.row
+            let text = ''
+            switch (row.status) {
+              case 1: text = '正常'
+                break
+              case 2: text = '关闭'
+                break
+            }
+
+            return h('p', text)
+          }
         },
         {
           title: '操作',
           slot: 'action',
-          width: 100,
+          width: 130,
           align: 'center'
         }
       ]
