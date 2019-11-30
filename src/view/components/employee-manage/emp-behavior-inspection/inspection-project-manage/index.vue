@@ -30,11 +30,12 @@
 
       <Table size="small" :height="windowHeight" @on-row-dblclick="handleShowDetail" :stripe="true" border ref="table-sa" :loading="this.loadData" :columns="cols" :data="dataSet">
         <template slot-scope="{ row, index }" slot="action">
+            <Button type="primary" size="small" :disabled="row.status !== 0 || dataDealing" @click="handleModifyData (row, index)">修改</Button>
           <Poptip
             confirm
             title="你确认删除个项目吗？"
             @on-ok="handleDeleteProject (row, index)">
-            <Button type="error" size="small" :disabled="row.status !== 0">删除</Button>
+            <Button type="error" size="small" :disabled="row.status !== 0 || dataDealing">删除</Button>
           </Poptip>
         </template>
 
@@ -47,11 +48,11 @@
       </Table>
     </Card>
 
-    <Modal v-model="showInspectionAction" :loading="dataSaving" scrollable :title="actionTitle" width="700" ok-text="提交" :styles="{top: '10px'}"
+    <Modal v-model="showInspectionAction" :loading="this.dataSaving" scrollable :title="dtlTitle" width="700" ok-text="提交" :styles="{top: '10px'}"
       :mask-closable="this.actionType === 'view'"
       :footer-hide="this.actionType === 'view'"
-      @on-ok="handleSaveChange">
-      <InspectionAction @saveCancel="handleSaveCancel" @saveSuccess="handleSaveSuccess" :saveNow_="saveNow" :rowData="{}" :selOption="{}" :actionType="this.actionType"></InspectionAction>
+      @on-ok="handleSaveDetail">
+      <InspectionAction @saveCancel="handleSaveCancel" @saveSuccess="handleSaveSuccess" :saveNow="saveNow" :rowData="this.detailRow" :actionType="this.actionType"></InspectionAction>
     </Modal>
 
     <Modal v-model="showInsParaMng" scrollable title="项目参数" width="700" :styles="{top: '10px'}"
@@ -94,10 +95,24 @@ export default {
       loadData: false,
       showInspectionAction: false,
       showInsParaMng: false,
+      newRow: {
+        id: 0,
+        name: '',
+        year: undefined,
+        startTime: '',
+        endTime: '',
+        seTime: [],
+        projectStartTime: '',
+        projectCloseTime: '',
+        scTime: [],
+        describe: ''
+      },
+      detailRow: {},
       dataSaving: true,
-      actionTitle: '',
+      dtlTitle: '',
       actionType: '', // view || create || modify
       saveNow: false,
+      dataDealing: false,
       windowHeight: 0
     }
   },
@@ -110,11 +125,6 @@ export default {
     },
     handleDateChange (val) {
       this.formData.prjYear = val
-    },
-    handleCreateInspection () {
-      this.actionType = 'create'
-      this.actionTitle = '发起排查项目'
-      this.showInspectionAction = true
     },
     handleDeleteProject (row, index) {
       const condition = {
@@ -133,14 +143,46 @@ export default {
 
       })
     },
-    handleSaveChange () {
-
+    handleSaveDetail () {
+      this.saveNow = true
+      this.$nextTick(() => {
+        this.saveNow = false
+      })
     },
     handleSaveCancel () {
-
+      this.dataSaving = false
+      this.$nextTick(() => {
+        this.dataSaving = true
+      })
     },
-    handleSaveSuccess () {
+    handleSaveSuccess (isNew, rowIndex, data) {
+      if (isNew) {
+        this.dataSet.push({
+          id: data.id,
+          name: data.name,
+          year: data.year,
+          startTime: data.startTime,
+          endTime: data.endTime,
+          projectStartTime: data.projectStartTime,
+          projectCloseTime: data.projectCloseTime,
+          describe: data.describe,
+          status: data.status
+        })
+      } else {
+        this.dataSet[rowIndex].name = data.name
+        this.dataSet[rowIndex].year = data.year
+        this.dataSet[rowIndex].startTime = data.startTime
+        this.dataSet[rowIndex].endTime = data.endTime
+        this.dataSet[rowIndex].projectStartTime = data.projectStartTime
+        this.dataSet[rowIndex].projectCloseTime = data.projectCloseTime
+        this.dataSet[rowIndex].describe = data.describe
+      }
 
+      this.dataSaving = false
+      this.showInspectionAction = false
+      this.$nextTick(() => {
+        this.dataSaving = true
+      })
     },
     handleChgPageSize (size, current) {
       if (current) this.pageData.current = current
@@ -175,8 +217,23 @@ export default {
         this.loadData = false
       })
     },
-    handleShowDetail () {
-
+    handleShowDetail (row, index) {
+      this.actionType = 'view'
+      this.dtlTitle = '排查项目（只读）'
+      this.detailRow = Object.assign({}, row, { seTime: [row.startTime, row.endTime], scTime: [row.projectStartTime, row.projectCloseTime] })
+      this.showInspectionAction = true
+    },
+    handleCreateInspection () {
+      this.actionType = 'create'
+      this.dtlTitle = '发起排查项目'
+      this.detailRow = Object.assign({}, this.newRow)
+      this.showInspectionAction = true
+    },
+    handleModifyData (row, index) {
+      this.actionType = 'modify'
+      this.dtlTitle = '排查项目（修改）'
+      this.detailRow = Object.assign({}, row, { seTime: [row.startTime, row.endTime], scTime: [row.projectStartTime, row.projectCloseTime] })
+      this.showInspectionAction = true
     },
     setWindowHeight () {
       this.windowHeight = window.innerHeight - 230

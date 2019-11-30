@@ -13,7 +13,7 @@ export const mixinInfo = {
         {
           title: '项目名称',
           width: 200,
-          key: 'describe',
+          key: 'name',
           tooltip: 'true'
         },
         {
@@ -62,7 +62,7 @@ export const mixinInfo = {
         {
           title: '操作',
           slot: 'action',
-          width: 100,
+          width: 150,
           align: 'center'
         }
       ]

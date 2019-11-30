@@ -27,14 +27,14 @@
     </Form>
 
     <div style="margin-left: 10px;margin-top: 10px;">
-      <Table size="small" :height="400" @on-row-dblclick="handleShowDetail" :stripe="true" border ref="table-sa" :loading="this.loadData" :columns="cols" :data="dataSet">
+      <Table size="small" :height="400" @on-row-dblclick="handleShowDetail" :stripe="true" border ref="table" :loading="this.loadData" :columns="cols" :data="dataSet">
         <template slot-scope="{ row, index }" slot="action">
-          <Button type="primary" size="small" @click="handleModifyData (row, index)">修改</Button>
+          <Button type="primary" size="small" :disabled="dataDealing" @click="handleModifyData (row, index)">修改</Button>
           <Poptip
             confirm
             title="你确认删除这条项目吗？"
             @on-ok="handleDeleteByOne (row, index)">
-            <Button type="error" size="small" :disabled="refreshing">删除</Button>
+            <Button type="error" size="small" :disabled="dataDealing">删除</Button>
           </Poptip>
         </template>
         <div slot="footer" style="width:100%;text-align: center">
@@ -100,9 +100,9 @@ export default {
       showInsParaDetail: false,
       saveNow: false,
       actionType: '', // view || create || modify
-      dtlTitle: '111',
+      dtlTitle: '',
       dataSaving: true,
-      refreshing: false
+      dataDealing: false
     }
   },
   methods: {
@@ -173,7 +173,7 @@ export default {
       this.showInsParaDetail = true
     },
     handleDeleteByOne (row, index) {
-      this.refreshing = true
+      this.dataDealing = true
       const condition = {
         id: row.id
       }
@@ -187,9 +187,9 @@ export default {
           this.dataSet.splice(index, 1)
         }
 
-        this.refreshing = false
+        this.dataDealing = false
       }).catch(() => {
-        this.refreshing = false
+        this.dataDealing = false
       })
     },
     handleSaveCancel () {
