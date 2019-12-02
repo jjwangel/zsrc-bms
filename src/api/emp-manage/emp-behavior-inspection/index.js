@@ -3,7 +3,7 @@
  * @Date: 2019-11-28 16:00:49
  * @Description: 员工行为排查
  * @Last Modified by: jjw
- * @Last Modified time: 2019-11-29 18:49:53
+ * @Last Modified time: 2019-12-02 19:34:21
  */
 
 import baseAPI from '../../base'
@@ -117,5 +117,51 @@ export const modifyEmpCheckPublicParam = async (formData) => {
   let data = { ...formData }
 
   const res = await baseAPI.modifyData('empcheckpublicparam', data)
+  return res
+}
+
+/**
+ * @description 获取员工排查记录列表(发起排查)列表数据
+ * @param {*} formData
+ * @returns
+ */
+export const getEmpCheckRecordList = (formData) => {
+  const params = { ...formData }
+
+  return baseAPI.getListData('/empcheckrecords/tocheck/page', params)
+}
+
+/**
+ * @description 新增员工排查记录
+ * @param {*} formData
+ * @returns
+ */
+export const addEmpCheckRecordByBatch = async (formData) => {
+  const params = [ ...formData ]
+  const res = await baseAPI.insertData('empcheckrecord/batch', params)
+  return res
+}
+
+/**
+ * @description 新增编外员工信息
+ * @param {*} formData
+ * @returns
+ */
+export const addOffstaffEmployee = async (formData) => {
+  let data = { ...formData }
+
+  const res = await baseAPI.insertData('offstaffemployee', data)
+  return res
+}
+
+/**
+ * @description 更新编外员工信息
+ * @param {*} formData
+ * @returns
+ */
+export const modifyOffstaffEmployee = async (formData) => {
+  let data = { ...formData }
+
+  const res = await baseAPI.modifyData('offstaffemployee', data)
   return res
 }

@@ -33,7 +33,7 @@
             <Button type="primary" size="small" :disabled="row.status !== 0 || dataDealing" @click="handleModifyData (row, index)">修改</Button>
           <Poptip
             confirm
-            title="你确认删除个项目吗？"
+            title="你确认删除这个项目吗？"
             @on-ok="handleDeleteProject (row, index)">
             <Button type="error" size="small" :disabled="row.status !== 0 || dataDealing">删除</Button>
           </Poptip>

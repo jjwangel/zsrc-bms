@@ -11,6 +11,11 @@ export const mixinInfo = {
           }
         },
         {
+          type: 'selection',
+          width: 60,
+          align: 'center'
+        },
+        {
           title: '工号',
           width: 100,
           key: 'employeeNo',
@@ -19,34 +24,40 @@ export const mixinInfo = {
         {
           title: '姓名',
           width: 100,
-          key: 'employeeName',
+          key: 'name',
           tooltip: 'true'
         },
         {
           title: '所属单位',
-          key: 'deptName',
+          key: 'headSubName',
           tooltip: 'true'
         },
         {
           title: '部室/网点',
-          key: 'gw',
+          key: 'deptName',
           tooltip: 'true'
         },
         {
           title: '排查次数 ',
-          key: 'gw',
+          key: 'checkCount',
           tooltip: 'true'
         },
         {
           title: '排查状态',
-          key: 'gw',
-          tooltip: 'true'
-        },
-        {
-          title: '操作',
-          slot: 'action',
-          width: 100,
-          align: 'center'
+          key: 'checkStatus',
+          tooltip: 'true',
+          render: (h, params) => {
+            const row = params.row
+            let text = ''
+            switch (row.checkStatus) {
+              case 0: text = '待排查'
+                break
+              case 1: text = '已排查'
+                break
+            }
+
+            return h('p', text)
+          }
         }
       ]
     }

@@ -66,7 +66,6 @@ export default {
 
     return {
       formData: this.rowData,
-      dataSaving: false,
       rules: {
         type: [
           { validator: validateType, trigger: 'blur' }

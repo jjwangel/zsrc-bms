@@ -12,19 +12,18 @@ export const mixinInfo = {
         },
         {
           title: '类型',
-          width: 200,
-          key: 'employeeNo',
+          width: 120,
+          key: 'typeText',
           tooltip: 'true'
         },
         {
           title: '内容',
-          key: 'employeeName',
-          tooltip: 'true'
+          key: 'content'
         },
         {
           title: '排查情况',
           slot: 'action',
-          width: 200,
+          width: 220,
           align: 'center'
         }
       ]

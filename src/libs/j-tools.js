@@ -45,6 +45,30 @@ export const formatSelectOption = (selOpt) => {
  * @param {object} selOpt 传入表单选项对像
  * @description 返回格式化后的表单选项
  */
+export const formatSelectOptionByDefine = (data, keyName, valueName) => {
+  let result = []
+
+  for (const elem of data.values()) {
+    let keyValue = {}
+    Object.keys(elem).forEach((key) => {
+      if (key === keyName) {
+        keyValue.key = (typeof elem[key] === 'number' && !isNaN(elem[key]) ? Number.parseInt(elem[key]) : elem[key])
+      }
+      if (key === valueName) {
+        keyValue.value = elem[key]
+      }
+    })
+    if (Object.keys(keyValue).length > 0) {
+      result.push(keyValue)
+    }
+  }
+  return result
+}
+
+/**
+ * @param {object} selOpt 传入表单选项对像
+ * @description 返回格式化后的表单选项
+ */
 export const formatSingleSelectOption = (selOpt) => {
   let result = []
   for (let elem of selOpt.values()) {
