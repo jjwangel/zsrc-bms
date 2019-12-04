@@ -58,6 +58,12 @@ export const mixinInfo = {
 
             return h('p', text)
           }
+        },
+        {
+          title: '编外人员操作',
+          slot: 'action',
+          width: 150,
+          align: 'center'
         }
       ]
     }

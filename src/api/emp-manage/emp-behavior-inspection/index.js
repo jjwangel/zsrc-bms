@@ -3,7 +3,7 @@
  * @Date: 2019-11-28 16:00:49
  * @Description: 员工行为排查
  * @Last Modified by: jjw
- * @Last Modified time: 2019-12-02 19:34:21
+ * @Last Modified time: 2019-12-03 20:39:56
  */
 
 import baseAPI from '../../base'
@@ -164,4 +164,25 @@ export const modifyOffstaffEmployee = async (formData) => {
 
   const res = await baseAPI.modifyData('offstaffemployee', data)
   return res
+}
+
+/**
+ * @description 删除排查项目公共参数
+ * @param {*} formData
+ * @returns
+ */
+export const deleteOffStaffEmployee = async (formData) => {
+  const res = await baseAPI.deleteDataByOne(`/offstaffemployee/${formData.idcardNo}`)
+  return res
+}
+
+/**
+ * @description 获取员工发起调整时详细功能的数据
+ * @param {*} formData
+ * @returns
+ */
+export const getOffStaffEmployeeInfo = (formData) => {
+  const params = { ...formData }
+
+  return baseAPI.getOneRowData('/offstaffemployee', params)
 }

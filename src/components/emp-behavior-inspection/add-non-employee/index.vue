@@ -129,7 +129,9 @@ export default {
               content: '保存数据成功！',
               duration: 3
             })
-            // this.$emit('saveSuccess', false, this.formData._index, Object.assign({}, data))
+            this.$emit('saveSuccess', false, this.formData._index, Object.assign({}, {
+              name: this.formData.name
+            }))
           } else {
             this.$emit('saveCancel')
           }

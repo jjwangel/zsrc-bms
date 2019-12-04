@@ -43,6 +43,15 @@
         @on-select-cancel="handleOnSelectCancel"
         @on-select-all="handleOnSelectAll"
         @on-select-all-cancel="handleOnSelectAllCancel">
+        <template slot-scope="{ row, index }" slot="action">
+          <Button type="primary" size="small" :disabled="dataDealing || row.employeeNo != null" @click="handleModifyNonEmp (row, index)">修改</Button>
+          <Poptip
+            confirm
+            title="你确认删除这条项目吗？"
+            @on-ok="handleDeleteNonEmp (row, index)">
+            <Button type="error" size="small" :disabled="dataDealing || row.employeeNo != null">删除</Button>
+          </Poptip>
+        </template>
         <div slot="footer" style="width:100%;text-align: center">
           <Page :total="pageData.total" :current.sync="pageData.current" :disabled="this.dataSet.length > 0 ? false: true"
             @on-change="handleSearchRd"
@@ -75,7 +84,7 @@
 <script>
 import { getInstEmpList, getInstList } from '@/api/base'
 import { mixinInfo } from './common.js'
-import { getEmpCheckProjectList, getEmpCheckRecordList } from '@/api/emp-manage/emp-behavior-inspection'
+import { getEmpCheckProjectList, getEmpCheckRecordList, deleteOffStaffEmployee, getOffStaffEmployeeInfo } from '@/api/emp-manage/emp-behavior-inspection'
 import { formatSelectOptionByDefine } from '@/libs/j-tools.js'
 import InspectionCheckin from '_c/emp-behavior-inspection/inspection-checkin'
 import AddNonEmp from '_c/emp-behavior-inspection/add-non-employee'
@@ -118,6 +127,7 @@ export default {
       showAddNonEmp: false,
       showInspectionCheckin: false,
       dataSaving: true,
+      dataDealing: false,
       saveCheckin: false,
       initCheckinFlag: false,
       saveNonEmp: false,
@@ -270,7 +280,6 @@ export default {
       } else {
         this.dataSet[rowIndex].name = data.name
       }
-
       this.dataSaving = false
       this.showAddNonEmp = false
       this.$nextTick(() => {
@@ -339,6 +348,44 @@ export default {
         this.initCheckinFlag = false
       })
       this.showInspectionCheckin = true
+    },
+    handleModifyNonEmp (row, index) {
+      getOffStaffEmployeeInfo({ idcardNo: row.idcardNo }).then(res => {
+        if (res.data.code === '000000') {
+          this.actionType = 'modify'
+          this.selNonEmp = Object.assign({}, {
+            _index: index,
+            id: res.data.data.id,
+            name: res.data.data.name,
+            gender: res.data.data.gender,
+            idcardNo: res.data.data.idcardNo,
+            remark: res.data.data.remark
+          })
+          this.showAddNonEmp = true
+        }
+      }).catch(() => {
+
+      })
+    },
+    handleDeleteNonEmp (row, index) {
+      this.dataDealing = true
+      const condition = {
+        idcardNo: row.idcardNo
+      }
+
+      deleteOffStaffEmployee(condition).then(res => {
+        if (res.data.code === '000000') {
+          this.$Message.success({
+            content: '删除数据成功！',
+            duration: 3
+          })
+          this.dataSet.splice(index, 1)
+        }
+
+        this.dataDealing = false
+      }).catch(() => {
+        this.dataDealing = false
+      })
     },
     handleSelectEmp () {
       this.showSelectEmp = true
