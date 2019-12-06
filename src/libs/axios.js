@@ -31,7 +31,7 @@ class HttpRequest {
       // 前端接口请求设置一下ajax的withCrendetails属性试试，跨域默认不让操作cookie的，补充上这个属性应该就好了
       config.withCredentials = true
       // config.headers['Sso-Token'] = getSysToken()
-      if (config.method === 'post') {  // 增加时间戳，解决IE 默认从缓存中获取了数据，而没有重新发请求
+      if (config.method === 'post') { // 增加时间戳，解决IE 默认从缓存中获取了数据，而没有重新发请求
         config.data = {
           ...config.data,
           t: Date.parse(new Date()) / 1000

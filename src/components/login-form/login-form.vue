@@ -15,7 +15,7 @@
       </Input>
     </FormItem>
     <FormItem>
-      <Button @click="handleSubmit" type="primary" :loading="logining" long>登录</Button>
+      <Button @click="handleSubmit" :disabled="this.disableLogin" type="primary" :loading="logining" long>登录</Button>
     </FormItem>
   </Form>
 </template>
@@ -44,6 +44,7 @@ export default {
   },
   data () {
     return {
+      disableLogin: false,
       logining: false,
       form: {
         userName: '',
@@ -71,6 +72,15 @@ export default {
             password: encryptStr(this.form.password)
           })
         }
+      })
+    }
+  },
+  mounted () {
+    if (!!window.ActiveXObject || 'ActiveXObject' in window) { // 禁用IE登录
+      this.disableLogin = true
+      this.$Message.warning({
+        content: '温馨提示：本系统不支持IE浏览器，请使用谷歌浏览！',
+        duration: 5
       })
     }
   },
