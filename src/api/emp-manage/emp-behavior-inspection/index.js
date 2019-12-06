@@ -3,7 +3,7 @@
  * @Date: 2019-11-28 16:00:49
  * @Description: 员工行为排查
  * @Last Modified by: jjw
- * @Last Modified time: 2019-12-03 20:39:56
+ * @Last Modified time: 2019-12-05 20:23:05
  */
 
 import baseAPI from '../../base'
@@ -172,7 +172,7 @@ export const modifyOffstaffEmployee = async (formData) => {
  * @returns
  */
 export const deleteOffStaffEmployee = async (formData) => {
-  const res = await baseAPI.deleteDataByOne(`/offstaffemployee/${formData.idcardNo}`)
+  const res = await baseAPI.deleteDataByOne(`/offstaffemployee?idcardNo=${formData.idcardNo}`)
   return res
 }
 
@@ -185,4 +185,36 @@ export const getOffStaffEmployeeInfo = (formData) => {
   const params = { ...formData }
 
   return baseAPI.getOneRowData('/offstaffemployee', params)
+}
+
+/**
+ * @description 获取员工已排查记录列表分页查询列表数据
+ * @param {*} formData
+ * @returns
+ */
+export const getEmpCheckedRecordList = (formData) => {
+  const params = { ...formData }
+
+  return baseAPI.getListData('/empcheckrecords/page', params)
+}
+
+/**
+ * @description 删除员工排查记录
+ * @param {*} formData
+ * @returns
+ */
+export const deleteEmpCheckRecord = async (formData) => {
+  const res = await baseAPI.deleteDataByOne(`/empcheckrecord/${formData.id}`)
+  return res
+}
+
+/**
+ * @description 获取员工排查记录明细列表查询的数据
+ * @param {*} formData
+ * @returns
+ */
+export const getEmpCheckDetails = (formData) => {
+  const params = { ...formData }
+
+  return baseAPI.getOneRowData('/empcheckdetails', params)
 }

@@ -72,7 +72,16 @@ export default {
         })
         callback(new Error(''))
       } else {
-        callback()
+        let p = /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/
+        if (!p.test(value)) {
+          this.$Message.warning({
+            content: '身份证号格式不正确！',
+            duration: 5
+          })
+          callback(new Error(''))
+        } else {
+          callback()
+        }
       }
     }
 

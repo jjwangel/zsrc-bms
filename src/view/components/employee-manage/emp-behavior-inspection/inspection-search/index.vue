@@ -20,15 +20,21 @@
               <Button slot="append" icon="md-apps" @click="handleSelectEmp" :disabled="this.loadData"></Button>
             </Input>
           </FormItem>
-          <FormItem label="所属机构" prop="dqzt">
+          <FormItem label="所属机构" prop="deptCode">
             <Cascader style="width: 200px" :data="dept_list" v-model="formData.deptCode" trigger="hover" :disabled="this.loadData"></Cascader>
           </FormItem>
-          <FormItem label="排查状态" prop="checkStatus">
-              <Select v-model="formData.checkStatus" style="width:100px" clearable :disable="this.loadData">
-                <Option :value="0">待排查</Option>
-                <Option :value="1">已排查</Option>
-              </Select>
-            </FormItem>
+          <FormItem label="人员类型" prop="employeeType">
+            <Select v-model="formData.employeeType" style="width:100px" clearable :disable="this.loadData">
+              <Option :value="1">本行员工</Option>
+              <Option :value="2">编外人员</Option>
+            </Select>
+          </FormItem>
+          <FormItem label="排查状态" prop="checkResult">
+            <Select v-model="formData.checkResult" style="width:100px" clearable :disable="this.loadData">
+              <Option :value="1">正常</Option>
+              <Option :value="2">异常</Option>
+            </Select>
+          </FormItem>
           <ButtonGroup>
             <Button type="primary" icon="ios-search" @click="handleChgPageSize(pageData.size,1)" :loading="this.loadData">查询</Button>
           </ButtonGroup>
@@ -41,8 +47,8 @@
           <Poptip
             confirm
             title="你确认删除这条项目吗？"
-            @on-ok="handleDeleteNonEmp (row, index)">
-            <Button type="error" size="small" :disabled="dataDealing || row.employeeNo != null">删除</Button>
+            @on-ok="handleDeleteCheckRecord (row, index)">
+            <Button type="error" size="small" :disabled="dataDealing || row.checkerNo != employeeNo()">删除</Button>
           </Poptip>
         </template>
         <div slot="footer" style="width:100%;text-align: center">
@@ -58,34 +64,25 @@
       </Drawer>
     </Card>
 
-    <Modal v-model="showInspectionCheckin" :loading="dataSaving" scrollable title="排查登记" width="1000" ok-text="提交" :styles="{top: '10px'}"
-      :mask-closable="false"
-      :footer-hide="false"
-      @on-ok="handleCheckSave">
-      <InspectionCheckin @saveCancel="handleCheckCancel" @saveSuccess="handleCheckSuccess" :prjName="formData.prjName" :initFlag="initCheckinFlag" :saveNow="saveCheckin" :rowData="selCheckinRow" :prjId="formData.prjId"></InspectionCheckin>
-    </Modal>
-
-    <Modal v-model="showAddNonEmp" :loading="dataSaving" scrollable title="编外被排查人" width="700" ok-text="提交" :styles="{top: '10px'}"
-      :mask-closable="false"
-      :footer-hide="false"
-      @on-ok="handleNonEmpSave">
-      <AddNonEmp @saveCancel="handleNonEmpCancel" @saveSuccess="handleNonEmpSuccess" :saveNow="saveNonEmp" :rowData="selNonEmp" :actionType="actionType"></AddNonEmp>
+    <Modal v-model="showInspectionCheckin" scrollable title="排查登记" width="1000" :styles="{top: '10px'}"
+      :mask-closable="true"
+      :footer-hide="true">
+      <InspectionCheckView :rowData="detailData"></InspectionCheckView>
     </Modal>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { getInstEmpList, getInstList } from '@/api/base'
 import { mixinInfo } from './common.js'
-import { getEmpCheckProjectList, getEmpCheckRecordList, deleteOffStaffEmployee } from '@/api/emp-manage/emp-behavior-inspection'
+import { getEmpCheckProjectList, getEmpCheckedRecordList, deleteEmpCheckRecord } from '@/api/emp-manage/emp-behavior-inspection'
 import { formatSelectOptionByDefine } from '@/libs/j-tools.js'
-import InspectionCheckin from '_c/emp-behavior-inspection/inspection-checkin'
-import AddNonEmp from '_c/emp-behavior-inspection/add-non-employee'
+import InspectionCheckView from '_c/emp-behavior-inspection/inspection-checkin-view'
 
 export default {
   components: {
-    InspectionCheckin,
-    AddNonEmp
+    InspectionCheckView
   },
   mixins: [ mixinInfo ],
   data () {
@@ -101,7 +98,8 @@ export default {
         describe: '',
         employeeNo: '',
         employeeName: '',
-        checkStatus: undefined,
+        checkResult: undefined,
+        employeeType: undefined,
         deptCode: []
       },
       prjData: [],
@@ -118,13 +116,16 @@ export default {
       saveCheckin: false,
       initCheckinFlag: false,
       saveNonEmp: false,
-      selCheckinRow: [],
+      detailData: {},
       selNonEmp: {},
       actionType: '', // view || create || modify
       windowHeight: 0
     }
   },
   methods: {
+    ...mapGetters([
+      'employeeNo'
+    ]),
     initInfo () {
       const condition = {
         employee: true
@@ -221,11 +222,14 @@ export default {
       if (this.formData.deptCode && this.formData.deptCode.length > 0) {
         condition.deptCode = this.formData.deptCode[this.formData.deptCode.length - 1]
       }
-      if (this.formData.checkStatus || this.formData.checkStatus === 0) {
-        condition.status = this.formData.checkStatus
+      if (this.formData.checkResult || this.formData.checkResult === 0) {
+        condition.checkResult = this.formData.checkResult
+      }
+      if (this.formData.employeeType || this.formData.employeeType === 0) {
+        condition.employeeType = this.formData.employeeType
       }
 
-      getEmpCheckRecordList(condition).then(res => {
+      getEmpCheckedRecordList(condition).then(res => {
         if (res.data.code === '000000') {
           this.dataSet = res.data.data.rows
           this.pageData.total = res.data.data.total
@@ -242,20 +246,20 @@ export default {
       })
     },
     handleInspectionCheck (row, index) {
-      this.selCheckinRow = [row]
+      this.detailData = Object.assign({}, row)
       this.initCheckinFlag = true
       this.$nextTick(() => {
         this.initCheckinFlag = false
       })
       this.showInspectionCheckin = true
     },
-    handleDeleteNonEmp (row, index) {
+    handleDeleteCheckRecord (row, index) {
       this.dataDealing = true
       const condition = {
-        idcardNo: row.idcardNo
+        id: row.id
       }
 
-      deleteOffStaffEmployee(condition).then(res => {
+      deleteEmpCheckRecord(condition).then(res => {
         if (res.data.code === '000000') {
           this.$Message.success({
             content: '删除数据成功！',

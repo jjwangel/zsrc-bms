@@ -20,7 +20,7 @@
               <Button slot="append" icon="md-apps" @click="handleSelectEmp" :disabled="this.loadData"></Button>
             </Input>
           </FormItem>
-          <FormItem label="所属机构" prop="dqzt">
+          <FormItem label="所属机构" prop="deptCode">
             <Cascader style="width: 200px" :data="dept_list" v-model="formData.deptCode" trigger="hover" :disabled="this.loadData"></Cascader>
           </FormItem>
           <FormItem label="排查状态" prop="checkStatus">
@@ -270,6 +270,7 @@ export default {
     handleNonEmpSuccess (isNew, rowIndex, data) {
       if (isNew) {
         this.dataSet.push({
+          index: this.dataSet.length,
           name: data.name,
           idcardNo: data.idcardNo,
           headSubName: data.headSubName,

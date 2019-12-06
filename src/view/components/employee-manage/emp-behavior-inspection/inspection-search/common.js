@@ -12,7 +12,7 @@ export const mixinInfo = {
         },
         {
           title: '排查项目',
-          key: 'employeeNo',
+          key: 'projectName',
           tooltip: 'true'
         },
         {
@@ -24,33 +24,45 @@ export const mixinInfo = {
         {
           title: '姓名',
           width: 100,
-          key: 'employeeName',
+          key: 'name',
           tooltip: 'true'
         },
         {
           title: '所属单位',
-          key: 'deptName',
+          key: 'headSubName',
           tooltip: 'true'
         },
         {
           title: '部室/网点',
-          key: 'gw',
+          key: 'deptName',
           tooltip: 'true'
         },
         {
           title: '排查日期 ',
-          key: 'gw',
+          key: 'checkDate',
           tooltip: 'true'
         },
         {
           title: '排查人',
-          key: 'gw',
+          key: 'checkerName',
           tooltip: 'true'
         },
         {
           title: '排查情况',
-          key: 'gw',
-          tooltip: 'true'
+          key: 'checkResult',
+          tooltip: 'true',
+          render: (h, params) => {
+            const row = params.row
+            let text = ''
+            switch (row.checkResult) {
+              case 1: text = '正常'
+                break
+              case 2: text = '异常'
+                break
+            }
+
+            return h('p', text)
+          }
         },
         {
           title: '操作',

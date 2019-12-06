@@ -79,9 +79,7 @@ export default {
         CheckList: []
       },
       currentIndex: 0,
-      submitData: [],
-      showInsParaDetail: false,
-      showShowAttached: false
+      submitData: []
     }
   },
   computed: {
@@ -207,7 +205,7 @@ export default {
           let listData = {
             recordId: 0,
             status: 0,
-            typeId: sub.type
+            typeId: sub.id
           }
           switch (sub.checkStatusText) {
             case '正常' : listData.status = 1
