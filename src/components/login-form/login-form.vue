@@ -79,7 +79,7 @@ export default {
     if (!!window.ActiveXObject || 'ActiveXObject' in window) { // 禁用IE登录
       this.disableLogin = true
       this.$Message.warning({
-        content: '温馨提示：本系统不支持IE浏览器，请使用谷歌浏览！',
+        content: '温馨提示：本系统不支持IE浏览器，请使用谷歌浏览！可通过 http://125.0.184.100 下载',
         duration: 5
       })
     }
