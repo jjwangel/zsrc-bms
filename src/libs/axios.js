@@ -31,17 +31,17 @@ class HttpRequest {
       // 前端接口请求设置一下ajax的withCrendetails属性试试，跨域默认不让操作cookie的，补充上这个属性应该就好了
       config.withCredentials = true
       // config.headers['Sso-Token'] = getSysToken()
-      if (config.method === 'post') {
-        config.data = {
-          ...config.data,
-          t: Date.parse(new Date()) / 1000
-        }
-      } else if (config.method === 'get') {
-        config.params = {
-          t: Date.parse(new Date()) / 1000,
-          ...config.params
-        }
-      }
+      // if (config.method === 'post') {
+      //   config.data = {
+      //     ...config.data,
+      //     t: Date.parse(new Date()) / 1000
+      //   }
+      // } else if (config.method === 'get') {
+      //   config.params = {
+      //     t: Date.parse(new Date()) / 1000,
+      //     ...config.params
+      //   }
+      // }
       return config
     }, error => {
       return Promise.reject(error)
