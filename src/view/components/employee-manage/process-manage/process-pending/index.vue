@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import { mapMutations, mapGetters } from 'vuex'
 import { mixinInfo } from './common.js'
 import { getFlowsList } from '@/api/emp-manage/process-manage'
 import AttentionAuditView from '_c/chg-attention/attention-audit-view'
@@ -79,7 +80,15 @@ export default {
       windowHeight: 0
     }
   },
+  computed: {
+    ...mapGetters([
+      'dealPending'
+    ])
+  },
   methods: {
+    ...mapMutations([
+      'setDealPending'
+    ]),
     initInfo () {
       this.handleSearchRd()
     },
@@ -111,8 +120,10 @@ export default {
     handleSaveSuccess (rowIndex) {
       this.dataSaving = false
       this.showVerifyAttention = false
+      this.setDealPending('PROCESS-MANAGE')
       this.$nextTick(() => {
         this.dataSaving = true
+        this.setDealPending(undefined)
         this.handleSearchRd()
       })
     },
@@ -131,8 +142,10 @@ export default {
     handleFollowSaveSuccess (rowIndex) {
       this.dataSaving = false
       this.showVerifyFollow = false
+      this.setDealPending('PROCESS-MANAGE')
       this.$nextTick(() => {
         this.dataSaving = true
+        this.setDealPending(undefined)
         this.handleSearchRd()
       })
     },
@@ -175,6 +188,11 @@ export default {
   },
   mounted () {
     this.initInfo()
+  },
+  watch: {
+    dealPending (v) {
+      if (v && v !== 'PROCESS-MANAGE') this.handleSearchRd()
+    }
   },
   created () {
     window.addEventListener('resize', this.setWindowHeight)

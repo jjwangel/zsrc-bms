@@ -61,13 +61,13 @@
     </Form>
     <Divider style="margin-top: 10px;margin-bottom: 10px;" />
     <Form ref="form2" :rules="rules" :show-message="false" :model="formData" label-position="top">
-      <FormItem label="关注原因描述" prop="focusReason" style="margin-left: 10px;" class="info_title">
+      <FormItem label="关注（调整）原因描述" prop="focusReason" style="margin-left: 10px;" class="info_title">
         <Input type="textarea" show-word-limit v-model="formData.focusReason" :rows="2" :autosize='{ minRows: 4, maxRows: 4 }' readonly></Input>
       </FormItem>
       <FormItem label="采取措施" prop="dispose" style="margin-left: 10px;" class="info_title">
         <Input type="textarea" show-word-limit :maxlength="500" v-model="formData.dispose" :rows="2" :autosize='{ minRows: 4, maxRows: 4 }'></Input>
       </FormItem>
-      <FormItem label="跟进情况登记" prop="followCondition" style="margin-left: 10px;" class="info_title">
+      <FormItem label="请详细填写：跟进情况" prop="followCondition" style="margin-left: 10px;" class="info_title">
         <Input type="textarea" show-word-limit :maxlength="1000" v-model="formData.followCondition" :rows="2" :autosize='{ minRows: 4, maxRows: 4 }'></Input>
       </FormItem>
       <FormItem label="下一步计划" prop="nextPlan" style="margin-left: 10px;" class="info_title">

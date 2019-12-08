@@ -32,13 +32,18 @@ export default {
     homeRoute: {},
     local: localRead('local'),
     errorList: [],
-    hasReadErrorPage: false
+    hasReadErrorPage: false,
+    dealPending: undefined // 值：MAIN-PAGE；PROCESS-MANAGE
   },
   getters: {
     menuList: (state, getters, rootState) => getMenuByRouter(routers, rootState.user.access),
-    errorCount: state => state.errorList.length
+    errorCount: state => state.errorList.length,
+    dealPending: state => state.dealPending
   },
   mutations: {
+    setDealPending (state, v) {
+      state.dealPending = v
+    },
     setHideMenu (state, menuAccess) {
       setHideMenuByRule(routers, menuAccess)
     },

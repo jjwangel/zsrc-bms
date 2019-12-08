@@ -60,7 +60,7 @@
     </Form>
     <Divider style="margin-top: 10px;margin-bottom: 10px;" />
     <Form ref="form2" :show-message="false" :model="formData" label-position="top">
-      <FormItem label="关注原因描述" prop="focusReason" style="margin-left: 10px;" class="info_title">
+      <FormItem label="关注（调整）原因描述" prop="focusReason" style="margin-left: 10px;" class="info_title">
         <Input type="textarea" show-word-limit :maxlength="1000" v-model="formData.focusReason" :rows="2" :autosize='{ minRows: 4, maxRows: 4 }' readonly></Input>
       </FormItem>
       <FormItem label="采取措施" prop="dispose" style="margin-left: 10px;" class="info_title">

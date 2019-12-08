@@ -27,17 +27,26 @@
     </Form>
     <Divider style="margin-top: 10px;margin-bottom: 10px;" />
     <Row :gutter="20">
-      <Col span="12">
+      <Col span="8">
         <Form ref="form2" :show-message="false" :model="formData" label-position="top">
           <FormItem label="关注类别（调整前）" prop="focusTypeText" style="margin-left: 10px;" class="info_title">
             <Input v-model="formData.focusTypeText" search enter-button="查看详细" @on-search="handleShowDetail" readonly></Input>
           </FormItem>
         </Form>
       </Col>
-      <Col span="12">
+      <Col span="16">
+        <Form ref="form6" :show-message="false" :model="formData" label-position="top">
+          <FormItem label="关注类型（调整前）" prop="focusTypeText" style="margin-left: 10px;" class="info_title">
+            <Input v-model="formData.focusTypeText" readonly></Input>
+          </FormItem>
+        </Form>
+      </Col>
+    </Row>
+    <Row :gutter="20">
+      <Col span="8">
         <Form ref="form3" :rules="rules" :show-message="false" :model="formData" label-position="top">
           <FormItem label="关注类别（调整后）" prop="newFocusType" style="margin-left: 10px;" class="info_title">
-            <Select :value="formData.newFocusType" :label-in-value="true" @on-change="handleAttLevelChg">
+            <Select :value="formData.newFocusType" style="width: 200px;" :label-in-value="true" @on-change="handleAttLevelChg">
               <Option :value="1">重点关注</Option>
               <Option :value="2">一般关注</Option>
               <Option :value="3">正常</Option>
@@ -45,13 +54,18 @@
           </FormItem>
         </Form>
       </Col>
+      <Col span="16">
+        <Form ref="form5" :rules="rules" :show-message="false" :model="formData" label-position="top">
+          <FormItem label="关注类型（调整后）" prop="focusItem" style="margin-left: 10px;" class="info_title">
+            <Select :value="formData.focusItem" :disabled="formData.newFocusType === 3" multiple :max-tag-count="3" :max-tag-placeholder="maxTagPlaceholder" :label-in-value="true" @on-change="handleFocusItemChg">
+              <Option v-for="item in this.selOption.selFocusItem" :value="item.key" :key="item.key">{{ item.value }}</Option>
+            </Select>
+          </FormItem>
+        </Form>
+      </Col>
     </Row>
+
     <Form ref="form4" :rules="rules" :show-message="false" :model="formData" label-position="top">
-      <FormItem label="关注类型" prop="focusItem" style="margin-left: 10px;" class="info_title">
-        <Select :value="formData.focusItem" multiple :max-tag-count="6" :max-tag-placeholder="maxTagPlaceholder" :label-in-value="true" @on-change="handleFocusItemChg">
-          <Option v-for="item in this.selOption.selFocusItem" :value="item.key" :key="item.key">{{ item.value }}</Option>
-        </Select>
-      </FormItem>
       <FormItem label="请详细填写：关注（调整）原因" prop="focusReason" style="margin-left: 10px;" class="info_title">
         <Input type="textarea" show-word-limit :maxlength="1000" v-model="formData.focusReason" :rows="2" :autosize='{ minRows: 6, maxRows: 6 }'></Input>
       </FormItem>
@@ -134,7 +148,7 @@ export default {
     }
 
     const validateFocusItem = (rule, value, callback) => {
-      if (value.length === 0) {
+      if (value.length === 0 && this.formData.newFocusType !== 3) {
         this.$Message.warning({
           content: '请选择“关注类型”',
           duration: 5
@@ -227,7 +241,7 @@ export default {
       let data = {
         credentialFileIds: this.files.map((v) => { return v.id }).join(),
         employeeNo: this.formData.employeeNo,
-        focusItem: this.formData.focusItemText,
+        focusItem: (this.formData.newFocusType === 3 ? '' : this.formData.focusItemText),
         focusReason: this.formData.focusReason,
         focusTypeAfter: this.formData.newFocusType,
         focusTypeBefore: this.formData.focusType
@@ -249,6 +263,7 @@ export default {
     },
     async vaildData () {
       await vaildForm(this, 'form3')
+      await vaildForm(this, 'form5')
       await vaildForm(this, 'form4')
     },
     handleUploadFiles () {
@@ -317,6 +332,7 @@ export default {
     rowData (val) {
       this.$refs['form3'].resetFields()
       this.$refs['form4'].resetFields()
+      this.$refs['form5'].resetFields()
       this.formData = val
     },
     saveNow (val) {

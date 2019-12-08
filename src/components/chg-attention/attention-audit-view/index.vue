@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Form ref="form" :rules="rules" :show-message="false" :model="formData" :label-width="80">
-      <Row :gutter="20">
+    <Form ref="form" :rules="rules" :show-message="false" :model="formData" :label-width="80" label-position="left">
+      <Row :gutter="0">
         <Col span="6">
           <FormItem label="员工工号" prop="employeeNo" class="info_title">
             <Input v-model="formData.employeeNo" readonly></Input>
@@ -23,33 +23,38 @@
           </FormItem>
         </Col>
       </Row>
+    </Form>
+    <Form ref="form1" :show-message="false" :model="formData" style="margin-left: 8px;">
       <Row :gutter="20">
-        <Col span="12">
-          <FormItem label="关注类别（调整前）" :label-width="150" class="info_title">
+        <Col span="6">
+          <FormItem label="关注类别（调整前）" class="info_title">
             <Input v-model="getBeforeFocusTypeText" search enter-button="查看详细" @on-search="handleShowDetail" readonly></Input>
           </FormItem>
         </Col>
-        <Col span="12">
-          <FormItem label="关注类别（调整后）" :label-width="150" class="info_title">
-            <Input v-model="getAfterFocusTypeText" readonly></Input>
+        <Col span="18">
+          <FormItem label="关注类型（调整前）" prop="focusItem" class="info_title">
+            <Input v-model="formData.focusItem" readonly></Input>
           </FormItem>
         </Col>
       </Row>
       <Row :gutter="20">
-        <Col span="12">
-          <FormItem label="关注类型" prop="focusItem" :label-width="80" class="info_title">
+        <Col span="6">
+          <FormItem label="关注类别（调整后）" class="info_title">
+            <Input v-model="getAfterFocusTypeText" readonly></Input>
+          </FormItem>
+        </Col>
+        <Col span="18">
+          <FormItem label="关注类型（调整后）" prop="focusItem" class="info_title">
             <Input v-model="formData.focusItem" readonly></Input>
           </FormItem>
         </Col>
-        <Col span="12">
-          <FormItem label="" prop="gzlx" :label-width="10" class="info_title">
-              <Button type="primary" @click="handleShowAttached" :disabled="this.files.length === 0" long>浏览上传文件</Button>
-            </FormItem>
-        </Col>
       </Row>
     </Form>
-    <Divider style="margin-top: 10px;margin-bottom: 10px;" />
-    <Form ref="form2" :show-message="false" :model="formData" label-position="top">
+    <div>
+      <Button style="float: right;" type="primary" @click="handleShowAttached" :disabled="this.files.length === 0">浏览上传文件</Button>
+    </div>
+
+    <Form ref="form2" :show-message="false" :model="formData" label-position="top" style="margin-top: 15px;">
       <FormItem label="关注（调整）原因描述" prop="focusReason" style="margin-left: 10px;" class="info_title">
         <Input type="textarea" show-word-limit :maxlength="1000" v-model="formData.focusReason" :rows="2" :autosize='{ minRows: 4, maxRows: 4 }' readonly></Input>
       </FormItem>
