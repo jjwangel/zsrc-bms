@@ -26,7 +26,7 @@
       <Row :gutter="20">
         <Col span="12">
           <FormItem label="关注类别（调整前）" :label-width="150" class="info_title">
-            <Input v-model="getBeforeFocusTypeText" readonly></Input>
+            <Input v-model="getBeforeFocusTypeText" search enter-button="查看详细" @on-search="handleShowDetail" readonly></Input>
           </FormItem>
         </Col>
         <Col span="12">
@@ -43,25 +43,27 @@
         </Col>
         <Col span="12">
           <FormItem label="" prop="gzlx" :label-width="10" class="info_title">
-              <Button type="primary" @click="handleShowAttached" long>浏览上传文件</Button>
+              <Button type="primary" @click="handleShowAttached" :disabled="this.files.length === 0" long>浏览上传文件</Button>
             </FormItem>
         </Col>
       </Row>
     </Form>
     <Divider style="margin-top: 10px;margin-bottom: 10px;" />
     <Form ref="form2" :show-message="false" :model="formData" label-position="top">
-      <FormItem label="关注原因描述" prop="focusReason" style="margin-left: 10px;" class="info_title">
+      <FormItem label="关注（调整）原因描述" prop="focusReason" style="margin-left: 10px;" class="info_title">
         <Input type="textarea" show-word-limit :maxlength="1000" v-model="formData.focusReason" :rows="2" :autosize='{ minRows: 4, maxRows: 4 }' readonly></Input>
       </FormItem>
     </Form>
     <div v-show="this.actionType!=='view'">
-      <Form ref="form3" :rules="rules" :show-message="false" :model="formData" label-position="top">
+      <Form ref="form3" :rules="rules" :show-message="false" :model="formData">
         <FormItem :label="getStatusLabel + '意见'" style="margin-left: 10px;" prop="nodeStatus" class="info_title">
-          <Select v-model="formData.nodeStatus" @on-change="handleNodeStatusChg" :label-in-value="true">
+          <Select v-model="formData.nodeStatus" style="width: 200px;" @on-change="handleNodeStatusChg" :label-in-value="true">
             <Option :value="1">同意</Option>
             <Option :value="2">不同意</Option>
           </Select>
         </FormItem>
+      </Form>
+      <Form ref="form4" :rules="rules" :show-message="false" :model="formData" label-position="top">
         <FormItem label="意见内容" prop="nodeComment" style="margin-left: 10px;" class="info_title">
           <Input type="textarea" show-word-limit :maxlength="1000" v-model="formData.nodeComment" :rows="2" :autosize='{ minRows: 6, maxRows: 6 }'></Input>
         </FormItem>
@@ -74,11 +76,11 @@
       <Step v-for="log in this.flowLogs.logs" :title="log.title" :key="log.id">
         <template slot="content">
           <div :class="{'step_div': log.flowNode === 3}">
-          <p v-show="log.operatorNo !== ''">{{log.title}}人：{{log.operatorName}}（{{log.operatorNo}}）</p>
-          <p v-show="log.operatorNo !== ''">{{log.title}}日期：{{log.createTime}}</p>
-          <p v-show="log.flowNode !== 0 && log.operatorNo !== ''">{{log.title}}意见：{{log.nodeStatusText}}</p>
-          <p style="word-break:break-all;" v-show="log.flowNode !== 0 && log.operatorNo !== ''">意见内容：{{log.nodeComment}}</p>
-        </div>
+            <p v-show="log.operatorNo !== ''">{{log.title}}人：{{log.operatorName}}（{{log.operatorNo}}）</p>
+            <p v-show="log.operatorNo !== ''">{{log.title}}日期：{{log.createTime}}</p>
+            <p v-show="log.flowNode !== 0 && log.operatorNo !== ''">{{log.title}}意见：{{log.nodeStatusText}}</p>
+            <p style="word-break:break-all;" v-show="log.flowNode !== 0 && log.operatorNo !== ''">意见内容：{{log.nodeComment}}</p>
+          </div>
         </template>
       </Step>
     </Steps>
@@ -95,17 +97,25 @@
       </List>
     </Drawer>
 
+    <Modal v-model="showAttentionDetail"
+      scrollable title="详细信息" width="700"
+      :mask-closable="true"
+      :footer-hide="true">
+      <AttentionDetailInfo :rowData="this.detailData"></AttentionDetailInfo>
+    </Modal>
+
   </div>
 </template>
 
 <script>
-import { getFocusPersonAdjustFlowData, verifyFocusPersonAdjustFlow, getFocusPersonAdjustFlowlogs } from '@/api/emp-manage/chg-attention'
+import AttentionDetailInfo from '_c/chg-attention/attention-action/detail-info.vue'
+import { getFocusPersonAdjustFlowData, verifyFocusPersonAdjustFlow, getFocusPersonAdjustFlowlogs, getFocusPersonDetail } from '@/api/emp-manage/chg-attention'
 import { vaildForm } from '@/libs/j-tools.js'
 import config from '@/config'
 
 export default {
   components: {
-
+    AttentionDetailInfo
   },
   props: [
     'actionType',
@@ -146,6 +156,9 @@ export default {
       },
       base_url: '',
       showShowAttached: false,
+      loadDetail: false,
+      showAttentionDetail: false,
+      detailData: {},
       rules: {
         nodeStatus: [
           { validator: validateNodeStatus, trigger: 'blur' }
@@ -226,16 +239,23 @@ export default {
                 flowNode: data[i].flowNode
               })
             } else {
-              switch (i) {
-                case 0: title = '发起'
-                  break
-                case 1: title = '复核'
-                  break
-                case 2: title = '审核'
-                  break
-                case 3: title = '审批'
-                  break
+              if (i > 1) {
+                if (this.formData.focusTypeBefore > this.formData.focusTypeAfter) {
+                  title = ''
+                }
+              } else {
+                switch (i) {
+                  case 0: title = '发起'
+                    break
+                  case 1: title = '复核'
+                    break
+                  case 2: title = '审核'
+                    break
+                  case 3: title = '审批'
+                    break
+                }
               }
+
               this.flowLogs.logs.push({
                 id: parseInt(Math.random() * (9999999 - 1000000 + 1) + 1000000, 10),
                 title: title,
@@ -251,6 +271,21 @@ export default {
         }
       }).catch(() => {
 
+      })
+    },
+    handleShowDetail () {
+      if (this.loadDetail) return
+      this.loadDetail = true
+
+      getFocusPersonDetail({ employeeNo: this.formData.employeeNo }).then(res => {
+        if (res.data.code === '000000') {
+          this.detailData = res.data.data
+        }
+        this.loadDetail = false
+        this.showAttentionDetail = true
+      }).catch(() => {
+        this.detailData = []
+        this.loadDetail = false
       })
     },
     handleNodeStatusChg (item) {
@@ -296,15 +331,20 @@ export default {
             duration: 5
           })
           this.$emit('saveSuccess', this.rowData._index)
-        } else {
-          this.$emit('saveCancel')
+        } else if (res.data.code === '003910') {
+          this.$Message.error({
+            content: '当前流程已删除，无法提交！',
+            duration: 5
+          })
         }
+        this.$emit('saveCancel')
       }).catch(() => {
         this.$emit('saveCancel')
       })
     },
     async vaildData () {
       await vaildForm(this, 'form3')
+      await vaildForm(this, 'form4')
     }
   },
   mounted () {
@@ -314,6 +354,8 @@ export default {
     rowData (val) {
       if (Object.keys(val).length === 0) return
       this.$refs['form3'].resetFields()
+      this.$refs['form4'].resetFields()
+      this.showShowAttached = false
       this.findFlowData()
     },
     saveNow (val) {

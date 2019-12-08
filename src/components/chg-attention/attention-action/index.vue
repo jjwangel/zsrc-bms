@@ -52,7 +52,7 @@
           <Option v-for="item in this.selOption.selFocusItem" :value="item.key" :key="item.key">{{ item.value }}</Option>
         </Select>
       </FormItem>
-      <FormItem label="关注（调整）原因描述" prop="focusReason" style="margin-left: 10px;" class="info_title">
+      <FormItem label="请详细填写：关注（调整）原因" prop="focusReason" style="margin-left: 10px;" class="info_title">
         <Input type="textarea" show-word-limit :maxlength="1000" v-model="formData.focusReason" :rows="2" :autosize='{ minRows: 6, maxRows: 6 }'></Input>
       </FormItem>
 
@@ -68,6 +68,9 @@
             <Button type="primary" :loading="this.fileUploading" @click="handleUploadFiles" long>上传证明附件</Button>
           </template>
         </List>
+        <div style="height: 10px;margin-top: 5px;">
+          <p style="float:right;">上传附件类型：word、excel、pdf、rar、zip</p>
+        </div>
       </div>
     </Form>
 
@@ -190,7 +193,7 @@ export default {
       }
     },
     handleShowDetail () {
-      if (this.loadingDetail) return
+      if (this.loadDetail) return
       this.loadDetail = true
 
       getFocusPersonDetail({ employeeNo: this.formData.employeeNo }).then(res => {

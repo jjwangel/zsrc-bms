@@ -20,6 +20,7 @@
           </FormItem>
           <FormItem label="操作结果" prop="nodeStatus">
             <Select v-model="formData.nodeStatus" clearable style="width:100px" :disable="this.loadData">
+              <Option :value="0">待处理</Option>
               <Option :value="1">同意</Option>
               <Option :value="2">不同意</Option>
             </Select>
@@ -50,6 +51,7 @@
         </template>
 
         <div slot="footer" style="width:100%;text-align: center">
+          <span style="float: left;margin-left: 10px">双击任意记录，显示详细信息</span>
           <Page :total="pageData.total" :current.sync="pageData.current" :disabled="this.dataSet.length > 0 ? false: true"
             @on-change="handleSearchRd"
             @on-page-size-change="handleChgPageSize"
@@ -92,7 +94,7 @@ export default {
         employeeNo: '',
         employeeName: '',
         flowNode: 0,
-        nodeStatus: 0,
+        nodeStatus: undefined,
         sponsorDate: []
       },
       optDate: {
@@ -159,6 +161,8 @@ export default {
       this.formData.employeeNo = this.trimForText(this.formData.employeeNo).toUpperCase()
       this.formData.employeeName = this.trimForText(this.formData.employeeName)
       const condition = {
+        orderBy: 'create_time',
+        orderType: 'desc',
         page: this.pageData.current,
         pageSize: this.pageData.size
       }
@@ -171,12 +175,12 @@ export default {
       if (this.formData.flowNode && this.formData.flowNode !== 0) {
         condition.flowNode = this.formData.flowNode
       }
-      if (this.formData.nodeStatus && this.formData.nodeStatus !== 0) {
+      if (this.formData.nodeStatus !== undefined) {
         condition.nodeStatus = this.formData.nodeStatus
       }
       if (this.formData.sponsorDate.length > 0 && this.formData.sponsorDate[0] !== '' && this.formData.sponsorDate[1] !== '') {
-        condition.createTimeStart = this.formData.sponsorDate[0]
-        condition.createTimeEnd = this.formData.sponsorDate[1]
+        condition.createTimeStart = this.formData.sponsorDate[0] + ' 00:00:00'
+        condition.createTimeEnd = this.formData.sponsorDate[1] + ' 23:59:59'
       }
 
       getFocusPersonAdjustFlowsList(condition).then(res => {

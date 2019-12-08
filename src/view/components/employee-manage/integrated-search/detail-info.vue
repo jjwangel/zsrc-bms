@@ -7,38 +7,38 @@
       <TabPane v-if="this.pvCtrl.findIndex((val) => { return val.code === 'bms_employeemng_infoquery_relative' }) !== -1" label="员工亲属关系" name="kinsfolk_info" tab="tab-emp-info" :index=2>
         <KinsfolkInfo :main-data="this.mainData" :load-data="this.load_kinsfolk"></KinsfolkInfo>
       </TabPane>
-      <TabPane v-if="this.pvCtrl.findIndex((val) => { return val.code === 'bms_employeemng_infoquery_inoutinfo' }) !== -1" label="员工出入境信息" name="exit_entry_info" tab="tab-emp-info" :index=3>
+      <TabPane v-if="true" label="员工关注台账" name="attention_info" tab="tab-emp-info" :index=3>
+        <AttBookInfo :rowData="this.mainData" :load-data="this.load_attention"></AttBookInfo>
+      </TabPane>
+      <TabPane v-if="this.pvCtrl.findIndex((val) => { return val.code === 'bms_employeemng_infoquery_inoutinfo' }) !== -1" label="员工出入境信息" name="exit_entry_info" tab="tab-emp-info" :index=4>
         <ExitEntryInfo :main-data="this.mainData" :load-data="this.load_ee"></ExitEntryInfo>
       </TabPane>
-      <TabPane v-if="this.pvCtrl.findIndex((val) => { return val.code === 'bms_employeemng_infoquery_incomeinfo' }) !== -1" label="员工收入信息" name="income_info" tab="tab-emp-info" :index=4>
+      <TabPane v-if="this.pvCtrl.findIndex((val) => { return val.code === 'bms_employeemng_infoquery_incomeinfo' }) !== -1" label="员工收入信息" name="income_info" tab="tab-emp-info" :index=5>
         <IncomeInfo :main-data="this.mainData" :load-data="this.load_income"></IncomeInfo>
       </TabPane>
-      <TabPane v-if="this.pvCtrl.findIndex((val) => { return val.code === 'bms_employeemng_infoquery_propertyinfo' }) !== -1" label="员工财产填报信息" name="property_info" tab="tab-emp-info" :index=5>
+      <TabPane v-if="this.pvCtrl.findIndex((val) => { return val.code === 'bms_employeemng_infoquery_propertyinfo' }) !== -1" label="员工财产填报信息" name="property_info" tab="tab-emp-info" :index=6>
         <PropertyInfo :main-data="this.mainData" :load-data="this.load_property"></PropertyInfo>
       </TabPane>
-      <TabPane v-if="this.pvCtrl.findIndex((val) => { return val.code === 'bms_employeemng_infoquery_investinfo' }) !== -1" label="员工投资信息" name="invest_info" tab="tab-emp-info" :index=6>
+      <TabPane v-if="this.pvCtrl.findIndex((val) => { return val.code === 'bms_employeemng_infoquery_investinfo' }) !== -1" label="员工投资信息" name="invest_info" tab="tab-emp-info" :index=7>
         <InvestInfo :main-data="this.mainData" :load-data="this.load_invest"></InvestInfo>
       </TabPane>
-      <TabPane v-if="this.pvCtrl.findIndex((val) => { return val.code === 'bms_employeemng_infoquery_creditinfo' }) !== -1" label="员工征信信息" name="credit_info" tab="tab-emp-info" :index=7>
+      <TabPane v-if="this.pvCtrl.findIndex((val) => { return val.code === 'bms_employeemng_infoquery_creditinfo' }) !== -1" label="员工征信信息" name="credit_info" tab="tab-emp-info" :index=8>
         <CreditInfo :main-data="this.mainData" :load-data="this.load_credit"></CreditInfo>
       </TabPane>
-      <TabPane v-if="this.pvCtrl.findIndex((val) => { return val.code === 'bms_employeemng_infoquery_outlineinfo' }) !== -1" label="员工违规信息" name="illegal_info" tab="tab-emp-info" :index=8>
+      <TabPane v-if="this.pvCtrl.findIndex((val) => { return val.code === 'bms_employeemng_infoquery_outlineinfo' }) !== -1" label="员工违规信息" name="illegal_info" tab="tab-emp-info" :index=9>
         <IllegalInfo :main-data="this.mainData" :load-data="this.load_illegal"></IllegalInfo>
       </TabPane>
-      <TabPane v-if="this.pvCtrl.findIndex((val) => { return val.code === 'bms_employeemng_infoquery_bankacctinfo' }) !== -1" label="员工银行账户信息" name="bank_account_info" tab="tab-emp-info" :index=9>
+      <TabPane v-if="this.pvCtrl.findIndex((val) => { return val.code === 'bms_employeemng_infoquery_bankacctinfo' }) !== -1" label="员工银行账户信息" name="bank_account_info" tab="tab-emp-info" :index=10>
         <BankAccountInfo :main-data="this.mainData" :load-data="this.load_ba"></BankAccountInfo>
       </TabPane>
-      <TabPane v-if="this.pvCtrl.findIndex((val) => { return val.code === 'bms_employeemng_infoquery_homevisitinfo' }) !== -1" label="员工家访信息" name="family_visit_info" tab="tab-emp-info" :index=10>
+      <TabPane v-if="this.pvCtrl.findIndex((val) => { return val.code === 'bms_employeemng_infoquery_homevisitinfo' }) !== -1" label="员工家访信息" name="family_visit_info" tab="tab-emp-info" :index=11>
         <FamilyVisitInfo :main-data="this.mainData" :load-data="this.load_fv"></FamilyVisitInfo>
       </TabPane>
-      <TabPane v-if="this.pvCtrl.findIndex((val) => { return val.code === 'bms_employeemng_infoquery_bussinfo' }) !== -1" label="员工经商信息" name="business_info" tab="tab-emp-info" :index=11>
+      <TabPane v-if="this.pvCtrl.findIndex((val) => { return val.code === 'bms_employeemng_infoquery_bussinfo' }) !== -1" label="员工经商信息" name="business_info" tab="tab-emp-info" :index=12>
         <BusinessInfo :main-data="this.mainData" :load-data="this.load_business"></BusinessInfo>
       </TabPane>
-      <TabPane v-if="this.pvCtrl.findIndex((val) => { return val.code === 'bms_employeemng_infoquery_suspectlawsuitinfo' }) !== -1" label="员工涉诉信息" name="litigation_info" tab="tab-emp-info" :index=12>
+      <TabPane v-if="this.pvCtrl.findIndex((val) => { return val.code === 'bms_employeemng_infoquery_suspectlawsuitinfo' }) !== -1" label="员工涉诉信息" name="litigation_info" tab="tab-emp-info" :index=13>
         <LitigationInfo :main-data="this.mainData" :load-data="this.load_litigation"></LitigationInfo>
-      </TabPane>
-      <TabPane v-if="true" label="员工关注台账" name="attention_info" tab="tab-emp-info" :index=13>
-        <AttBookInfo :rowData="this.mainData" :load-data="this.load_attention"></AttBookInfo>
       </TabPane>
     </Tabs>
   </div>

@@ -74,6 +74,14 @@ export const mixinInfo = {
           }
         },
         {
+          title: '调整日期',
+          key: 'createTime',
+          tooltip: 'true',
+          render: (h, params) => {
+            return h('p', params.row.createTime.split(' ')[0])
+          }
+        },
+        {
           title: '流程状态',
           key: 'flowNode',
           tooltip: 'true',

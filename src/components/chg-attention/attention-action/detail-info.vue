@@ -19,11 +19,6 @@
             <Input v-model="getTypeText" readonly></Input>
           </FormItem>
         </Col>
-        <Col span="12">
-          <FormItem label="关注类型" prop="focusItem" class="info_title">
-            <Input v-model="formData.focusItem" readonly></Input>
-          </FormItem>
-        </Col>
       </Row>
       <Row :gutter="20">
         <Col span="12">
@@ -37,6 +32,9 @@
           </FormItem>
         </Col>
       </Row>
+      <FormItem label="关注类型" prop="focusItem" class="info_title">
+        <Input v-model="formData.focusItem" readonly></Input>
+      </FormItem>
     </Form>
     <Divider style="margin-top: 10px;margin-bottom: 10px;" />
     <Form ref="form2" :model="formData" :show-message="false" label-position="top">

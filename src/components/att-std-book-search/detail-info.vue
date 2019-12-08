@@ -36,8 +36,8 @@
           </FormItem>
         </Col>
         <Col span="8">
-          <FormItem label="审批意见" prop="approveStatus" class="info_title">
-            <Input v-model="formData.approveStatus" readonly></Input>
+          <FormItem label="审批意见" prop="approveStatusText" class="info_title">
+            <Input v-model="formData.approveStatusText" readonly></Input>
           </FormItem>
         </Col>
         <Col span="8">
@@ -76,6 +76,7 @@ export default {
     rowData (val) {
       if (Object.keys(val).length === 0) return
       this.formData = val
+      console.log(val)
     }
   }
 }

@@ -7,7 +7,8 @@ const noMsgCode = [
   '003304',
   '003903',
   '003901',
-  '003904'
+  '003904',
+  '003910'
 ]
 class HttpRequest {
   constructor (baseUrl = baseURL) {

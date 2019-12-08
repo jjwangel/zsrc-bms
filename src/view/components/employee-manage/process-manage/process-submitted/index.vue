@@ -25,6 +25,7 @@
 
       <Table size="small" :height="windowHeight" @on-row-dblclick="handleShowProcess" :stripe="true" border ref="table" :loading="this.loadData" :columns="cols" :data="dataSet">
         <div slot="footer" style="width:100%;text-align: center">
+          <span style="float: left;margin-left: 10px">双击任意记录，显示详细信息</span>
           <Page :total="pageData.total" :current.sync="pageData.current" :disabled="this.dataSet.length > 0 ? false: true"
             @on-change="handleSearchRd"
             @on-page-size-change="handleChgPageSize"
@@ -117,11 +118,11 @@ export default {
       this.loadData = true
 
       const condition = {
+        orderBy: 'create_time',
+        orderType: 'desc',
         status: 2,
         page: this.pageData.current,
-        pageSize: this.pageData.size,
-        orderBy: 'process_time',
-        orderType: 'desc'
+        pageSize: this.pageData.size
       }
       if (this.formData.type && this.formData.type !== 0) {
         condition.type = this.formData.type

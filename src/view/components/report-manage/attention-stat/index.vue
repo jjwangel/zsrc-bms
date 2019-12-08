@@ -6,6 +6,7 @@
         height=300
         @on-row-dblclick="handleSearchInst2">
         <div slot="footer" style="width:100%;text-align: center">
+          <span style="float: left;margin-left: 10px">双击任意记录，显示详细信息</span>
           <Page :total="pageData.total" :current.sync="pageData.current"
             @on-change="searchMain"
             @on-page-size-change="handleChgPageMainSize"

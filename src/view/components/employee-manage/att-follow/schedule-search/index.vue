@@ -43,6 +43,7 @@
         </template>
 
         <div slot="footer" style="width:100%;text-align: center">
+          <span style="float: left;margin-left: 10px">双击任意记录，显示详细信息</span>
           <Page :total="pageData.total" :current.sync="pageData.current" :disabled="this.dataSet.length > 0 ? false: true"
             @on-change="handleSearchRd"
             @on-page-size-change="handleChgPageSize"
@@ -155,6 +156,8 @@ export default {
       this.formData.employeeNo = this.trimForText(this.formData.employeeNo).toUpperCase()
       this.formData.employeeName = this.trimForText(this.formData.employeeName)
       const condition = {
+        orderBy: 'create_time',
+        orderType: 'desc',
         page: this.pageData.current,
         pageSize: this.pageData.size
       }

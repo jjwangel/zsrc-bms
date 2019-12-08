@@ -56,6 +56,11 @@ export const mixinInfo = {
           }
         },
         {
+          title: '关注类型',
+          key: 'focusItem',
+          tooltip: 'true'
+        },
+        {
           title: '关注日期',
           key: 'focusDate',
           tooltip: 'true'

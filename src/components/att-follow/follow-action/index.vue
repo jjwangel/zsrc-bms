@@ -103,11 +103,41 @@ export default {
       }
     }
 
+    const validateDispose = (rule, value, callback) => {
+      if (value === '') {
+        this.$Message.warning({
+          content: '请输入采取措施！',
+          duration: 5
+        })
+        callback(new Error(''))
+      } else {
+        callback()
+      }
+    }
+
+    const validateNextPlan = (rule, value, callback) => {
+      if (value === '') {
+        this.$Message.warning({
+          content: '请输入下一步计划！',
+          duration: 5
+        })
+        callback(new Error(''))
+      } else {
+        callback()
+      }
+    }
+
     return {
       formData: this.rowData,
       rules: {
         followCondition: [
           { validator: validateFollowCondition, trigger: 'blur' }
+        ],
+        dispose: [
+          { validator: validateDispose, trigger: 'blur' }
+        ],
+        nextPlan: [
+          { validator: validateNextPlan, trigger: 'blur' }
         ]
       }
     }
