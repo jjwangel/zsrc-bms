@@ -13,15 +13,17 @@
     </Card>
 
     <Modal v-model="showVerifyAttention" :loading="dataSaving" scrollable title="关注人员调整流程" width="1000" ok-text="提交" :styles="{top: '10px'}"
-      :mask-closable="false"
+      :mask-closable="this.flag === 2"
+      :footer-hide="this.flag === 2"
       @on-ok="handleSaveChange">
-      <AttentionAuditView @saveCancel="handleSaveCancel" @saveSuccess="handleSaveSuccess" :saveNow="saveNow" :rowData="this.selRow" :actionType="this.actionType"></AttentionAuditView>
+      <AttentionAuditView @saveCancel="handleSaveCancel" @saveSuccess="handleSaveSuccess" :saveNow="saveNow" :rowData="this.selRow" :actionType="this.flag === 1 ? 'create' : 'view'"></AttentionAuditView>
     </Modal>
 
     <Modal v-model="showVerifyFollow" :loading="dataSaving" scrollable title="关注人员跟进登记流程" width="1000" ok-text="提交" :styles="{top: '10px'}"
-      :mask-closable="false"
+      :mask-closable="this.flag === 2"
+      :footer-hide="this.flag === 2"
       @on-ok="handleFollowSaveChange">
-      <FollowAuditView @saveCancel="handleFollowSaveCancel" @saveSuccess="handleFollowSaveSuccess" :saveNow="saveFollowNow" :rowData="this.selFollowRow" :actionType="this.actionType"></FollowAuditView>
+      <FollowAuditView @saveCancel="handleFollowSaveCancel" @saveSuccess="handleFollowSaveSuccess" :saveNow="saveFollowNow" :rowData="this.selFollowRow" :actionType="this.flag === 1 ? 'create' : 'view'"></FollowAuditView>
     </Modal>
   </div>
 </template>
@@ -40,7 +42,8 @@ export default {
   },
   mixins: [mixinInfo],
   props: [
-    'todo_title'
+    'todo_title',
+    'flag'
   ],
   data () {
     return {
@@ -52,8 +55,7 @@ export default {
       showVerifyFollow: false,
       dataSaving: true,
       saveNow: false,
-      saveFollowNow: false,
-      actionType: '' // view || create || modify
+      saveFollowNow: false
     }
   },
   computed: {
@@ -75,7 +77,7 @@ export default {
       const condition = {
         orderBy: 'create_time',
         orderType: 'desc',
-        status: 1,
+        status: this.flag,
         page: 1,
         pageSize: 40
       }
@@ -91,7 +93,6 @@ export default {
       })
     },
     handleDealProcess (row, index) {
-      this.actionType = 'create'
       switch (row.type) {
         case 1:
           this.showVerifyAttention = true

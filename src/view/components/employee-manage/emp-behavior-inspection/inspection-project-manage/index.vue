@@ -196,7 +196,9 @@ export default {
 
       const condition = {
         page: this.pageData.current,
-        pageSize: this.pageData.size
+        pageSize: this.pageData.size,
+        orderBy: 'project_start_time',
+        orderType: 'desc'
       }
       if (this.formData.prjYear && this.formData.prjYear !== '') {
         condition.year = this.formData.prjYear

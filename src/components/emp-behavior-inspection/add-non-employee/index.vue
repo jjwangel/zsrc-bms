@@ -41,7 +41,7 @@ export default {
   ],
   data () {
     const validateGender = (rule, value, callback) => {
-      if (value === '') {
+      if (!value || value === '') {
         this.$Message.warning({
           content: '请选择“姓别”',
           duration: 5

@@ -118,6 +118,7 @@ export default {
               idcardNo: elem.idcardNo,
               prjName: this.prjName,
               otherUnusualBehavior: '',
+              deptCode: elem.deptCode,
               CheckList: JSON.parse(JSON.stringify(this.dataSet))
             })
           }
@@ -200,6 +201,7 @@ export default {
         let rows = {
           employeeNo: main.employeeNo,
           idcardNo: main.idcardNo,
+          deptCode: main.deptCode,
           otherUnusualBehavior: main.otherUnusualBehavior,
           projectId: this.prjId,
           details: []

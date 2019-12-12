@@ -115,7 +115,7 @@ export default {
       },
       nonEmpNewRow: {
         name: '',
-        gender: '',
+        gender: undefined,
         idcardNo: '',
         remark: ''
       },
@@ -285,7 +285,6 @@ export default {
           deptCode: this.deptCode(),
           checkStatus: 0
         })
-        console.log(this.dataSet)
       } else {
         this.dataSet[rowIndex].name = data.name
       }
