@@ -9,6 +9,7 @@ export default {
   state: {
     token: getToken(),
     employeeNo: '',
+    deptCode: '',
     userName: '',
     gender: '男',
     rolesCode: [],
@@ -30,6 +31,9 @@ export default {
     },
     setGender (state, gender) {
       state.gender = gender
+    },
+    setDeptCode (state, deptCode) {
+      state.deptCode = deptCode
     },
     setToken (state, token) {
       state.token = token
@@ -58,6 +62,7 @@ export default {
     employeeNo: state => state.employeeNo,
     userName: state => state.userName,
     gender: state => state.gender,
+    deptCode: state => state.deptCode,
     token: state => state.token,
     rolesCode: state => state.rolesCode,
     rolesCodeShort: state => state.rolesCodeShort,
@@ -103,6 +108,7 @@ export default {
             commit('setAvatar', '')
             commit('setUserName', data.data.staff.name)
             commit('setGender', data.data.staff.gender)
+            commit('setDeptCode', data.data.staff.deptCode)
             commit('setRolesName', data.data.roles.map((val) => { return val.name }))
             commit('setRolesCode', data.data.roles.map((val) => { return val.code }))
             commit('setRolesCodeShort', data.data.roles.map((val) => { return (val.code === 'bms_admin' ? val.code : val.code.substring(0, 6)) }))

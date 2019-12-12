@@ -215,16 +215,16 @@ export default [
           }
         ]
       },
-      {
-        path: 'special_archives_manage',
-        name: 'bms_employeemng_projectcheckmng',
-        meta: {
-          icon: 'ios-people',
-          title: '专项排查档案管理',
-          hideInMenu: false
-        },
-        component: () => import('@/view/components/employee-manage/emp-behavior-inspection/inspection-project-manage/index.vue')
-      },
+      // {
+      //   path: 'special_archives_manage',
+      //   name: 'bms_employeemng_projectcheckmng',
+      //   meta: {
+      //     icon: 'ios-people',
+      //     title: '专项排查档案管理',
+      //     hideInMenu: false
+      //   },
+      //   component: () => import('@/view/components/employee-manage/emp-behavior-inspection/inspection-project-manage/index.vue')
+      // },
       {
         path: 'att_standing_book_search',
         name: 'bms_employeemng_focusquery',

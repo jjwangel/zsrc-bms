@@ -5,7 +5,11 @@
         <Form ref ="form" :model="formData" :label-width="80" inline>
           <FormItem label="排查项目" prop="prjId">
             <Select v-model="formData.prjId" style="width:400px" @on-change="handleSelectPrjChg" :disable="this.loadData">
-              <Option v-for="item in this.selPrj" :value="item.key" :key="item.key">{{ item.value }}</Option>
+              <Option v-for="item in this.selPrj" :value="item.key" :key="item.key" :label="item.value">
+                  <span>{{ item.value }}</span>
+                  <span style="float:right;color:#ccc">{{prjData.find((v) => v.id === item.key).status === 1 ? '正常' : '关闭'}}</span>
+                <!-- {{ item.value }} -->
+              </Option>
             </Select>
           </FormItem>
           <Button type="primary" icon="md-refresh" @click="getPrjectData" :disabled="this.loadData"></Button>
@@ -29,7 +33,7 @@
               <Option :value="2">编外人员</Option>
             </Select>
           </FormItem>
-          <FormItem label="排查状态" prop="checkResult">
+          <FormItem label="排查结果" prop="checkResult">
             <Select v-model="formData.checkResult" style="width:100px" clearable :disable="this.loadData">
               <Option :value="1">正常</Option>
               <Option :value="2">异常</Option>
@@ -52,6 +56,7 @@
           </Poptip>
         </template>
         <div slot="footer" style="width:100%;text-align: center">
+          <span style="float: left;margin-left: 10px">双击任意记录，显示详细信息</span>
           <Page :total="pageData.total" :current.sync="pageData.current" :disabled="this.dataSet.length > 0 ? false: true"
             @on-change="handleSearchRd"
             @on-page-size-change="handleChgPageSize"
@@ -156,9 +161,13 @@ export default {
       this.formData.prjId = undefined
       this.formData.describe = ''
       this.dataSet = []
-      getEmpCheckProjectList({ status: 1 }).then(res => {
+      const condition = {
+        orderBy: 'project_start_time',
+        orderType: 'desc'
+      }
+      getEmpCheckProjectList(condition).then(res => {
         if (res.data.code === '000000') {
-          this.prjData = res.data.data.rows
+          this.prjData = res.data.data.filter((v) => v.status !== 0)
           this.selPrj = formatSelectOptionByDefine(this.prjData, 'id', 'name')
         }
         this.loadData = false

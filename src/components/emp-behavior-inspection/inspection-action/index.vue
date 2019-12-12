@@ -202,13 +202,12 @@ export default {
       })
     },
     async vaildData () {
+      this.formData.name = this.trimForText(this.formData.name)
+      this.formData.describe = this.trimForText(this.formData.describe)
       await vaildForm(this, 'form')
       await vaildForm(this, 'form1')
     },
     saveDetail () {
-      this.formData.name = this.trimForText(this.formData.name)
-      this.formData.describe = this.trimForText(this.formData.describe)
-
       let data = {
         name: this.formData.name,
         describe: this.formData.describe,

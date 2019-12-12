@@ -118,6 +118,11 @@ export const col_car = [
     align: 'center'
   },
   {
+    title: '车辆所有人',
+    key: 'carOwnerText',
+    tooltip: true
+  },
+  {
     title: '车牌号码',
     key: 'carNo',
     tooltip: true

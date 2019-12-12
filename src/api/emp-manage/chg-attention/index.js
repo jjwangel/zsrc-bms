@@ -3,7 +3,7 @@
  * @Date: 2019-05-03 10:31:49
  * @Description: 调整员工关注类别
  * @Last Modified by: jjw
- * @Last Modified time: 2019-11-23 14:40:15
+ * @Last Modified time: 2019-12-09 20:03:56
  */
 
 import baseAPI from '../../base'
@@ -96,4 +96,15 @@ export const getFocusPersonAdjustFlowlogs = (formData) => {
   const url = '/focuspersonadjustflowlogs'
 
   return baseAPI.getOneRowData(url, params)
+}
+
+/**
+ * @description 获取查询关注人员待发起调整详细的数据
+ * @param {*} formData
+ * @returns
+ */
+export const getFocusPersonAdjustDetail = (formData) => {
+  const params = { ...formData }
+
+  return baseAPI.getOneRowData('/focusperson/toadjustdetail', params)
 }

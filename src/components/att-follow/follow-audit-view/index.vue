@@ -224,8 +224,6 @@ export default {
       })
     },
     saveData () {
-      this.formData._approveComment = this.trimForText(this.formData._approveComment)
-
       let data = {
         id: this.formData.id,
         approveComment: this.formData._approveComment,
@@ -247,6 +245,7 @@ export default {
       })
     },
     async vaildData () {
+      this.formData._approveComment = this.trimForText(this.formData._approveComment)
       await vaildForm(this, 'form3')
     }
   },

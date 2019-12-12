@@ -35,16 +35,19 @@
       :mask-closable="this.action === 'view'"
       :footer-hide="this.action === 'view'"
       @on-ok="handleSaveDetail">
-      <DetailInfo @saveCancel="handleSaveCancel" @saveSuccess="handleSaveSuccess" :saveData="saveNow" :rowData="this.detail_row" :action="this.action"></DetailInfo>
+      <DetailInfo @saveCancel="handleSaveCancel" @saveSuccess="handleSaveSuccess" :saveData="saveNow" :rowData="this.detail_row" :action="this.action" :selOption="this.sel_option"></DetailInfo>
     </Modal>
   </div>
 </template>
 
 <script>
 import { getEmpCarList, delEmpCarByBatch } from '@/api/self-info/info-fill'
+import { formatSelectOption } from '@/libs/j-tools.js'
 import DetailInfo from './detail-info.vue'
 import { col_car } from './common.js'
 import { mapGetters } from 'vuex'
+import { getSelectOptionData } from '@/api/base'
+
 export default {
   props: ['loadData'],
   components: {
@@ -63,8 +66,11 @@ export default {
       col_car,
       data_car: [],
       sel_id: [],
+      sel_option: {},
       newRow: {
         'id': 0,
+        'carOwner': 1,
+        'carOwnerText': '',
         'carNo': '',
         'carVar': '',
         'carType': '',
@@ -80,7 +86,21 @@ export default {
       'employeeNo'
     ]),
     initInfo () {
+      const optName = {
+        type: [
+          'CAR_OWNER'
+        ]
+      }
+      getSelectOptionData(optName).then(res => {
+        if (res.data.code === '000000') {
+          this.sel_option = {
+            selCarOwner: formatSelectOption(res.data.data.CAR_OWNER)
+          }
+          this.newRow.carOwnerText = this.sel_option.selCarOwner.find((item) => item.key === 1).value
+        }
+      }).catch(() => {
 
+      })
     },
     setSelectRowId (sel) {
       this.sel_id = []
@@ -207,6 +227,8 @@ export default {
           carBuyDate: data.carBuyDate,
           carIsloan: data.carIsloan,
           carIsloanText: data.carIsloanText,
+          carOwner: data.carOwner,
+          carOwnerText: data.carOwnerText,
           carPrice: data.carPrice
         })
       } else {
@@ -216,6 +238,8 @@ export default {
         this.data_car[rowIndex].carBuyDate = data.carBuyDate
         this.data_car[rowIndex].carIsloan = data.carIsloan
         this.data_car[rowIndex].carIsloanText = data.carIsloanText
+        this.data_car[rowIndex].carOwner = data.carOwner
+        this.data_car[rowIndex].carOwnerText = data.carOwnerText
         this.data_car[rowIndex].carPrice = data.carPrice
       }
 

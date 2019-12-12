@@ -76,7 +76,6 @@ export default {
     rowData (val) {
       if (Object.keys(val).length === 0) return
       this.formData = val
-      console.log(val)
     }
   }
 }

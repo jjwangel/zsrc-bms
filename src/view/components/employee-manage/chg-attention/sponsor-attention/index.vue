@@ -106,7 +106,7 @@ export default {
       })
     },
     handleSponsorAttention (row, index) {
-      this.selRow = Object.assign({}, row, { focusItem: [], focusItemText: '', focusReason: '', newFocusType: 0 })
+      this.selRow = Object.assign({}, row, { focusItem: [], focusItemText: '', focusReason: '', newFocusType: 0, focusItemBefore: '' })
       this.showAttentionAction = true
     },
     handleSaveChange () {

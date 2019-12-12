@@ -23,7 +23,7 @@ export const mixinInfo = {
         {
           title: '排查情况',
           slot: 'action',
-          width: 220,
+          width: 250,
           align: 'center'
         }
       ]

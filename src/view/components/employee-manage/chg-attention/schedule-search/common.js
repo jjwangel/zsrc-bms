@@ -74,7 +74,7 @@ export const mixinInfo = {
           }
         },
         {
-          title: '调整日期',
+          title: '发起调整日期',
           key: 'createTime',
           tooltip: 'true',
           render: (h, params) => {

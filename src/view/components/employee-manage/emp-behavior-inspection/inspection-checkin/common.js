@@ -62,7 +62,7 @@ export const mixinInfo = {
         {
           title: '编外人员操作',
           slot: 'action',
-          width: 150,
+          width: 120,
           align: 'center'
         }
       ]

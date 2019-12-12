@@ -1,8 +1,8 @@
 <template>
   <div>
-      <Form ref="formShares" :rules="ruleShares" :show-message="false" :model="formData" :label-width="120">
+      <Form ref="formShares" :rules="ruleShares" :show-message="false" :model="formData" :label-width="130">
         <FormItem label="">
-          <span>请填报员工持有农合机构（含中山农商银行）、村集体、企业的股金信息</span>
+          <p class="memo_info">请填报员工持有农合机构（含中山农商银行）、村集体、企业的股金信息</p>
         </FormItem>
         <FormItem label="股金所属单位全称" prop="capName" class="info_title">
           <Input v-model="formData.capName" :readonly="this.action==='view'"></Input>
@@ -16,8 +16,8 @@
             <span style="margin-left: 10px">元</span>
           </div>
         </FormItem>
-        <FormItem label="注意：">
-          <p>当持有某单位股金是无需出资购入的，“购入股金出资额”处可以输入0元，如果存在部分或全部是出资购入的，按实际出资额填报。</p>
+        <FormItem label="">
+          <p class="memo_info">当持有某单位股金是无需出资购入的，“购入股金出资额”处可以输入0元，如果存在部分或全部是出资购入的，按实际出资额填报。</p>
         </FormItem>
       </Form>
   </div>
@@ -199,5 +199,9 @@ export default {
   .info_title{
     font-weight:bold;
     color: #464c5b;
+  }
+  .memo_info{
+    font-size:xx-small;
+    line-height:20px;
   }
 </style>

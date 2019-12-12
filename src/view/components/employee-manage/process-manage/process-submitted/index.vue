@@ -128,8 +128,8 @@ export default {
         condition.type = this.formData.type
       }
       if (this.formData.recDate.length === 2 && this.formData.recDate[0] !== '' && this.formData.recDate[1] !== '') {
-        condition.receiveTimeStart = this.formData.recDate[0] + ' 00:00:00'
-        condition.receiveTimeEnd = this.formData.recDate[1] + ' 23:59:59'
+        condition.receiveTimeStart = this.formData.recDate[0]
+        condition.receiveTimeEnd = this.formData.recDate[1]
       }
 
       getFlowsList(condition).then(res => {

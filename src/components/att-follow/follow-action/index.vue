@@ -179,10 +179,6 @@ export default {
       })
     },
     saveData () {
-      this.formData.dispose = this.trimForText(this.formData.dispose)
-      this.formData.followCondition = this.trimForText(this.formData.followCondition)
-      this.formData.nextPlan = this.trimForText(this.formData.nextPlan)
-
       let data = {
         adjustFlowId: this.formData.adjustFlowId,
         employeeNo: this.formData.employeeNo,
@@ -206,6 +202,9 @@ export default {
       })
     },
     async vaildData () {
+      this.formData.dispose = this.trimForText(this.formData.dispose)
+      this.formData.followCondition = this.trimForText(this.formData.followCondition)
+      this.formData.nextPlan = this.trimForText(this.formData.nextPlan)
       await vaildForm(this, 'form2')
     }
   },

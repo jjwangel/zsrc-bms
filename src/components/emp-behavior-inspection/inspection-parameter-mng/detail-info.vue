@@ -92,12 +92,11 @@ export default {
       })
     },
     async vaildData () {
+      this.formData.content = this.trimForText(this.formData.content)
       await vaildForm(this, 'form')
       await vaildForm(this, 'form1')
     },
     saveDetail () {
-      this.formData.content = this.trimForText(this.formData.content)
-
       let data = {
         content: this.formData.content,
         status: this.formData.status

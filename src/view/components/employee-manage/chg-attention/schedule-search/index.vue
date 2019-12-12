@@ -179,8 +179,8 @@ export default {
         condition.nodeStatus = this.formData.nodeStatus
       }
       if (this.formData.sponsorDate.length > 0 && this.formData.sponsorDate[0] !== '' && this.formData.sponsorDate[1] !== '') {
-        condition.createTimeStart = this.formData.sponsorDate[0] + ' 00:00:00'
-        condition.createTimeEnd = this.formData.sponsorDate[1] + ' 23:59:59'
+        condition.createTimeStart = this.formData.sponsorDate[0]
+        condition.createTimeEnd = this.formData.sponsorDate[1]
       }
 
       getFocusPersonAdjustFlowsList(condition).then(res => {

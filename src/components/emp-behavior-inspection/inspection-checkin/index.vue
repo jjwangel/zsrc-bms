@@ -167,30 +167,34 @@ export default {
       }
     },
     handleSaveDetail () {
-      if (this.formData.CheckList.findIndex(v => v.checkStatusText === '') !== -1) {
-        this.$Message.warning({
-          content: '有未设置“排查情况”的记录！',
-          duration: 5
-        })
-        this.$emit('saveCancel')
-      } else {
-        this.$Modal.confirm({
-          title: '排查登记',
-          content: '确定保存吗？',
-          onOk: this.saveDetail,
-          onCancel: () => {
-            this.$emit('saveCancel')
-          }
-        })
-      }
-    },
-    saveDetail () {
-      let data = []
       // 保存最后一条数据
       this.submitData[this.currentIndex].employeeNo = this.formData.employeeNo
       this.submitData[this.currentIndex].employeeName = this.formData.employeeName
       this.submitData[this.currentIndex].otherUnusualBehavior = this.formData.otherUnusualBehavior
       this.submitData[this.currentIndex].CheckList = JSON.parse(JSON.stringify(this.formData.CheckList))
+
+      for (const elem of this.submitData.values()) {
+        if (elem.CheckList.findIndex(v => v.checkStatusText === '') !== -1) {
+          this.$Message.warning({
+            content: '有未设置“排查情况”的记录！',
+            duration: 5
+          })
+          this.$emit('saveCancel')
+          return
+        }
+      }
+
+      this.$Modal.confirm({
+        title: '排查登记',
+        content: '确定保存吗？',
+        onOk: this.saveDetail,
+        onCancel: () => {
+          this.$emit('saveCancel')
+        }
+      })
+    },
+    saveDetail () {
+      let data = []
 
       for (let main of this.submitData.values()) {
         let rows = {

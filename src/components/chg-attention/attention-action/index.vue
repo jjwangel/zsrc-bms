@@ -36,8 +36,8 @@
       </Col>
       <Col span="16">
         <Form ref="form6" :show-message="false" :model="formData" label-position="top">
-          <FormItem label="关注类型（调整前）" prop="focusTypeText" style="margin-left: 10px;" class="info_title">
-            <Input v-model="formData.focusTypeText" readonly></Input>
+          <FormItem label="关注类型（调整前）" prop="focusItemBefore" style="margin-left: 10px;" class="info_title">
+            <Input v-model="formData.focusItemBefore" readonly></Input>
           </FormItem>
         </Form>
       </Col>
@@ -114,7 +114,7 @@
 import AttentionDetailInfo from '_c/chg-attention/attention-action/detail-info.vue'
 import { deleteDataByOne } from '@/api/base'
 import { vaildForm } from '@/libs/j-tools.js'
-import { addFocusPersonAdjustFlow, getFocusPersonDetail } from '@/api/emp-manage/chg-attention'
+import { addFocusPersonAdjustFlow, getFocusPersonDetail, getFocusPersonAdjustDetail } from '@/api/emp-manage/chg-attention'
 import config from '@/config'
 
 export default {
@@ -194,11 +194,29 @@ export default {
     }
   },
   methods: {
+    initInfo () {
+      const condition = {
+        employeeNo: this.formData.employeeNo
+      }
+
+      getFocusPersonAdjustDetail(condition).then(res => {
+        if (res.data.code === '000000') {
+          this.formData.focusItemBefore = res.data.data.focusItemBefore
+        }
+      }).catch(() => {
+
+      })
+    },
     maxTagPlaceholder (num) {
       return '+' + num
     },
     handleAttLevelChg (item) {
-      if (item) this.formData.newFocusType = item.value
+      if (item) {
+        this.formData.newFocusType = item.value
+        if (this.formData.newFocusType === 3) {
+          this.formData.focusItem = []
+        }
+      }
     },
     handleFocusItemChg (item) {
       if (item) {
@@ -236,8 +254,6 @@ export default {
       })
     },
     saveData () {
-      this.formData.focusReason = this.trimForText(this.formData.focusReason)
-
       let data = {
         credentialFileIds: this.files.map((v) => { return v.id }).join(),
         employeeNo: this.formData.employeeNo,
@@ -262,6 +278,7 @@ export default {
       })
     },
     async vaildData () {
+      this.formData.focusReason = this.trimForText(this.formData.focusReason)
       await vaildForm(this, 'form3')
       await vaildForm(this, 'form5')
       await vaildForm(this, 'form4')
@@ -334,6 +351,7 @@ export default {
       this.$refs['form4'].resetFields()
       this.$refs['form5'].resetFields()
       this.formData = val
+      this.initInfo()
     },
     saveNow (val) {
       if (val) this.handleSaveData()

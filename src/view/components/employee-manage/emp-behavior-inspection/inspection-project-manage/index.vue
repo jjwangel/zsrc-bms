@@ -30,12 +30,12 @@
 
       <Table size="small" :height="windowHeight" @on-row-dblclick="handleShowDetail" :stripe="true" border ref="table-sa" :loading="this.loadData" :columns="cols" :data="dataSet">
         <template slot-scope="{ row, index }" slot="action">
-            <Button type="primary" size="small" :disabled="row.status !== 0 || dataDealing" @click="handleModifyData (row, index)">修改</Button>
+            <Button type="primary" size="small" :disabled="row.status === 2" @click="handleModifyData (row, index)">修改</Button>
           <Poptip
             confirm
             title="你确认删除这个项目吗？"
             @on-ok="handleDeleteProject (row, index)">
-            <Button type="error" size="small" :disabled="row.status !== 0 || dataDealing">删除</Button>
+            <Button type="error" size="small" :disabled="row.status !== 0">删除</Button>
           </Poptip>
         </template>
 
@@ -65,7 +65,7 @@
 
 <script>
 import { mixinInfo } from './common.js'
-import { getEmpCheckProjectList, deleteEmpCheckProject } from '@/api/emp-manage/emp-behavior-inspection'
+import { getEmpCheckProjectListByPage, deleteEmpCheckProject } from '@/api/emp-manage/emp-behavior-inspection'
 import InspectionAction from '_c/emp-behavior-inspection/inspection-action'
 import InsParaMng from '_c/emp-behavior-inspection/inspection-parameter-mng'
 
@@ -112,7 +112,6 @@ export default {
       dtlTitle: '',
       actionType: '', // view || create || modify
       saveNow: false,
-      dataDealing: false,
       windowHeight: 0
     }
   },
@@ -206,7 +205,7 @@ export default {
         condition.status = this.formData.status
       }
 
-      getEmpCheckProjectList(condition).then(res => {
+      getEmpCheckProjectListByPage(condition).then(res => {
         if (res.data.code === '000000') {
           this.dataSet = res.data.data.rows
           this.pageData.total = res.data.data.total

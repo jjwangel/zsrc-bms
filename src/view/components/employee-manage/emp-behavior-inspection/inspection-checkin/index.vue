@@ -31,7 +31,7 @@
             </FormItem>
           <ButtonGroup>
             <Button type="primary" icon="ios-search" @click="handleChgPageSize(pageData.size,1)" :loading="this.loadData">查询</Button>
-            <Button type="primary" icon="ios-search" @click="handleInspectionCheckBatch" :loading="this.loadData" :disabled="this.selCheckinRow.length === 0">批量排查</Button>
+            <Button type="primary" icon="ios-search" @click="handleInspectionCheckBatch" :loading="this.loadData" :disabled="this.selCheckinRow.length <= 1">批量排查</Button>
             <Button type="primary" icon="ios-search" @click="handleAddNonEmp" :loading="this.loadData">添加编外被排查人</Button>
           </ButtonGroup>
         </Form>
@@ -44,7 +44,7 @@
         @on-select-all="handleOnSelectAll"
         @on-select-all-cancel="handleOnSelectAllCancel">
         <template slot-scope="{ row, index }" slot="action">
-          <Button type="primary" size="small" :disabled="dataDealing || row.employeeNo != null" @click="handleModifyNonEmp (row, index)">修改</Button>
+          <!-- <Button type="primary" size="small" :disabled="dataDealing || row.employeeNo != null" @click="handleModifyNonEmp (row, index)">修改</Button> -->
           <Poptip
             confirm
             title="你确认删除这条项目吗？"
@@ -53,6 +53,7 @@
           </Poptip>
         </template>
         <div slot="footer" style="width:100%;text-align: center">
+          <span style="float: left;margin-left: 10px">双击任意记录，进入单个排查</span>
           <Page :total="pageData.total" :current.sync="pageData.current" :disabled="this.dataSet.length > 0 ? false: true"
             @on-change="handleSearchRd"
             @on-page-size-change="handleChgPageSize"
@@ -82,6 +83,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { getInstEmpList, getInstList } from '@/api/base'
 import { mixinInfo } from './common.js'
 import { getEmpCheckProjectList, getEmpCheckRecordList, deleteOffStaffEmployee, getOffStaffEmployeeInfo } from '@/api/emp-manage/emp-behavior-inspection'
@@ -138,6 +140,10 @@ export default {
     }
   },
   methods: {
+    ...mapGetters([
+      'deptCode',
+      'employeeNo'
+    ]),
     initInfo () {
       const condition = {
         employee: true
@@ -170,7 +176,7 @@ export default {
       this.dataSet = []
       getEmpCheckProjectList({ status: 1 }).then(res => {
         if (res.data.code === '000000') {
-          this.prjData = res.data.data.rows
+          this.prjData = res.data.data
           this.selPrj = formatSelectOptionByDefine(this.prjData, 'id', 'name')
         }
         this.loadData = false
@@ -276,8 +282,10 @@ export default {
           headSubName: data.headSubName,
           deptName: data.deptName,
           checkCount: 0,
-          checkStatus: 1
+          deptCode: this.deptCode(),
+          checkStatus: 0
         })
+        console.log(this.dataSet)
       } else {
         this.dataSet[rowIndex].name = data.name
       }
@@ -328,6 +336,11 @@ export default {
 
       getEmpCheckRecordList(condition).then(res => {
         if (res.data.code === '000000') {
+          let self = res.data.data.rows.find((v) => v.employeeNo === this.employeeNo())
+          if (self) {
+            self._disabled = true
+          }
+
           this.dataSet = res.data.data.rows
           this.pageData.total = res.data.data.total
           let index = 0
@@ -343,6 +356,15 @@ export default {
       })
     },
     handleInspectionCheck (row, index) {
+      if (row.employeeNo === this.employeeNo()) {
+        this.$Message.warning({
+          content: '不能对自已进行排查！',
+          duration: 5
+        })
+        return
+      }
+
+      this.$refs.table.selectAll(false) // 取消所有已选择
       this.selCheckinRow = [row]
       this.initCheckinFlag = true
       this.$nextTick(() => {
@@ -371,7 +393,8 @@ export default {
     handleDeleteNonEmp (row, index) {
       this.dataDealing = true
       const condition = {
-        idcardNo: row.idcardNo
+        idcardNo: row.idcardNo,
+        deptCode: row.deptCode
       }
 
       deleteOffStaffEmployee(condition).then(res => {

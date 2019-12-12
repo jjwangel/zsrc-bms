@@ -32,8 +32,8 @@
           </FormItem>
         </Col>
         <Col span="18">
-          <FormItem label="关注类型（调整前）" prop="focusItem" class="info_title">
-            <Input v-model="formData.focusItem" readonly></Input>
+          <FormItem label="关注类型（调整前）" prop="focusItemBefore" class="info_title">
+            <Input v-model="formData.focusItemBefore" readonly></Input>
           </FormItem>
         </Col>
       </Row>
@@ -321,8 +321,6 @@ export default {
       })
     },
     saveData () {
-      this.formData.nodeComment = this.trimForText(this.formData.nodeComment)
-
       let data = {
         flowId: this.formData.id,
         flowNode: this.formData.flowNode,
@@ -348,6 +346,7 @@ export default {
       })
     },
     async vaildData () {
+      this.formData.nodeComment = this.trimForText(this.formData.nodeComment)
       await vaildForm(this, 'form3')
       await vaildForm(this, 'form4')
     }
