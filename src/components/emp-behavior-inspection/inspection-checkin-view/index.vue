@@ -22,13 +22,7 @@
 
     <div style="margin-left: 10px;margin-top: 10px;">
       <Table size="small" :height="400" :stripe="true" border ref="table" :columns="cols" :data="dataSet">
-        <template slot-scope="{ row, index }" slot="action">
-          <RadioGroup v-model="dataSet[index].statusText">
-            <Radio label="正常" disabled></Radio>
-            <Radio label="异常" disabled></Radio>
-            <Radio label="不清楚" disabled></Radio>
-          </RadioGroup>
-        </template>
+
       </Table>
 
       <Form ref="form1" :show-message="false" :model="formData" label-position="top" style="margin-top: 10px;">

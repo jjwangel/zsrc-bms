@@ -171,8 +171,8 @@ export default {
         condition.approveStatus = this.formData.approveStatus
       }
       if (this.formData.createDate.length > 0 && this.formData.createDate[0] !== '' && this.formData.createDate[1] !== '') {
-        condition.createTimeStart = this.formData.createDate[0] + ' 00:00:00'
-        condition.createTimeEnd = this.formData.createDate[1] + ' 23:59:59'
+        condition.createTimeStart = this.formData.createDate[0]
+        condition.createTimeEnd = this.formData.createDate[1]
       }
 
       getFocusPersonFollows(condition).then(res => {

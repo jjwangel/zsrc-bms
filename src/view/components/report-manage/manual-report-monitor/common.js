@@ -35,6 +35,7 @@ export const mixinInfo = {
         {
           title: '其他收入',
           key: 'otherIncomeFill',
+          align: 'center',
           render: (h, params) => {
             const row = params.row
             if (row.otherIncomeFill !== 0) {
@@ -53,6 +54,7 @@ export const mixinInfo = {
         {
           title: '房产',
           key: 'houseFill',
+          align: 'center',
           render: (h, params) => {
             const row = params.row
             if (row.houseFill !== 0) {
@@ -71,6 +73,7 @@ export const mixinInfo = {
         {
           title: '纯土地',
           key: 'landFill',
+          align: 'center',
           render: (h, params) => {
             const row = params.row
             if (row.landFill !== 0) {
@@ -89,6 +92,7 @@ export const mixinInfo = {
         {
           title: '汽车',
           key: 'carFill',
+          align: 'center',
           render: (h, params) => {
             const row = params.row
             if (row.carFill !== 0) {
@@ -107,6 +111,7 @@ export const mixinInfo = {
         {
           title: '股金',
           key: 'capFill',
+          align: 'center',
           render: (h, params) => {
             const row = params.row
             if (row.capFill !== 0) {
@@ -125,6 +130,7 @@ export const mixinInfo = {
         {
           title: '证券及投资',
           key: 'investFill',
+          align: 'center',
           render: (h, params) => {
             const row = params.row
             if (row.investFill !== 0) {
@@ -143,6 +149,7 @@ export const mixinInfo = {
         {
           title: '银行账户',
           key: 'bankAcctFill',
+          align: 'center',
           render: (h, params) => {
             const row = params.row
             if (row.bankAcctFill !== 0) {
@@ -161,6 +168,7 @@ export const mixinInfo = {
         {
           title: '征信信息',
           key: 'credFill',
+          align: 'center',
           render: (h, params) => {
             const row = params.row
             if (row.credFill !== 0) {

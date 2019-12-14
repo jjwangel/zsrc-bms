@@ -22,9 +22,14 @@ export const mixinInfo = {
         },
         {
           title: '排查情况',
-          slot: 'action',
-          width: 220,
-          align: 'center'
+          key: 'statusText',
+          width: 150,
+          align: 'center',
+          render: (h, params) => {
+            const row = params.row
+
+            return h('p', row.statusText)
+          }
         }
       ]
     }

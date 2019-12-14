@@ -202,7 +202,7 @@ export default {
     handleNodeStatusChg (item) {
       if (item) {
         switch (item.value) {
-          case 1: this.formData._approveComment = '同意调整'
+          case 1: this.formData._approveComment = '同意'
             break
           case 2: this.formData._approveComment = ''
             break

@@ -60,7 +60,7 @@ export const mixinInfo = {
           }
         },
         {
-          title: '编外人员操作',
+          title: '删除编外人员',
           slot: 'action',
           width: 120,
           align: 'center'
