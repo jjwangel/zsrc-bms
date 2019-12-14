@@ -28,7 +28,11 @@ export const mixinInfo = {
           render: (h, params) => {
             const row = params.row
 
-            return h('p', row.statusText)
+            if (row.statusText === '异常') {
+              return h('p', { style: { 'color': 'red', 'font-weight': 'bold' } }, row.statusText)
+            } else {
+              return h('p', row.statusText)
+            }
           }
         }
       ]

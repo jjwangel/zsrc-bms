@@ -289,8 +289,11 @@ export default {
       this.windowHeight = window.innerHeight - 380
     }
   },
-  mounted () {
+  activated () {
     this.initInfo()
+  },
+  mounted () {
+
   },
   created () {
     window.addEventListener('resize', this.setWindowHeight)

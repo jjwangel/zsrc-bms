@@ -61,7 +61,11 @@ export const mixinInfo = {
                 break
             }
 
-            return h('p', text)
+            if (text === '异常') {
+              return h('p', { style: { 'color': 'red', 'font-weight': 'bold' } }, text)
+            } else {
+              return h('p', text)
+            }
           }
         },
         {
