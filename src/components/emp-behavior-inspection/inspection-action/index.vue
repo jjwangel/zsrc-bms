@@ -29,7 +29,7 @@
         :editable='false'></DatePicker>
       </FormItem>
       <FormItem label="启动-关闭时间" prop="scTime" :label-width="110" class="info_title">
-        <DatePicker type="daterange" placement="bottom-start" :options="optDateAfter"
+        <DatePicker type="daterange" placement="bottom-start"
         :disabled="this.actionType==='view'"
         style="width: 100%"
         :clearable="false"

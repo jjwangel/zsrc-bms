@@ -23,8 +23,7 @@ export const mixinInfo = {
         },
         {
           title: '跟进情况登记',
-          key: 'followCondition',
-          tooltip: 'true'
+          key: 'followCondition'
         },
         {
           title: '下一步计划',

@@ -76,7 +76,7 @@ export const mixinInfo = {
           tooltip: 'true'
         },
         {
-          title: '流程状态',
+          title: '是否流程中',
           key: 'existFlow',
           tooltip: 'true',
           render: (h, params) => {

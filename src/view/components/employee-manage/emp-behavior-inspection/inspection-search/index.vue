@@ -60,6 +60,7 @@
           <Page :total="pageData.total" :current.sync="pageData.current" :disabled="this.dataSet.length > 0 ? false: true"
             @on-change="handleSearchRd"
             @on-page-size-change="handleChgPageSize"
+            :page-size-opts="[10, 20, 30, 40, 60, 80]"
             size="small" show-elevator show-sizer />
         </div>
       </Table>
@@ -290,10 +291,10 @@ export default {
     }
   },
   activated () {
-    this.initInfo()
+    this.getPrjectData()
   },
   mounted () {
-
+    this.initInfo()
   },
   created () {
     window.addEventListener('resize', this.setWindowHeight)
