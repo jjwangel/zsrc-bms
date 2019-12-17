@@ -260,8 +260,7 @@ export default {
         }
       }
     },
-    handleUploadErr (err) {
-      console.log(err)
+    handleUploadErr () {
       this.$Message.error({
         content: '上传征信报告失败！',
         duration: 3

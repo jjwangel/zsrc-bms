@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Form ref="formInve" :rules="ruleInve" :show-message="false" :model="formData" :label-width="80">
+    <Form ref="formInve" :rules="ruleInve" :show-message="false" :model="formData" :label-width="90">
       <FormItem label="投资类型" prop="capInveType" class="info_title">
         <Select :value="formData.capInveType" :label-in-value="true" @on-change="handleInveTypeChg" :disabled="this.action==='view'">
           <Option v-for="item in this.sel_option.selCapInveType" :value="item.key" :key="item.key">{{ item.value }}</Option>
@@ -10,8 +10,8 @@
         <div>
           <InputNumber style='width:90%' v-model="formData.capPrice" :min="0" :precision="2" :active-change="false" @on-change="handlePriceChange" :readonly="this.action==='view'"></InputNumber>
           <span style="margin-left: 10px">元</span>
-        </div>
-      </FormItem>
+          </div>
+        </FormItem>
       <FormItem label="备注" prop="capBz" class="info_title">
         <Input type="textarea" v-model="formData.capBz" :readonly="this.action==='view'" :rows="2" :autosize='{ minRows: 2, maxRows: 2 }'></Input>
       </FormItem>

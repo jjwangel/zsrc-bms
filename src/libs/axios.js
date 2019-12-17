@@ -7,7 +7,8 @@ const noMsgCode = [
   '003304',
   '003903',
   '003901',
-  '003904'
+  '003904',
+  '003910'
 ]
 class HttpRequest {
   constructor (baseUrl = baseURL) {
@@ -79,7 +80,6 @@ class HttpRequest {
       data.data = data.data || {}
       return { data, status }
     }, error => {
-      console.log(error)
       Message.error({
         content: '有异常产生！',
         duration: 5

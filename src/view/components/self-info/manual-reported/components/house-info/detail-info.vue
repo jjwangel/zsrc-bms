@@ -72,8 +72,12 @@
       </FormItem>
       <FormItem label="备注" prop="bz" class="info_title">
           <Input type="textarea" v-model="formData.bz" :rows="2" :autosize='{ minRows: 2, maxRows: 2 }' :readonly="this.action==='view'"></Input>
-          <span>注意：当一项或多项的输入选择“其他”的，必须统一在“备注”栏里简要填写相关内容</span>
       </FormItem>
+      <FormItem label="">
+        <p class="memo_info">1、当一项或多项的输入选择“其他”的，必须统一在“备注”栏里简要填写相关内容。</p>
+        <p class="memo_info">2、“产权所属”：根据产权证书上写的产权人选择相应的选项。</p>
+        <p class="memo_info">3、选择项“配偶（属夫妻共同财产）”：指产权登记在配偶名下，但从法律上认定为属于夫妻的共同财产。</p>
+    </FormItem>
     </Form>
   </div>
 </template>
@@ -371,5 +375,9 @@ export default {
   .info_title{
     font-weight:bold;
     color: #464c5b;
+  }
+  .memo_info{
+    font-size:xx-small;
+    line-height:20px;
   }
 </style>

@@ -61,7 +61,7 @@
     <Modal v-model="show_create_rpt" :loading="data_saving" scrollable  width="300" ok-text="确定" :mask-closable="false"
       :title="this.formRpt.new_rpt_title"
       @on-ok="handleSubmitRpt">
-      <Form :label-width="120">
+      <Form :label-width="130">
         <FormItem label="本次征信报告日期" class="info_title">
           <DatePicker type="date" :options="optCreditDate" :value="this.formRpt.new_rpt_date" @on-change="handleNewRptDateChange" :editable="false" style="width:100%;" :clearable="false">
           </DatePicker>

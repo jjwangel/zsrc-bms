@@ -1,21 +1,15 @@
 export const mixinInfo = {
   data () {
     return {
-      col_todo: [
+      cols: [
         {
           type: 'index',
-          width: 30,
+          width: 50,
           align: 'center'
         },
         {
           title: '标题',
-          key: 'title',
-          tooltip: 'true'
-        },
-        {
-          title: '时间',
-          width: 120,
-          key: 'dt',
+          key: 'name',
           tooltip: 'true'
         }
       ]

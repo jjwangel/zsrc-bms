@@ -68,7 +68,7 @@
             </Row>
       </Col>
       <Col span="8">
-        <ToDo style="margin-bottom: 10px" todo_title="待办事项"></ToDo>
+        <ToDo style="margin-bottom: 10px" todo_title="待办事项" :flag="1"></ToDo>
         <Card shadow>
           <div style="height: 544px;text-align: center">
             <!-- <img v-if="showZsMap" :src="zsMap" style="height: 544px;width: 100%;" alt=""> -->

@@ -9,6 +9,7 @@ export default {
   state: {
     token: getToken(),
     employeeNo: '',
+    deptCode: '',
     userName: '',
     gender: '男',
     rolesCode: [],
@@ -31,6 +32,9 @@ export default {
     setGender (state, gender) {
       state.gender = gender
     },
+    setDeptCode (state, deptCode) {
+      state.deptCode = deptCode
+    },
     setToken (state, token) {
       state.token = token
       setToken(token)
@@ -45,6 +49,9 @@ export default {
       state.rolesCodeShort = rolesCodeShort
     },
     setMenuAccess (state, menuAccess) {
+      // ##############    临时增加    ####################################
+      // let oth = ['bms_employeemng_lanuch_change_attention', 'bms_employeemng_change_attention_schedule_search', 'bms_employeemng_lanuch_follow', 'bms_employeemng_follow_schedule_search', 'bms_employeemng_process_pending', 'bms_employeemng_process_submitted', 'special_archives_manage', 'att_standing_book_search', 'bms_employeemng_inspection_project_manage', 'bms_employeemng_inspection_checkin', 'bms_employeemng_inspection_search'] // 临时测试
+      // menuAccess.push(...oth)
       state.menuAccess = menuAccess
     },
     setHasGetInfo (state, status) {
@@ -55,6 +62,7 @@ export default {
     employeeNo: state => state.employeeNo,
     userName: state => state.userName,
     gender: state => state.gender,
+    deptCode: state => state.deptCode,
     token: state => state.token,
     rolesCode: state => state.rolesCode,
     rolesCodeShort: state => state.rolesCodeShort,
@@ -100,6 +108,7 @@ export default {
             commit('setAvatar', '')
             commit('setUserName', data.data.staff.name)
             commit('setGender', data.data.staff.gender)
+            commit('setDeptCode', data.data.staff.deptCode)
             commit('setRolesName', data.data.roles.map((val) => { return val.name }))
             commit('setRolesCode', data.data.roles.map((val) => { return val.code }))
             commit('setRolesCodeShort', data.data.roles.map((val) => { return (val.code === 'bms_admin' ? val.code : val.code.substring(0, 6)) }))

@@ -2,6 +2,15 @@
   <div>
     <Form ref="formCar" :rules="ruleCar" :show-message="false" :model="formData" :label-width="80">
       <Row :gutter="20">
+        <Col span="24">
+          <FormItem label="车辆所有人" prop="carOwner" class="info_title" :label-width="90">
+            <Select :value="formData.carOwner" :label-in-value="true" @on-change="handleCarOwnerChg" :disabled="this.action==='view'">
+              <Option v-for="item in this.sel_option.selCarOwner" :value="item.key" :key="item.key">{{ item.value }}</Option>
+            </Select>
+          </FormItem>
+        </Col>
+      </Row>
+      <Row :gutter="20">
         <Col span="12">
           <FormItem label="汽车品牌" prop="carVar" class="info_title">
             <Input v-model="formData.carVar" :readonly="this.action==='view'"></Input>
@@ -55,6 +64,7 @@ export default {
   props: [
     'action',
     'rowData',
+    'selOption',
     'saveData'
   ],
   data () {
@@ -156,6 +166,7 @@ export default {
 
     return {
       formData: this.rowData,
+      sel_option: this.selOption,
       dataSaving: false,
       optBuyDate: {
         disabledDate (date) {
@@ -195,6 +206,10 @@ export default {
         })
       }
     },
+    handleCarOwnerChg ({ value, label }) {
+      this.formData.carOwner = value
+      this.formData.carOwnerText = label
+    },
     handleDateChange (val) {
       this.formData.carBuyDate = val
     },
@@ -226,7 +241,8 @@ export default {
             carType: this.formData.carType,
             carBuyDate: this.formData.carBuyDate,
             carIsloan: this.formData.carIsloan,
-            carPrice: this.formData.carPrice
+            carPrice: this.formData.carPrice,
+            carOwner: this.formData.carOwner
           }
 
           if (this.action === 'modify') { // 修改记录
@@ -237,7 +253,8 @@ export default {
                   duration: 3
                 })
                 this.$emit('saveSuccess', false, this.formData._index, Object.assign({}, data, {
-                  carIsloanText: this.formData.carIsloanText
+                  carIsloanText: this.formData.carIsloanText,
+                  carOwnerText: this.formData.carOwnerText
                 }))
                 this.dataSaving = false
               } else {
@@ -263,7 +280,8 @@ export default {
                 })
                 this.$emit('saveSuccess', true, this.formData._index, Object.assign({}, data, {
                   id: res.data.data.id,
-                  carIsloanText: this.formData.carIsloanText
+                  carIsloanText: this.formData.carIsloanText,
+                  carOwnerText: this.formData.carOwnerText
                 }))
                 this.dataSaving = false
               } else {
@@ -295,6 +313,9 @@ export default {
     },
     saveData (val) {
       if (val) this.handleSaveDetail()
+    },
+    selOption (val) {
+      this.sel_option = val
     }
   }
 }

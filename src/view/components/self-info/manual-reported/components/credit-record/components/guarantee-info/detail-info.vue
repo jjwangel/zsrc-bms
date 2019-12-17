@@ -14,7 +14,7 @@
             </FormItem>
           </Col>
           <Col span="12">
-            <FormItem label="担保贷款发放日期" prop="loanOpenDate" class="info_title">
+            <FormItem label="担保贷款发放日期" :label-width="130" prop="loanOpenDate" class="info_title">
               <DatePicker type="date" :options="optLoanOpenDate" :editable="false" style="width:100%;" :value="formData.loanOpenDate" @on-change="handleOpenChange" :clearable="false" :disabled="this.operate==='view'"></DatePicker>
             </FormItem>
             <!-- <FormItem label=" 担保方式" prop="assuMode" class="info_title">

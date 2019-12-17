@@ -105,7 +105,7 @@
             <FormItem label="参加工作时间" prop="attendJobTime" class="formitem info_title">
               <Input type="text" v-model="formData.attendJobTime" readonly></Input>
             </FormItem>
-            <FormItem label="本岗位任职时间" prop="joinHeadSubTime" class="formitem info_title">
+            <FormItem label="本岗位任职时间" prop="joinHeadSubTime" class="formitem info_title" :label-width="120">
               <Input type="text" v-model="formData.joinHeadSubTime" readonly></Input>
             </FormItem>
           </Form>

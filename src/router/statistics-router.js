@@ -36,6 +36,15 @@ export default [
           title: '关注人员情况统计'
         },
         component: () => import('@/view/components/report-manage/attention-stat/index.vue')
+      },
+      {
+        path: 'rpt-manual-report-monitor',
+        name: 'bms_statquery_infofillmonitor',
+        meta: {
+          icon: 'md-code',
+          title: '员工信息填报监测'
+        },
+        component: () => import('@/view/components/report-manage/manual-report-monitor/index.vue')
       }
     ]
   }

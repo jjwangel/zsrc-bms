@@ -34,7 +34,7 @@ export const col_badrec = [
     align: 'center'
   },
   {
-    title: '信用卡逾期账户数',
+    title: '所有信用卡累计逾期次数',
     key: 'credCardOverdueNum',
     tooltip: true
   },
@@ -44,7 +44,7 @@ export const col_badrec = [
     tooltip: true
   },
   {
-    title: '贷款逾期账户数',
+    title: '所有贷款累计逾期次数',
     key: 'loanOverdueNum',
     tooltip: true
   },

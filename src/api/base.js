@@ -58,6 +58,15 @@ export const getSelectOptionData = (params) => {
   })
 }
 
+export const getSingleSelectOptionData = (params) => {
+  let url = '/menums'
+  return axios.request({
+    url,
+    params,
+    method: 'get'
+  })
+}
+
 export const getInstEmpList = (data) => {
   let url = '/deptemployee/tree'
   const params = { employee: data.employee }
@@ -134,6 +143,21 @@ export const getUserOperationAuth = (formData) => {
   })
 }
 
+// /**
+//  * @description 下载上传文件
+//  * @param {*} formData
+//  * @returns
+//  */
+// export const getDownloadFile = (formData) => {
+//   let url = `/uploadfile/download/${formData.id}`
+//   const params = {}
+//   return axios.request({
+//     url,
+//     params,
+//     method: 'get'
+//   })
+// }
+
 export default {
   getListData,
   getOneRowData,
@@ -148,4 +172,5 @@ export default {
   resetLoginPwd,
   getEmployeesDetail,
   getUserOperationAuth
+  // getDownloadFile
 }

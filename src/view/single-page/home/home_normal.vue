@@ -2,10 +2,10 @@
   <div>
     <Row :gutter="16" >
       <Col span="12">
-        <ToDo todo_title="待办事项"></ToDo>
+        <ToDo todo_title="待办事项" :flag="1"></ToDo>
       </Col>
       <Col span="12">
-        <ToDo todo_title="已办事项"></ToDo>
+        <ToDo todo_title="已办事项" :flag="2"></ToDo>
       </Col>
     </Row>
   </div>
