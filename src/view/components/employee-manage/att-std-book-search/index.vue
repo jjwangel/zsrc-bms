@@ -212,6 +212,7 @@ export default {
 
       this.formData.employeeNo = this.trimForText(this.formData.employeeNo).toUpperCase()
       this.formData.employeeName = this.trimForText(this.formData.employeeName)
+      this.downloadPara = ''
       if (this.formData.employeeNo !== '') {
         this.downloadPara = `employeeNo=${this.formData.employeeNo}`
       }
