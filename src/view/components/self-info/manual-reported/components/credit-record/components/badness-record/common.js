@@ -5,22 +5,22 @@ export const col_badness = [
     align: 'center'
   },
   {
-    title: '所有信用卡累计逾期次数',
+    title: '信用卡逾期账户数',
     key: 'credCardOverdueNum',
     tooltip: true
   },
   {
-    title: '是否超过90天逾期（信用卡）',
+    title: '是否存在超90天以上逾期',
     key: 'dyaOverdue1Text',
     tooltip: true
   },
   {
-    title: '所有贷款累计逾期次数',
+    title: '贷款逾期账户数',
     key: 'loanOverdueNum',
     tooltip: true
   },
   {
-    title: '是否超90天以上逾期（贷款）',
+    title: '是否存在超90天以上逾期',
     key: 'dyaOverdue2Text',
     tooltip: true
   },

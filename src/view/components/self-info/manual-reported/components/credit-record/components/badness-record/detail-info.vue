@@ -3,7 +3,7 @@
     <Form ref="formBadRec" :rules="ruleBadRec" :show-message="false" :model="formData" :label-width="100">
       <Row :gutter="20">
         <Col span="12">
-          <FormItem label="所有信用卡累计逾期次数" prop="credCardOverdueNum" class="info_title">
+          <FormItem label="信用卡逾期账户数" prop="credCardOverdueNum" class="info_title">
             <InputNumber style='width:100%' :precision="0" :active-change="false" v-model="formData.credCardOverdueNum" :min="0" @on-change="handleCardNumChange" :readonly="this.operate==='view'"></InputNumber>
           </FormItem>
         </Col>
@@ -18,7 +18,7 @@
       </Row>
       <Row :gutter="20">
         <Col span="12">
-          <FormItem label="所有贷款累计逾期次数" prop="loanOverdueNum" class="info_title">
+          <FormItem label="贷款逾期账户数" prop="loanOverdueNum" class="info_title">
             <InputNumber style='width:100%' :precision="0" :active-change="false" v-model="formData.loanOverdueNum" :min="0" @on-change="handleLoanNumChange" :readonly="this.operate==='view'"></InputNumber>
           </FormItem>
         </Col>
@@ -47,7 +47,7 @@ export default {
     const validateCardNum = (rule, value, callback) => {
       if ((!value || value === 0) && this.formData.dyaOverdue1 === 1) {
         this.$Message.warning({
-          content: '所有信用卡累计逾期次数必需大于0 ！',
+          content: '信用卡逾期账户数必需大于0 ！',
           duration: 5
         })
         callback(new Error(''))
@@ -59,7 +59,7 @@ export default {
     const validateLoanNum = (rule, value, callback) => {
       if ((!value || value === 0) && this.formData.dyaOverdue2 === 1) {
         this.$Message.warning({
-          content: '所有贷款累计逾期次数必需大于0 ！',
+          content: '贷款逾期账户数必需大于0 ！',
           duration: 5
         })
         callback(new Error(''))

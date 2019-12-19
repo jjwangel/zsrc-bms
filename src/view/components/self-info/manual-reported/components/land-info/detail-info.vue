@@ -349,7 +349,7 @@ export default {
     color: #464c5b;
   }
   .memo_info{
-    font-size:xx-small;
+    font-size:x-small;
     line-height:20px;
   }
 </style>
