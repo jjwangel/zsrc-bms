@@ -43,8 +43,11 @@
       </Table>
 
       <Form ref="form1" :show-message="false" :model="formData" label-position="top" style="margin-top: 10px;">
-        <FormItem label="存在其它异常行为" prop="otherUnusualBehavior" class="info_title">
-          <Input type="textarea" show-word-limit :maxlength="200" v-model="formData.otherUnusualBehavior" :rows="2" :autosize='{ minRows: 4, maxRows: 4 }'></Input>
+        <FormItem label="" prop="haveOtherUnusualBehavior" class="info_title">
+          <Checkbox v-model="formData.haveOtherUnusualBehavior" @on-change="handleBehaviorCheckChange">存在其它异常行为（如无其它异常行为，无需填写）</Checkbox>
+        </FormItem>
+        <FormItem label="" prop="otherUnusualBehavior" class="info_title">
+          <Input type="textarea" show-word-limit :maxlength="200" v-model="formData.otherUnusualBehavior" :rows="2" :autosize='{ minRows: 4, maxRows: 4 }' :readonly="!formData.haveOtherUnusualBehavior"></Input>
         </FormItem>
       </Form>
     </div>
@@ -75,6 +78,7 @@ export default {
         employeeNo: '',
         employeeName: '',
         prjName: '',
+        haveOtherUnusualBehavior: false,
         otherUnusualBehavior: '',
         CheckList: []
       },
@@ -117,6 +121,7 @@ export default {
               employeeName: elem.name,
               idcardNo: elem.idcardNo,
               prjName: this.prjName,
+              haveOtherUnusualBehavior: false,
               otherUnusualBehavior: '',
               deptCode: elem.deptCode,
               CheckList: JSON.parse(JSON.stringify(this.dataSet))
@@ -129,11 +134,17 @@ export default {
         this.dataSet = []
       })
     },
+    handleBehaviorCheckChange (val) {
+      if (!val) {
+        this.formData.otherUnusualBehavior = ''
+      }
+    },
     setFormData (sourceIndex, currentIndex) {
       if (sourceIndex !== currentIndex) {
         // 保存formData已修改的数据
         this.submitData[sourceIndex].employeeNo = this.formData.employeeNo
         this.submitData[sourceIndex].employeeName = this.formData.employeeName
+        this.submitData[sourceIndex].haveOtherUnusualBehavior = this.formData.haveOtherUnusualBehavior
         this.submitData[sourceIndex].otherUnusualBehavior = this.formData.otherUnusualBehavior
         this.submitData[sourceIndex].CheckList = JSON.parse(JSON.stringify(this.formData.CheckList))
       }
@@ -141,6 +152,7 @@ export default {
       // 用下一条数据更新当前formData
       this.formData.employeeNo = this.submitData[currentIndex].employeeNo
       this.formData.employeeName = this.submitData[currentIndex].employeeName
+      this.formData.haveOtherUnusualBehavior = this.submitData[currentIndex].haveOtherUnusualBehavior
       this.formData.otherUnusualBehavior = this.submitData[currentIndex].otherUnusualBehavior
       this.formData.CheckList = JSON.parse(JSON.stringify(this.submitData[currentIndex].CheckList))
     },
@@ -151,16 +163,24 @@ export default {
       this.setFormData(sourceIndex, this.currentIndex)
     },
     handleForward () {
+      if (this.formData.haveOtherUnusualBehavior === true && this.formData.otherUnusualBehavior === '') {
+        this.$Message.warning({
+          content: '其它异常行为内容不能为空！',
+          duration: 5
+        })
+        return
+      }
       if (this.formData.CheckList.findIndex(v => v.checkStatusText === '') !== -1) {
         this.$Message.warning({
           content: '有未设置“排查情况”的记录！',
           duration: 5
         })
-      } else {
-        const sourceIndex = this.currentIndex
-        this.currentIndex++
-        this.setFormData(sourceIndex, this.currentIndex)
+        return
       }
+
+      const sourceIndex = this.currentIndex
+      this.currentIndex++
+      this.setFormData(sourceIndex, this.currentIndex)
     },
     handleBatchSetCheck () {
       for (let item of this.formData.CheckList.values()) {
@@ -171,10 +191,20 @@ export default {
       // 保存最后一条数据
       this.submitData[this.currentIndex].employeeNo = this.formData.employeeNo
       this.submitData[this.currentIndex].employeeName = this.formData.employeeName
+      this.submitData[this.currentIndex].haveOtherUnusualBehavior = this.formData.haveOtherUnusualBehavior
       this.submitData[this.currentIndex].otherUnusualBehavior = this.formData.otherUnusualBehavior
       this.submitData[this.currentIndex].CheckList = JSON.parse(JSON.stringify(this.formData.CheckList))
 
       for (const elem of this.submitData.values()) {
+        if (elem.haveOtherUnusualBehavior === true && elem.otherUnusualBehavior === '') {
+          this.$Message.warning({
+            content: '有未填写“其它异常行为”内容的记录！',
+            duration: 5
+          })
+          this.$emit('saveCancel')
+          return
+        }
+
         if (elem.CheckList.findIndex(v => v.checkStatusText === '') !== -1) {
           this.$Message.warning({
             content: '有未设置“排查情况”的记录！',

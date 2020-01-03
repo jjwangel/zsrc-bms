@@ -49,7 +49,7 @@
       <Button style="float: right; " type="primary" @click="handleShowReview">预览排查表</Button>
     </div>
 
-    <Modal v-model="showCheckItemReview" scrollable title="排查表预览" width="700" :styles="{top: '10px'}"
+    <Modal v-model="showCheckItemReview" scrollable title="排查表预览" width="800" :styles="{top: '10px'}"
       :mask-closable="true"
       :footer-hide="true">
       <CheckItemReview :prjId="prjId" :refreshNow="refreshNow"></CheckItemReview>

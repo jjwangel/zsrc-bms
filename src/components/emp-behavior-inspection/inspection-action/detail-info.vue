@@ -2,7 +2,7 @@
   <div>
     <Form ref="form" :show-message="false" :label-width="80">
         <FormItem v-for="item in this.itemData" :key="item.index" :label="item.typeText" class="info_title">
-          <Input :value="item.content" type="textarea" :rows="2" :autosize='{ minRows: 4, maxRows: 4 }' readonly></Input>
+          <Input :value="item.content" type="textarea" :rows="2" :autosize='{ minRows: 2, maxRows: 2 }' readonly></Input>
         </FormItem>
     </Form>
   </div>

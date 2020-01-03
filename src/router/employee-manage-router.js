@@ -126,7 +126,7 @@ export default [
         path: 'chg_att_type',
         name: 'chg_att_type',
         meta: {
-          icon: 'md-cloud-download',
+          icon: 'md-warning',
           title: '调整关注类别'
         },
         component: parentView,
@@ -157,7 +157,7 @@ export default [
         path: 'att_follow',
         name: 'att_follow',
         meta: {
-          icon: 'md-cloud-download',
+          icon: 'md-contacts',
           title: '关注人员跟进'
         },
         component: parentView,
@@ -188,7 +188,7 @@ export default [
         path: 'process_manage',
         name: 'process_manage',
         meta: {
-          icon: 'md-cloud-download',
+          icon: 'md-git-compare',
           title: '流程管理'
         },
         component: parentView,
@@ -229,7 +229,7 @@ export default [
         path: 'att_standing_book_search',
         name: 'bms_employeemng_focusquery',
         meta: {
-          icon: 'ios-people',
+          icon: 'ios-paper',
           title: '关注台账查询',
           hideInMenu: false
         },
@@ -239,7 +239,7 @@ export default [
         path: 'emp_behavior_inspection',
         name: 'emp_behavior_inspection',
         meta: {
-          icon: 'md-cloud-download',
+          icon: 'md-body',
           title: '员工行为排查'
         },
         component: parentView,
