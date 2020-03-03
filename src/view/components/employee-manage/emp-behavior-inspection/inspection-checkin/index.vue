@@ -13,15 +13,15 @@
         <Input type="textarea" v-model="formData.describe" style="width: 95%;margin-left: 80px;margin-top: 10px;margin-bottom: 10px;" :rows="2" :autosize='{ minRows: 4, maxRows: 4 }' readonly></Input>
         <Form ref ="form1" :model="formData" :label-width="80" inline>
           <FormItem label="员工工号" prop="employeeNo">
-            <Input type="text" v-model="formData.employeeNo" :readonly="this.loadData" style="width:100px;"></Input>
+            <Input type="text" v-model="formData.employeeNo" :readonly="this.loadData" style="width:90px;"></Input>
           </FormItem>
           <FormItem label="员工姓名" prop="employeeName">
-            <Input type="text" v-model="formData.employeeName" :readonly="this.loadData" style="width:130px;">
+            <Input type="text" v-model="formData.employeeName" :readonly="this.loadData" style="width:120px;">
               <Button slot="append" icon="md-apps" @click="handleSelectEmp" :disabled="this.loadData"></Button>
             </Input>
           </FormItem>
           <FormItem label="所属机构" prop="deptCode">
-            <Cascader style="width: 200px" :data="dept_list" v-model="formData.deptCode" trigger="hover" :disabled="this.loadData"></Cascader>
+            <Cascader style="width: 180px" :data="dept_list" v-model="formData.deptCode" trigger="hover" :disabled="this.loadData"></Cascader>
           </FormItem>
           <FormItem label="排查状态" prop="checkStatus">
               <Select v-model="formData.checkStatus" style="width:100px" clearable :disable="this.loadData">
@@ -36,7 +36,7 @@
             <Button type="success" icon="md-cloud-download"
               :to="downloadUrl + downloadPara" target="_blank"
               @click="handleDownloadList"
-              :loading="this.downloading">导出数据</Button>
+              :loading="this.downloading">导出</Button>
           </ButtonGroup>
         </Form>
       </div>
@@ -462,7 +462,7 @@ export default {
   },
   mounted () {
     this.base_url = (process.env.NODE_ENV === 'production' ? this.$config.baseUrl.pro : this.$config.baseUrl.dev)
-    this.downloadUrl = this.base_url + '/empcheckrecords/tocheck/export?'
+    this.downloadUrl = this.base_url + 'empcheckrecords/tocheck/export?'
     this.initInfo()
   },
   created () {

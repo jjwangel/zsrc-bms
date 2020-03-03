@@ -44,7 +44,7 @@
             <Button type="success" icon="md-cloud-download"
               :to="downloadUrl + downloadPara" target="_blank"
               @click="handleDownloadList"
-              :loading="this.downloading">导出数据</Button>
+              :loading="this.downloading">导出</Button>
         </ButtonGroup>
           </ButtonGroup>
         </Form>
@@ -340,7 +340,7 @@ export default {
   },
   mounted () {
     this.base_url = (process.env.NODE_ENV === 'production' ? this.$config.baseUrl.pro : this.$config.baseUrl.dev)
-    this.downloadUrl = this.base_url + '/empcheckrecords/export?'
+    this.downloadUrl = this.base_url + 'empcheckrecords/export?'
     this.initInfo()
   },
   created () {
