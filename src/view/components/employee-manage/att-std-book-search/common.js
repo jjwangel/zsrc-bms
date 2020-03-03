@@ -61,15 +61,15 @@ export const mixinInfo = {
           tooltip: 'true'
         },
         {
-          title: '关注日期',
+          title: '调整日期',
           key: 'focusDate',
           tooltip: 'true'
         },
-        {
-          title: '解除日期',
-          key: 'freeDate',
-          tooltip: 'true'
-        },
+        // {
+        //   title: '解除日期',
+        //   key: 'freeDate',
+        //   tooltip: 'true'
+        // },
         {
           title: '关注时长',
           key: 'focusDuration',

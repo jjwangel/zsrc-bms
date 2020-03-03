@@ -69,9 +69,9 @@ export const mixinInfo = {
           }
         },
         {
-          title: '操作',
+          title: '删除排查记录',
           slot: 'action',
-          width: 100,
+          width: 110,
           align: 'center'
         }
       ]

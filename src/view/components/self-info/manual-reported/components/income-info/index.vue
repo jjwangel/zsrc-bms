@@ -2,7 +2,7 @@
   <div>
     <Card dis-hover>
       <div slot="title">
-        <span class="info_title" style="margin-left: 25px">填报年度</span>
+        <span class="info_title" style="margin-left: 55px">填报年份</span>
         <DatePicker type="year" :options="optSelDate"
           @on-change="handleDateChange"
           :disabled="this.searching || this.dataSaving"
@@ -11,8 +11,8 @@
           style="width: 100px;margin-right: 10px;margin-left: 18px"
           :editable='false'></DatePicker>
       </div>
-      <Form ref="formOI" :rules="ruleOI" :model="formData" :show-message="false" :label-width="100">
-        <FormItem label="年度其他收入" prop="incoTol" class="info_title">
+      <Form ref="formOI" :rules="ruleOI" :model="formData" :show-message="false" :label-width="130">
+        <FormItem label="其他收入（累计）" prop="incoTol" class="info_title">
           <InputNumber :min="0" :precision="2" :active-change="false" @on-change="handleTolChange" placeholder="填报除本行收入、本行股金分红以外的收入" style="width: 280px;" v-model="formData.incoTol" :readonly="this.searching || this.dataSaving">
           </InputNumber>
           <span> 元 （填报除本行收入、本行股金分红以外的收入）</span>

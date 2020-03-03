@@ -33,6 +33,10 @@
             <Button type="primary" icon="ios-search" @click="handleChgPageSize(pageData.size,1)" :loading="this.loadData">查询</Button>
             <Button type="primary" icon="ios-search" @click="handleInspectionCheckBatch" :loading="this.loadData" :disabled="this.selCheckinRow.length <= 1">批量排查</Button>
             <Button type="primary" icon="ios-search" @click="handleAddNonEmp" :loading="this.loadData">添加编外被排查人</Button>
+            <Button type="success" icon="md-cloud-download"
+              :to="downloadUrl + downloadPara" target="_blank"
+              @click="handleDownloadList"
+              :loading="this.downloading">导出数据</Button>
           </ButtonGroup>
         </Form>
       </div>
@@ -137,7 +141,11 @@ export default {
       selCheckinRow: [],
       selNonEmp: {},
       actionType: '', // view || create || modify
-      windowHeight: 0
+      windowHeight: 0,
+      downloading: false,
+      downloadUrl: '',
+      base_url: '',
+      downloadPara: ''
     }
   },
   methods: {
@@ -414,6 +422,37 @@ export default {
     handleSelectEmp () {
       this.showSelectEmp = true
     },
+    handleDownloadList () {
+      if (this.downloading) return
+      this.downloading = true
+
+      this.formData.employeeNo = this.trimForText(this.formData.employeeNo).toUpperCase()
+      this.formData.employeeName = this.trimForText(this.formData.employeeName)
+
+      this.downloadPara = `projectId=${this.formData.prjId}`
+      if (this.formData.employeeNo !== '') {
+        this.downloadPara = `${this.downloadPara}&employeeNo=${this.formData.employeeNo}`
+      }
+      if (this.formData.employeeName !== '') {
+        this.downloadPara = `${this.downloadPara}&employeeName=${this.formData.employeeName}`
+      }
+
+      if (this.formData.deptCode && this.formData.deptCode.length > 0) {
+        this.downloadPara = `${this.downloadPara}&deptCode=${this.formData.deptCode[this.formData.deptCode.length - 1]}`
+      }
+      if (this.formData.checkStatus || this.formData.checkStatus === 0) {
+        this.downloadPara = `${this.downloadPara}&checkStatus=${this.formData.checkStatus}`
+      }
+
+      this.$Message.info({
+        content: '正在生成数据，请稍候......',
+        duration: 5
+      })
+
+      setTimeout(() => {
+        this.downloading = false
+      }, 5000)
+    },
     setWindowHeight () {
       this.windowHeight = window.innerHeight - 380
     }
@@ -422,6 +461,8 @@ export default {
     this.getPrjectData()
   },
   mounted () {
+    this.base_url = (process.env.NODE_ENV === 'production' ? this.$config.baseUrl.pro : this.$config.baseUrl.dev)
+    this.downloadUrl = this.base_url + '/empcheckrecords/tocheck/export?'
     this.initInfo()
   },
   created () {

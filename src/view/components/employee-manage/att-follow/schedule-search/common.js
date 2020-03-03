@@ -99,6 +99,17 @@ export const mixinInfo = {
           tooltip: 'true'
         },
         {
+          title: '任务人',
+          key: 'nodeStatus',
+          tooltip: 'true',
+          render: (h, params) => {
+            const row = params.row
+            const text = (row.approveStatus === 0) ? row.approverName : '无'
+
+            return h('p', text)
+          }
+        },
+        {
           title: '操作',
           slot: 'action',
           width: 100,

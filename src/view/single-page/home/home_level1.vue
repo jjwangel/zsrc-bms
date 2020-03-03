@@ -37,7 +37,7 @@
                   <Col span="12">
                     <Card shadow style="height: 282px">
                       <p slot="title">
-                        负债前10
+                        负债前10(不含按揭)
                       </p>
                       <!-- <a href="#" slot="extra">
                         <Icon type="ios-loop-strong"></Icon>

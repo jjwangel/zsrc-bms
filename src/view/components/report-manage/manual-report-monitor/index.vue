@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { getFormatDate, getStartToLastDate } from '@/libs/j-tools.js'
+import { getFormatDate } from '@/libs/j-tools.js'
 import { mixinInfo } from './common.js'
 import { getEmpInfoFillList } from '@/api/rpt-stat/manual-report-monitor'
 
@@ -97,6 +97,14 @@ export default {
     },
     handleSearchRd () {
       if (this.loadData) return
+      if (this.formData.creditDate.length === 0) {
+        this.$Message.warning({
+          content: '请选择“员工征信录入日期”',
+          duration: 5
+        })
+        return
+      }
+
       this.loadData = true
 
       const condition = {
@@ -139,7 +147,7 @@ export default {
   },
   mounted () {
     this.formData.incomeYear = getFormatDate('yyyy')
-    this.formData.creditDate = getStartToLastDate('month')
+    // this.formData.creditDate = getStartToLastDate('month')
     this.base_url = (process.env.NODE_ENV === 'production' ? this.$config.baseUrl.pro : this.$config.baseUrl.dev)
     this.downloadUrl = this.base_url + 'stat/infofills/export?'
   },

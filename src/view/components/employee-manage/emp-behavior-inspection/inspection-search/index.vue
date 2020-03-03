@@ -41,6 +41,11 @@
           </FormItem>
           <ButtonGroup>
             <Button type="primary" icon="ios-search" @click="handleChgPageSize(pageData.size,1)" :loading="this.loadData">查询</Button>
+            <Button type="success" icon="md-cloud-download"
+              :to="downloadUrl + downloadPara" target="_blank"
+              @click="handleDownloadList"
+              :loading="this.downloading">导出数据</Button>
+        </ButtonGroup>
           </ButtonGroup>
         </Form>
       </div>
@@ -52,7 +57,7 @@
             confirm
             title="你确认删除这条项目吗？"
             @on-ok="handleDeleteCheckRecord (row, index)">
-            <Button type="error" size="small" :disabled="dataDealing || row.checkerNo != employeeNo()">删除</Button>
+            <Button type="error" size="small" :disabled="dataDealing || row.checkerNo != employeeNo() || formData.prjClosed">删除</Button>
           </Poptip>
         </template>
         <div slot="footer" style="width:100%;text-align: center">
@@ -122,10 +127,15 @@ export default {
       saveCheckin: false,
       initCheckinFlag: false,
       saveNonEmp: false,
+      prjClosed: true,
       detailData: {},
       selNonEmp: {},
       actionType: '', // view || create || modify
-      windowHeight: 0
+      windowHeight: 0,
+      downloading: false,
+      downloadUrl: '',
+      base_url: '',
+      downloadPara: ''
     }
   },
   methods: {
@@ -182,6 +192,7 @@ export default {
       if (item) {
         this.formData.describe = this.prjData.find((v) => v.id === item).describe
         this.formData.prjName = this.prjData.find((v) => v.id === item).name
+        this.formData.prjClosed = !(this.prjData.find((v) => v.id === item).status === 1)
         this.handleChgPageSize(this.pageData.size, 1)
       }
     },
@@ -286,6 +297,40 @@ export default {
     handleSelectEmp () {
       this.showSelectEmp = true
     },
+    handleDownloadList () {
+      if (this.downloading) return
+      this.downloading = true
+
+      this.formData.employeeNo = this.trimForText(this.formData.employeeNo).toUpperCase()
+      this.formData.employeeName = this.trimForText(this.formData.employeeName)
+
+      this.downloadPara = `projectId=${this.formData.prjId}`
+      if (this.formData.employeeNo !== '') {
+        this.downloadPara = `${this.downloadPara}&employeeNo=${this.formData.employeeNo}`
+      }
+      if (this.formData.employeeName !== '') {
+        this.downloadPara = `${this.downloadPara}&employeeName=${this.formData.employeeName}`
+      }
+
+      if (this.formData.deptCode && this.formData.deptCode.length > 0) {
+        this.downloadPara = `${this.downloadPara}&deptCode=${this.formData.deptCode[this.formData.deptCode.length - 1]}`
+      }
+      if (this.formData.checkResult || this.formData.checkResult === 0) {
+        this.downloadPara = `${this.downloadPara}&checkResult=${this.formData.checkResult}`
+      }
+      if (this.formData.employeeType || this.formData.employeeType === 0) {
+        this.downloadPara = `${this.downloadPara}&employeeType=${this.formData.employeeType}`
+      }
+
+      this.$Message.info({
+        content: '正在生成数据，请稍候......',
+        duration: 5
+      })
+
+      setTimeout(() => {
+        this.downloading = false
+      }, 5000)
+    },
     setWindowHeight () {
       this.windowHeight = window.innerHeight - 380
     }
@@ -294,6 +339,8 @@ export default {
     this.getPrjectData()
   },
   mounted () {
+    this.base_url = (process.env.NODE_ENV === 'production' ? this.$config.baseUrl.pro : this.$config.baseUrl.dev)
+    this.downloadUrl = this.base_url + '/empcheckrecords/export?'
     this.initInfo()
   },
   created () {

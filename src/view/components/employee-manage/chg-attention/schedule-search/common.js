@@ -128,6 +128,17 @@ export const mixinInfo = {
           }
         },
         {
+          title: '任务人',
+          key: 'nodeStatus',
+          tooltip: 'true',
+          render: (h, params) => {
+            const row = params.row
+            const text = (row.nodeStatus === 1 || row.nodeStatus === 2) ? '无' : row.currentOperatorName
+
+            return h('p', text)
+          }
+        },
+        {
           title: '操作',
           slot: 'action',
           width: 100,

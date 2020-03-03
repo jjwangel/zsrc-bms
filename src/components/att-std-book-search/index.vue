@@ -18,7 +18,7 @@
           </FormItem>
         </Col>
         <Col span="6">
-          <FormItem label="开始关注日期" :label-width="107" prop="focusDate" class="info_title">
+          <FormItem label="调整日期" prop="focusDate" class="info_title">
             <Input v-model="formData.focusDate" readonly></Input>
           </FormItem>
         </Col>
@@ -35,7 +35,7 @@
           </FormItem>
         </Col>
         <Col span="6">
-          <FormItem label="解除日期" prop="freeDate" class="info_title">
+          <FormItem label="解除关注日期" :label-width="107" prop="freeDate" class="info_title">
             <Input v-model="formData.freeDate" readonly></Input>
           </FormItem>
         </Col>
