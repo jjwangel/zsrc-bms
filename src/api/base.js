@@ -1,9 +1,13 @@
 import axios from '@/libs/api.request'
+import qs from 'qs'
 
 export const getListData = (url, params) => {
   return axios.request({
     url,
     params,
+    paramsSerializer: function (params) {
+      return qs.stringify(params, { arrayFormat: 'repeat' })
+    },
     method: 'get'
   })
 }

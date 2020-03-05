@@ -8,12 +8,18 @@
               <Option v-for="item in this.selPrj" :value="item.key" :key="item.key">{{ item.value }}</Option>
             </Select>
           </FormItem>
+          <FormItem label="" prop="closed" :label-width="0">
+            <Select v-model="closed" style="width:100px" :disable="this.loadData" @on-change="handlePrjStatusChg">
+              <Option :value="1">开展中</Option>
+              <Option :value="0">已关闭</Option>
+            </Select>
+          </FormItem>
           <Button type="primary" icon="md-refresh" @click="getPrjectData" :disabled="this.loadData"></Button>
         </Form>
         <Input type="textarea" v-model="formData.describe" style="width: 95%;margin-left: 80px;margin-top: 10px;margin-bottom: 10px;" :rows="2" :autosize='{ minRows: 4, maxRows: 4 }' readonly></Input>
         <Form ref ="form1" :model="formData" :label-width="80" inline>
           <FormItem label="员工工号" prop="employeeNo">
-            <Input type="text" v-model="formData.employeeNo" :readonly="this.loadData" style="width:90px;"></Input>
+            <Input type="text" v-model="formData.employeeNo" :readonly="this.loadData" style="width:100px;"></Input>
           </FormItem>
           <FormItem label="员工姓名" prop="employeeName">
             <Input type="text" v-model="formData.employeeName" :readonly="this.loadData" style="width:120px;">
@@ -21,18 +27,25 @@
             </Input>
           </FormItem>
           <FormItem label="所属机构" prop="deptCode">
-            <Cascader style="width: 180px" :data="dept_list" v-model="formData.deptCode" trigger="hover" :disabled="this.loadData"></Cascader>
+            <Cascader style="width: 270px" :data="dept_list" v-model="formData.deptCode" trigger="hover" :disabled="this.loadData"></Cascader>
           </FormItem>
+        </Form>
+        <Form ref ="form2" :model="formData" :label-width="80" inline>
           <FormItem label="排查状态" prop="checkStatus">
-              <Select v-model="formData.checkStatus" style="width:100px" clearable :disable="this.loadData">
-                <Option :value="0">待排查</Option>
-                <Option :value="1">已排查</Option>
-              </Select>
-            </FormItem>
+            <Select v-model="formData.checkStatus" style="width:100px" clearable :disable="this.loadData">
+              <Option :value="0">待排查</Option>
+              <Option :value="1">已排查</Option>
+            </Select>
+          </FormItem>
+          <FormItem label="员工职务" prop="dutySeq" class="info_title">
+            <Select v-model="formData.dutySeq" style="width: 480px;" multiple :max-tag-count="2" :max-tag-placeholder="maxTagPlaceholder" :label-in-value="true" @on-change="handleDutySeqChg">
+              <Option v-for="item in this.selOption.selDutySeq" :value="item.key" :key="item.key">{{ item.value }}</Option>
+            </Select>
+          </FormItem>
           <ButtonGroup>
             <Button type="primary" icon="ios-search" @click="handleChgPageSize(pageData.size,1)" :loading="this.loadData">查询</Button>
-            <Button type="primary" icon="ios-search" @click="handleInspectionCheckBatch" :loading="this.loadData" :disabled="this.selCheckinRow.length <= 1">批量排查</Button>
-            <Button type="primary" icon="ios-search" @click="handleAddNonEmp" :loading="this.loadData">添加编外被排查人</Button>
+            <Button type="primary" icon="ios-search" @click="handleInspectionCheckBatch" :loading="this.loadData" :disabled="this.closed === 0 || this.selCheckinRow.length <= 1">批量排查</Button>
+            <Button type="primary" icon="ios-search" @click="handleAddNonEmp" :loading="this.loadData" :disabled="this.closed === 0">添加编外被排查人</Button>
             <Button type="success" icon="md-cloud-download"
               :to="downloadUrl + downloadPara" target="_blank"
               @click="handleDownloadList"
@@ -53,7 +66,7 @@
             confirm
             title="你确认删除这条项目吗？"
             @on-ok="handleDeleteNonEmp (row, index)">
-            <Button type="error" size="small" :disabled="dataDealing || row.employeeNo != null">删除</Button>
+            <Button type="error" size="small" :disabled="closed === 0 || dataDealing || row.employeeNo != null">删除</Button>
           </Poptip>
         </template>
         <div slot="footer" style="width:100%;text-align: center">
@@ -89,10 +102,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getInstEmpList, getInstList } from '@/api/base'
+import { getInstEmpList, getInstList, getSingleSelectOptionData } from '@/api/base'
 import { mixinInfo } from './common.js'
 import { getEmpCheckProjectList, getEmpCheckRecordList, deleteOffStaffEmployee, getOffStaffEmployeeInfo } from '@/api/emp-manage/emp-behavior-inspection'
-import { formatSelectOptionByDefine } from '@/libs/j-tools.js'
+import { formatSelectOptionByDefine, formatSingleSelectOption } from '@/libs/j-tools.js'
 import InspectionCheckin from '_c/emp-behavior-inspection/inspection-checkin'
 import AddNonEmp from '_c/emp-behavior-inspection/add-non-employee'
 
@@ -116,7 +129,9 @@ export default {
         employeeNo: '',
         employeeName: '',
         checkStatus: undefined,
-        deptCode: []
+        deptCode: [],
+        dutySeq: [],
+        dutySeqText: []
       },
       nonEmpNewRow: {
         name: '',
@@ -124,11 +139,13 @@ export default {
         idcardNo: '',
         remark: ''
       },
+      selOption: { selDutySeq: [] },
       prjData: [],
       selPrj: [],
       dataSet: [],
       dept_list: [],
       deptEmpList: [],
+      closed: 1,
       loadData: false,
       showSelectEmp: false,
       showAddNonEmp: false,
@@ -154,6 +171,14 @@ export default {
       'employeeNo'
     ]),
     initInfo () {
+      getSingleSelectOptionData({ type: 'EMP_DUTY' }).then(res => {
+        if (res.data.code === '000000') {
+          this.selOption.selDutySeq = formatSingleSelectOption(res.data.data)
+        }
+      }).catch(() => {
+
+      })
+
       const condition = {
         employee: true
       }
@@ -183,7 +208,15 @@ export default {
       this.formData.prjId = undefined
       this.formData.describe = ''
       this.dataSet = []
-      getEmpCheckProjectList({ status: 1 }).then(res => {
+
+      const condition = {
+        status: this.closed === 1 ? 1 : 2
+      }
+      if (this.closed === 0) {
+        condition.orderBy = 'project_close_time'
+        condition.orderType = 'desc'
+      }
+      getEmpCheckProjectList(condition).then(res => {
         if (res.data.code === '000000') {
           this.prjData = res.data.data
           this.selPrj = formatSelectOptionByDefine(this.prjData, 'id', 'name')
@@ -194,6 +227,17 @@ export default {
         this.selPrj = []
         this.loadData = false
       })
+    },
+    maxTagPlaceholder (num) {
+      return '+' + num
+    },
+    handleDutySeqChg (item) {
+      if (item) {
+        this.formData.dutySeqText = item.map((v) => { return v.label })
+      }
+    },
+    handlePrjStatusChg (val) {
+      this.getPrjectData()
     },
     handleOnSelect (sel, row) {
       this.selCheckinRow = sel
@@ -341,6 +385,9 @@ export default {
       if (this.formData.checkStatus || this.formData.checkStatus === 0) {
         condition.status = this.formData.checkStatus
       }
+      if (this.formData.dutySeqText.length > 0) {
+        condition.dutySeq = this.formData.dutySeqText
+      }
 
       getEmpCheckRecordList(condition).then(res => {
         if (res.data.code === '000000') {
@@ -364,6 +411,7 @@ export default {
       })
     },
     handleInspectionCheck (row, index) {
+      if (this.closed === 0) return
       if (row.employeeNo === this.employeeNo()) {
         this.$Message.warning({
           content: '不能对自已进行排查！',
@@ -442,6 +490,9 @@ export default {
       }
       if (this.formData.checkStatus || this.formData.checkStatus === 0) {
         this.downloadPara = `${this.downloadPara}&checkStatus=${this.formData.checkStatus}`
+      }
+      if (this.formData.dutySeqText.length > 0) {
+        this.downloadPara = `${this.downloadPara}&dutySeq=${this.formData.dutySeqText.map((v) => { return v }).join('&dutySeq=')}`
       }
 
       this.$Message.info({

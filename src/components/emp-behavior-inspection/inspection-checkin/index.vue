@@ -172,7 +172,7 @@ export default {
       }
       if (this.formData.CheckList.findIndex(v => v.checkStatusText === '') !== -1) {
         this.$Message.warning({
-          content: '有未设置“排查情况”的记录！',
+          content: '当前员工排查情况未登记！',
           duration: 5
         })
         return
@@ -207,7 +207,7 @@ export default {
 
         if (elem.CheckList.findIndex(v => v.checkStatusText === '') !== -1) {
           this.$Message.warning({
-            content: '有未设置“排查情况”的记录！',
+            content: '当前员工排查情况未登记！',
             duration: 5
           })
           this.$emit('saveCancel')

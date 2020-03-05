@@ -23,6 +23,12 @@ export const mixinInfo = {
           tooltip: 'true'
         },
         {
+          title: '人员类别',
+          width: 100,
+          key: 'employeeType',
+          tooltip: 'true'
+        },
+        {
           title: '所属单位',
           key: 'headSubName',
           tooltip: 'true'

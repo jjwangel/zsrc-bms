@@ -99,7 +99,7 @@ export const mixinInfo = {
           tooltip: 'true'
         },
         {
-          title: '任务人',
+          title: '下一操作人',
           key: 'nodeStatus',
           tooltip: 'true',
           render: (h, params) => {

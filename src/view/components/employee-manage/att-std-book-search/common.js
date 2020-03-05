@@ -76,7 +76,7 @@ export const mixinInfo = {
           tooltip: 'true'
         },
         {
-          title: '关注原因描述',
+          title: '关注(调整)原因描述',
           key: 'focusReason',
           tooltip: 'true'
         },
