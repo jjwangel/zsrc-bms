@@ -38,15 +38,18 @@
             </Select>
           </FormItem>
           <FormItem label="员工职务" prop="dutySeq" class="info_title">
-            <Select v-model="formData.dutySeq" style="width: 480px;" multiple :max-tag-count="2" :max-tag-placeholder="maxTagPlaceholder" :label-in-value="true" @on-change="handleDutySeqChg">
+            <Select v-model="formData.dutySeq" style="width: 480px;" :clearable="true" multiple :max-tag-count="2" :max-tag-placeholder="maxTagPlaceholder" :label-in-value="true" @on-change="handleDutySeqChg">
               <Option v-for="item in this.selOption.selDutySeq" :value="item.key" :key="item.key">{{ item.value }}</Option>
             </Select>
+          </FormItem>
+          <FormItem :label-width="0">
+            <Checkbox :value="this.formData.dutySeq.length === this.selOption.selDutySeq.length ? true:false" @on-change="handleDutyCheck">全选</Checkbox>
           </FormItem>
           <ButtonGroup>
             <Button type="primary" icon="ios-search" @click="handleChgPageSize(pageData.size,1)" :loading="this.loadData">查询</Button>
             <Button type="primary" icon="ios-search" @click="handleInspectionCheckBatch" :loading="this.loadData" :disabled="this.closed === 0 || this.selCheckinRow.length <= 1">批量排查</Button>
             <Button type="primary" icon="ios-search" @click="handleAddNonEmp" :loading="this.loadData" :disabled="this.closed === 0">添加编外被排查人</Button>
-            <Button type="success" icon="md-cloud-download"
+            <Button type="success" icon="md-cloud-download" :disabled = "this.formData.prjId ? false: true"
               :to="downloadUrl + downloadPara" target="_blank"
               @click="handleDownloadList"
               :loading="this.downloading">导出</Button>
@@ -160,6 +163,7 @@ export default {
       actionType: '', // view || create || modify
       windowHeight: 0,
       downloading: false,
+      dutySWitch: false,
       downloadUrl: '',
       base_url: '',
       downloadPara: ''
@@ -234,6 +238,13 @@ export default {
     handleDutySeqChg (item) {
       if (item) {
         this.formData.dutySeqText = item.map((v) => { return v.label })
+      }
+    },
+    handleDutyCheck (v) {
+      if (v) {
+        this.formData.dutySeq = this.selOption.selDutySeq.map((v) => { return v.key })
+      } else {
+        this.formData.dutySeq = []
       }
     },
     handlePrjStatusChg (val) {
@@ -489,7 +500,7 @@ export default {
         this.downloadPara = `${this.downloadPara}&deptCode=${this.formData.deptCode[this.formData.deptCode.length - 1]}`
       }
       if (this.formData.checkStatus || this.formData.checkStatus === 0) {
-        this.downloadPara = `${this.downloadPara}&checkStatus=${this.formData.checkStatus}`
+        this.downloadPara = `${this.downloadPara}&status=${this.formData.checkStatus}`
       }
       if (this.formData.dutySeqText.length > 0) {
         this.downloadPara = `${this.downloadPara}&dutySeq=${this.formData.dutySeqText.map((v) => { return v }).join('&dutySeq=')}`
