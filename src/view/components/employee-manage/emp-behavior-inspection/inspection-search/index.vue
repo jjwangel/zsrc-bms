@@ -41,7 +41,7 @@
           </FormItem>
           <ButtonGroup>
             <Button type="primary" icon="ios-search" @click="handleChgPageSize(pageData.size,1)" :loading="this.loadData">查询</Button>
-            <Button type="success" icon="md-cloud-download"
+            <Button type="success" icon="md-cloud-download" :disabled = "this.formData.prjId ? false: true"
               :to="downloadUrl + downloadPara" target="_blank"
               @click="handleDownloadList"
               :loading="this.downloading">导出</Button>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="userRole.findIndex((val) => val ==='bms_admin' || val === 'bms_01' || val === 'bms_02' || val === 'bms_03' || val === 'bms_04') !== -1">
+    <div v-if="userRole.findIndex((val) => val ==='bms_admin' || val === 'bms_01' || val === 'bms_02' || val === 'bms_03' || val === 'bms_04' || val === 'bms_11') !== -1">
       <HomeLevel1/>
     </div>
     <div v-else>

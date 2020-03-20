@@ -27,7 +27,8 @@ export default {
 
       if (this.prjId === 0) {
         const condition = {
-          status: 1
+          status: 1,
+          orderBy: 'type'
         }
 
         getEmpCheckPublicParamsNoId(condition).then(res => {
