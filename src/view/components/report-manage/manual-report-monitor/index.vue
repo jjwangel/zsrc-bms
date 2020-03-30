@@ -38,7 +38,7 @@
             <ButtonGroup>
               <Button type="primary" icon="ios-search" @click="handleChgPageSize(pageData.size,1)" :loading="this.loadData">查询</Button>
               <Button type="success" icon="ios-search" :to="downloadUrl + downloadPara" target="_blank"
-                @click="handleExportInfo"
+                @click="handleExportInfo" :disabled="this.formData.creditDate.length === 0"
                 :loading="this.loadData">导出
               </Button>
             </ButtonGroup>

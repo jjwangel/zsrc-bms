@@ -461,7 +461,8 @@ export default {
       this.dataDealing = true
       const condition = {
         idcardNo: row.idcardNo,
-        deptCode: row.deptCode
+        deptCode: row.deptCode,
+        name: row.name
       }
 
       deleteOffStaffEmployee(condition).then(res => {

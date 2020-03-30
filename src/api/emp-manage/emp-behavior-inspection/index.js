@@ -3,7 +3,7 @@
  * @Date: 2019-11-28 16:00:49
  * @Description: 员工行为排查
  * @Last Modified by: jjw
- * @Last Modified time: 2020-03-04 15:22:31
+ * @Last Modified time: 2020-03-27 08:18:15
  */
 
 import baseAPI from '../../base'
@@ -183,7 +183,7 @@ export const modifyOffstaffEmployee = async (formData) => {
  * @returns
  */
 export const deleteOffStaffEmployee = async (formData) => {
-  const res = await baseAPI.deleteDataByOne(`/offstaffemployee?idcardNo=${formData.idcardNo}&deptCode=${formData.deptCode}`)
+  const res = await baseAPI.deleteDataByOne(`/offstaffemployee?idcardNo=${formData.idcardNo}&deptCode=${formData.deptCode}&name=${formData.name}`)
   return res
 }
 
