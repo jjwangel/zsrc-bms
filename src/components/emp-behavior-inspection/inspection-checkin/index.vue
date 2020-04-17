@@ -44,7 +44,7 @@
 
       <Form ref="form1" :show-message="false" :model="formData" label-position="top" style="margin-top: 10px;">
         <FormItem label="" prop="haveOtherUnusualBehavior" class="info_title">
-          <Checkbox v-model="formData.haveOtherUnusualBehavior" @on-change="handleBehaviorCheckChange">存在其它异常行为（如无其它异常行为，无需填写）</Checkbox>
+          <Checkbox v-model="formData.haveOtherUnusualBehavior" @on-change="handleBehaviorCheckChange">存在其他异常行为，或对上述排查为“异常”有补充说明的，请填写（若无内容无需填写）</Checkbox>
         </FormItem>
         <FormItem label="" prop="otherUnusualBehavior" class="info_title">
           <Input type="textarea" show-word-limit :maxlength="200" v-model="formData.otherUnusualBehavior" :rows="2" :autosize='{ minRows: 4, maxRows: 4 }' :readonly="!formData.haveOtherUnusualBehavior"></Input>

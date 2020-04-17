@@ -26,7 +26,7 @@
       </Table>
 
       <Form ref="form1" :show-message="false" :model="formData" label-position="top" style="margin-top: 10px;">
-        <FormItem label="存在其它异常行为" prop="otherUnusualBehavior" class="info_title">
+        <FormItem label="存在其他异常行为，或对上述排查为“异常”有补充说明的，请填写（若无内容无需填写）" prop="otherUnusualBehavior" class="info_title">
           <Input type="textarea" show-word-limit :maxlength="200" readonly :value="formData.otherUnusualBehavior" :rows="2" :autosize='{ minRows: 4, maxRows: 4 }'></Input>
         </FormItem>
       </Form>
