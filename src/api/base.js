@@ -147,6 +147,15 @@ export const getUserOperationAuth = (formData) => {
   })
 }
 
+export const verifyToken = (data) => {
+  let url = '/verify'
+  return axios.request({
+    url,
+    data,
+    method: 'post'
+  })
+}
+
 // /**
 //  * @description 下载上传文件
 //  * @param {*} formData
@@ -175,6 +184,7 @@ export default {
   changeLoginPwd,
   resetLoginPwd,
   getEmployeesDetail,
-  getUserOperationAuth
+  getUserOperationAuth,
+  verifyToken
   // getDownloadFile
 }
