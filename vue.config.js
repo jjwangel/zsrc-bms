@@ -39,20 +39,20 @@ module.exports = {
   // 这里写你调用接口的基础路径，来解决跨域，如果设置了代理，那你本地开发环境的axios的baseUrl要写为 '' ，即空字符串
   devServer: {
     port: 9001, // 端口号
-    host: '0.0.0.0',
-    //proxy: 'localhost:3000'
+    host: '0.0.0.0'
+    // proxy: 'localhost:3000'
   },
   // 警告 webpack 的性能提示
-  configureWebpack : {
+  configureWebpack: {
     performance: {
-      hints:'warning',
+      hints: 'warning',
       // 入口起点的最大体积 整数类型（以字节为单位）
       maxEntrypointSize: 50000000,
       // 生成文件的最大体积 整数类型（以字节为单位 300k）
       maxAssetSize: 30000000,
       // 只给出 js 文件的性能提示
-      assetFilter: function(assetFilename) {
-        return assetFilename.endsWith('.js');
+      assetFilter: function (assetFilename) {
+        return assetFilename.endsWith('.js')
       }
     }
   }
