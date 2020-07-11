@@ -19,7 +19,7 @@
     </Card>
     <Card dis-hover>
       <Table size="small" :highlight-row="true" :stripe="true" border :columns="col_detail" :data="data_detail"
-      :loading="this.detail_search" height=600>
+      @on-row-dblclick="handleShowDetail" :loading="this.detail_search" height=600>
 
       <template slot-scope="{ row, index }" slot="yearEcnoPushTotal">
         <span>{{ formatMoney(row.yearEcnoPushTotal) }}</span>
@@ -38,19 +38,27 @@
         </div>
       </Table>
     </Card>
+
+    <Modal v-model="show_detail" scrollable :title="detailTitle" fullscreen footer-hide>
+      <DetailInfo :main-data="this.detail_data"></DetailInfo>
+    </Modal>
   </div>
 </template>
 
 <script>
 import echarts from 'echarts'
 import { getAttentionInstRptList, getAttentionInst2RptList, getAttentionDetailRptList } from '@/api/rpt-stat/attention-stat'
-import { on, off, getStartToLastDate } from '@/libs/j-tools.js'
+import { on, off, getStartToLastDate, getFormatDate } from '@/libs/j-tools.js'
 import { mixinInfo, charOption } from './common.js'
 import tdTheme from './theme.json'
+import DetailInfo from '_v/components/employee-manage/integrated-search/detail-info.vue'
 echarts.registerTheme('tdTheme', tdTheme)
 
 export default {
   mixins: [mixinInfo],
+  components: {
+    DetailInfo
+  },
   data () {
     return {
       pageData: {
@@ -70,6 +78,9 @@ export default {
       main_search: false,
       char_search: false,
       detail_search: false,
+      detailTitle: '',
+      detail_data: {},
+      show_detail: false,
       data_main: [],
       data_detail: []
     }
@@ -199,6 +210,11 @@ export default {
         this.data_detail = []
         this.detail_search = false
       })
+    },
+    handleShowDetail (row, index) {
+      this.detailTitle = `详细内容（${row.employeeName} - ${row.employeeNo}）`
+      this.show_detail = true
+      this.detail_data = Object.assign({}, row, { year: getFormatDate('yyyy') })
     },
     resize () {
       this.charAtt.resize()

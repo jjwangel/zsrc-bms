@@ -43,7 +43,7 @@
                         <Icon type="ios-loop-strong"></Icon>
                         更多...
                       </a> -->
-                      <Table size="small" width="400px" :loading="this.refreshing" :border="false" :height="200" ref="table-fz" :columns="col_fz" :data="data_fz">
+                      <Table size="small" width="400px" @on-row-dblclick="handleShowDetail" :loading="this.refreshing" :border="false" :height="200" ref="table-fz" :columns="col_fz" :data="data_fz">
                         <template slot-scope="{ row, index }" slot="latestDebtTotal">
                           <span>{{ formatMoney(row.latestDebtTotal) }}</span>
                         </template>
@@ -59,7 +59,7 @@
                         <Icon type="ios-loop-strong"></Icon>
                         更多...
                       </a> -->
-                      <Table size="small" :loading="this.refreshing" :border="false" :height="200" ref="table-sx" :columns="col_sx" :data="data_sx">
+                      <Table size="small" @on-row-dblclick="handleShowDetail" :loading="this.refreshing" :border="false" :height="200" ref="table-sx" :columns="col_sx" :data="data_sx">
                       </Table>
                     </Card>
                   </Col>
@@ -77,6 +77,10 @@
         </Card>
       </Col>
     </Row>
+
+    <Modal v-model="show_detail" scrollable :title="detailTitle" fullscreen footer-hide>
+      <DetailInfo :main-data="this.detail_data" init-tab='credit_info'></DetailInfo>
+    </Modal>
   </div>
 </template>
 
@@ -90,7 +94,9 @@ import AttentionPie from '_c/charts/attention-pie'
 import RiskLine from '_c/charts/risk-line'
 import RiskPie from '_c/charts/risk-pie'
 import DebtPie from '_c/charts/debt-pie'
+import DetailInfo from '_v/components/employee-manage/integrated-search/detail-info.vue'
 import { mixinInfoLevel1 } from './common.js'
+import { getFormatDate } from '@/libs/j-tools.js'
 
 import ToDo from './components/todo'
 export default {
@@ -101,7 +107,8 @@ export default {
     AttentionPie,
     RiskLine,
     RiskPie,
-    DebtPie
+    DebtPie,
+    DetailInfo
   },
   mixins: [mixinInfoLevel1],
   data () {
@@ -115,6 +122,9 @@ export default {
       showZsMap: this.rolesCodeShort().findIndex((val) => val === 'bms_admin' || val === 'bms_01' || val === 'bms_02') !== -1,
       data_fz: [],
       data_sx: [],
+      detailTitle: '',
+      detail_data: {},
+      show_detail: false,
       mapSrc: 'http://125.0.165.182:3838/proc-apps/focusperson_01/'
     }
   },
@@ -226,6 +236,11 @@ export default {
         this.data_sx = []
         this.refreshing = false
       })
+    },
+    handleShowDetail (row, index) {
+      this.detailTitle = `详细内容（${row.employeeName} - ${row.employeeNo}）`
+      this.show_detail = true
+      this.detail_data = Object.assign({}, row, { year: getFormatDate('yyyy') })
     }
   },
   mounted () {

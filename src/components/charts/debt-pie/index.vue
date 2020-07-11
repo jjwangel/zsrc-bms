@@ -39,6 +39,9 @@ export default {
   methods: {
     resize () {
       this.dom.resize()
+    },
+    handelPieClick (params) {
+
     }
   },
   watch: {
@@ -50,6 +53,7 @@ export default {
   },
   mounted () {
     this.dom = echarts.init(this.$refs.dom)
+    this.dom.on('click', this.handelPieClick)
     on(window, 'resize', this.resize)
   },
   beforeDestroy () {

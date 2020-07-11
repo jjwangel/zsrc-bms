@@ -63,7 +63,8 @@ import { getPurviewCtrlList } from '@/api/base'
 
 export default {
   props: [
-    'mainData'
+    'mainData',
+    'initTab'
   ],
   name: 'SyntheticalSearchDetail',
   components: {
@@ -84,7 +85,7 @@ export default {
   data () {
     return {
       pvCtrl: [],
-      curr_tab: 'base_info',
+      curr_tab: this.initTab || 'base_info',
       main_data: this.mainData,
       load_base: false,
       load_kinsfolk: false,
@@ -186,8 +187,8 @@ export default {
       this.main_data = val
 
       this.$nextTick(function () {
-        this.curr_tab = 'base_info'
-        this.handleTabsClick('base_info')
+        this.curr_tab = this.curr_tab
+        this.handleTabsClick(this.curr_tab)
       })
     }
   },

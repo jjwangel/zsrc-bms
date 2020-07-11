@@ -172,6 +172,7 @@ export default {
     }
 
     return {
+      base_url: '',
       formData: this.rowData,
       showAttentionDetail: false,
       fileUploadUrl: '',

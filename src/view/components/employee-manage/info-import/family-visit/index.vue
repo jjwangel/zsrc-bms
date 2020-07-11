@@ -59,6 +59,10 @@
               <FormItem :label-width="10">
                 <ButtonGroup>
                   <Button type="primary" icon="ios-search" :loading="this.load_data_rd" @click='handleSearchFamilyRd'>查询</Button>
+                  <Button Button type="success" icon="md-cloud-download"
+                    :to="downloadUrl + downloadPara" target="_blank"
+                    @click="handleDownloadFamilyVisit"
+                    :loading="this.downloading">导出</Button>
                 </ButtonGroup>
               </FormItem>
             </Form>
@@ -154,7 +158,10 @@ export default {
       col_family_imp,
       data_family_imp: [],
       data_family_rd: [],
-      windowHeight: 0
+      windowHeight: 0,
+      downloading: false,
+      downloadUrl: '',
+      downloadPara: ''
     }
   },
   methods: {
@@ -375,6 +382,19 @@ export default {
         this.data_saving = true
       })
     },
+    handleDownloadFamilyVisit () {
+      if (this.downloading) return
+      this.downloading = true
+      this.downloadPara = '' // TODO: 需要修改
+      this.$Message.info({
+        content: '正在生成数据，请稍候......',
+        duration: 5
+      })
+
+      setTimeout(() => {
+        this.downloading = false
+      }, 5000)
+    },
     setWindowHeight () {
       this.windowHeight = window.innerHeight - 270
     }
@@ -383,6 +403,7 @@ export default {
     this.base_url = (process.env.NODE_ENV === 'production' ? config.baseUrl.pro : config.baseUrl.dev)
     this.template_url = (process.env.NODE_ENV === 'production' ? config.baseUrl.pro_static : config.baseUrl.dev_static) + 'template/家访记录导入模板.xlsx'
     this.file_upload_url = this.base_url + config.fileUploadUrl.infoImport + '/hocainfo'
+    this.downloadUrl = this.base_url + 'focuspersonfollows/export?' // TODO: 需要修改
     this.formData.date_value = getStartToLastDate('year')
     this.formFamilyRd.date_value = getStartToLastDate('year')
     this.handleSearch()

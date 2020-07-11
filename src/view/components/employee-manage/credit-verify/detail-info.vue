@@ -208,8 +208,9 @@ export default {
     },
     handleBefUpload (file) {
       this.$Modal.confirm({
-        title: '上传征信文件',
+        title: '上传征信文件（请再次检查征信报告，确认为员工本人的征信后开始上传）',
         content: `确定上传文件：${file.name} 吗？`,
+        width: 650,
         onOk: () => {
           this.dataSaving = true
           this.$refs.upCredit.post(file)

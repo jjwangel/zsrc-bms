@@ -75,12 +75,42 @@
       </FormItem>
     </Form>
 
+    <div style="margin-left: 10px;">
+      <List header="Header" border size="small">
+        <ListItem v-for="item in this.files" :key="item.id">
+          <ListItemMeta :title="item.title"/>
+          <template slot="action">
+            <Button type="error" size="small" @click="handleDeleteFile(item.id)">删除</Button>
+          </template>
+        </ListItem>
+        <template slot="header">
+          <Button type="primary" :loading="this.fileUploading" @click="handleUploadFiles" long>上传证明附件</Button>
+        </template>
+      </List>
+      <div style="height: 10px;margin-top: 5px;">
+        <p style="float:right;">上传附件类型：word、excel、pdf、rar、zip</p>
+      </div>
+    </div>
+
+    <Upload :action="this.fileUploadUrl" ref="upload" v-show="false"
+      :with-credentials="true"
+      :data="{type: 1}"
+      :on-format-error="handleFileFormatErr"
+      :on-success="handleUploadSuccess"
+      :show-upload-list="false"
+      :on-progress="handleFileProgress"
+      :before-upload="handleBefUpload"
+      :on-error="handleUploadErr"
+      :format="['xlsx','xls','doc','docx','pdf','rar','zip']">
+    </Upload>
   </div>
 </template>
 
 <script>
 import { vaildForm } from '@/libs/j-tools.js'
 import { addFocusPersonFollow, getFocusPersonAdjustFlowDetail } from '@/api/emp-manage/follow-attention'
+import { deleteDataByOne } from '@/api/base'
+import config from '@/config'
 
 export default {
   components: {
@@ -128,7 +158,12 @@ export default {
     }
 
     return {
+      base_url: '',
       formData: this.rowData,
+      fileUploadUrl: '',
+      fileUploadPercnet: 0,
+      files: [],
+      fileUploading: false,
       rules: {
         followCondition: [
           { validator: validateFollowCondition, trigger: 'blur' }
@@ -206,7 +241,68 @@ export default {
       this.formData.followCondition = this.trimForText(this.formData.followCondition)
       this.formData.nextPlan = this.trimForText(this.formData.nextPlan)
       await vaildForm(this, 'form2')
+    },
+    handleUploadFiles () {
+      this.$refs.upload.handleClick()
+    },
+    handleFileFormatErr (file) {
+      this.$Notice.warning({
+        title: '文格式错误',
+        desc: file.name + ' 不是Excel、Word、PDF、RAR、ZIP等格式'
+      })
+      this.$nextTick(() => {
+        this.fileUploading = false
+      })
+    },
+    handleUploadSuccess (res, file) {
+      if (res.code === '000000') {
+        this.files.push({ title: res.data.name, id: res.data.id })
+      } else {
+        this.$Message.error({
+          content: `上传文件失败：${res.message}(${res.code})`,
+          duration: 5
+        })
+      }
+
+      this.fileUploading = false
+    },
+    handleFileProgress (event, file, fileList) {
+      this.fileUploadPercnet = event.percent
+    },
+    handleBefUpload (file) {
+      this.$refs.upload.post(file)
+      this.fileUploading = true
+      return false
+    },
+    handleUploadErr () {
+      this.$Message.error({
+        content: '上传文件失败！',
+        duration: 3
+      })
+    },
+    handleDeleteFile (id) {
+      const url = `/uploadfile/${id}`
+      deleteDataByOne(url).then(res => {
+        if (res.data.code === '000000') {
+          this.$Message.success({
+            content: '删除文件成功！',
+            duration: 5
+          })
+
+          this.files.forEach((item, index, arr) => {
+            if (item.id === id) {
+              arr.splice(index, 1)
+            }
+          })
+        }
+      }).catch(() => {
+
+      })
     }
+  },
+  mounted () {
+    this.base_url = (process.env.NODE_ENV === 'production' ? config.baseUrl.pro : config.baseUrl.dev)
+    this.fileUploadUrl = this.base_url + config.fileUploadUrl.uploadFile
   },
   watch: {
     rowData (val) {
