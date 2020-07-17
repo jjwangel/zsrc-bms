@@ -196,6 +196,7 @@ export default {
   },
   methods: {
     initInfo () {
+      this.files = []
       const condition = {
         employeeNo: this.formData.employeeNo
       }

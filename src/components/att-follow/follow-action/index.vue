@@ -94,7 +94,7 @@
 
     <Upload :action="this.fileUploadUrl" ref="upload" v-show="false"
       :with-credentials="true"
-      :data="{type: 1}"
+      :data="{type: 2}"
       :on-format-error="handleFileFormatErr"
       :on-success="handleUploadSuccess"
       :show-upload-list="false"
@@ -179,6 +179,7 @@ export default {
   },
   methods: {
     initInfo () {
+      this.files = []
       const condition = {
         id: this.formData.adjustFlowId
       }
@@ -215,6 +216,7 @@ export default {
     },
     saveData () {
       let data = {
+        credentialFileIds: this.files.map((v) => { return v.id }).join(),
         adjustFlowId: this.formData.adjustFlowId,
         employeeNo: this.formData.employeeNo,
         dispose: this.formData.dispose,

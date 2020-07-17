@@ -58,7 +58,11 @@
         </Col>
       </Row>
     </Form>
+    <div>
+      <Button style="float: right;margin-bottom: 10px;" @click="handleShowAttached" :disabled="this.files.length === 0" type="primary" >浏览上传文件</Button>
+    </div>
     <Divider style="margin-top: 10px;margin-bottom: 10px;" />
+
     <Form ref="form2" :show-message="false" :model="formData" label-position="top">
       <FormItem label="关注（调整）原因描述" prop="focusReason" style="margin-left: 10px;" class="info_title">
         <Input type="textarea" show-word-limit :maxlength="1000" v-model="formData.focusReason" :rows="2" :autosize='{ minRows: 4, maxRows: 4 }' readonly></Input>
@@ -110,14 +114,25 @@
           </template>
         </Step>
     </Steps>
-    </Drawer>
 
+    <Drawer title="浏览文件" :closable="false" :width="350" v-model="showShowAttached" :transfer="false" inner placement="left">
+      <List header="" size="small">
+        <ListItem v-for="item in this.files" :key="item.id">
+          <ListItemMeta :title="item.name"/>
+          <template slot="action">
+            <Button type="primary" size="small"
+            :to="base_url + '/uploadfile/download/' + item.id" target="_blank">下载</Button>
+          </template>
+        </ListItem>
+      </List>
+    </Drawer>
   </div>
 </template>
 
 <script>
 import { getFocusPersonFollowInfo, getFocusPersonAdjustFlowDetail, verifyFocusPersonFollow } from '@/api/emp-manage/follow-attention'
 import { vaildForm } from '@/libs/j-tools.js'
+import config from '@/config'
 
 export default {
   components: {
@@ -154,6 +169,9 @@ export default {
     }
 
     return {
+      files: [],
+      showShowAttached: false,
+      base_url: '',
       formData: {},
       rules: {
         _approveStatus: [
@@ -183,6 +201,7 @@ export default {
       getFocusPersonFollowInfo(condition).then(res => {
         if (res.data.code === '000000') {
           this.formData = Object.assign({}, res.data.data)
+          this.files = this.formData.credentialFiles
           condition = {
             id: res.data.data.adjustFlowId
           }
@@ -198,6 +217,9 @@ export default {
       }).catch(() => {
 
       })
+    },
+    handleShowAttached () {
+      this.showShowAttached = true
     },
     handleNodeStatusChg (item) {
       if (item) {
@@ -248,6 +270,9 @@ export default {
       this.formData._approveComment = this.trimForText(this.formData._approveComment)
       await vaildForm(this, 'form3')
     }
+  },
+  mounted () {
+    this.base_url = (process.env.NODE_ENV === 'production' ? config.baseUrl.pro : config.baseUrl.dev)
   },
   watch: {
     rowData (val) {

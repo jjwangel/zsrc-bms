@@ -385,7 +385,17 @@ export default {
     handleDownloadFamilyVisit () {
       if (this.downloading) return
       this.downloading = true
-      this.downloadPara = '' // TODO: 需要修改
+      this.downloadPara = ''
+
+      if (this.formFamilyRd.employeeNo !== '') {
+        this.downloadPara = `employeeNo=${this.formFamilyRd.employeeNo}`
+      }
+      if (this.formFamilyRd.unconvType && this.formFamilyRd.unconvType !== '-1') {
+        this.downloadPara = `${this.downloadPara}&unconvType=${this.formFamilyRd.unconvType}`
+      }
+      this.downloadPara = `${this.downloadPara}&hocaDateStart=${this.formFamilyRd.date_value[0]}`
+      this.downloadPara = `${this.downloadPara}&hocaDateEnd=${this.formFamilyRd.date_value[1]}`
+
       this.$Message.info({
         content: '正在生成数据，请稍候......',
         duration: 5
@@ -403,7 +413,7 @@ export default {
     this.base_url = (process.env.NODE_ENV === 'production' ? config.baseUrl.pro : config.baseUrl.dev)
     this.template_url = (process.env.NODE_ENV === 'production' ? config.baseUrl.pro_static : config.baseUrl.dev_static) + 'template/家访记录导入模板.xlsx'
     this.file_upload_url = this.base_url + config.fileUploadUrl.infoImport + '/hocainfo'
-    this.downloadUrl = this.base_url + 'focuspersonfollows/export?' // TODO: 需要修改
+    this.downloadUrl = this.base_url + 'emphocainfos/export?'
     this.formData.date_value = getStartToLastDate('year')
     this.formFamilyRd.date_value = getStartToLastDate('year')
     this.handleSearch()
