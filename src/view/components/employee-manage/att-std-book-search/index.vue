@@ -90,7 +90,7 @@ export default {
       formData: {
         employeeNo: '',
         employeeName: '',
-        focusType: undefined,
+        focusType: this.$route.params.focusType,
         bookStatus: undefined,
         focusItem: '',
         deptCode: []
@@ -140,6 +140,10 @@ export default {
       }).catch(() => {
 
       })
+
+      if (this.formData.focusType) {
+        this.handleChgPageSize(this.pageData.size, 1)
+      }
     },
     handleChgPageSize (size, current) {
       if (current) this.pageData.current = current

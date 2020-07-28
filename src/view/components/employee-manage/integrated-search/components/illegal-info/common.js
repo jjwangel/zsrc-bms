@@ -56,7 +56,7 @@ export const col_integral = [
   },
   {
     title: '备注',
-    key: 'memo',
+    key: 'bz',
     width: 80,
     tooltip: true
   }
@@ -113,6 +113,11 @@ export const col_illegal = [
   {
     title: '经济处理',
     key: 'econDeal',
+    tooltip: true
+  },
+  {
+    title: '备注',
+    key: 'bz',
     tooltip: true
   },
   {
@@ -178,7 +183,7 @@ export const col_punish = [
   },
   {
     title: '备注',
-    key: 'memo',
+    key: 'bz',
     tooltip: true
   }
 ]

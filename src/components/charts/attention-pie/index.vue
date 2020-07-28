@@ -41,7 +41,14 @@ export default {
       this.dom.resize()
     },
     handelPieClick (params) {
-      this.$router.push({ name: 'bms_employeemng_focusquery' })
+      let focusType
+      if (params.name === '一般关注') {
+        focusType = 2
+      } else if (params.name === '重点关注') {
+        focusType = 1
+      }
+
+      this.$router.push({ name: 'bms_employeemng_focusquery', params: { focusType } })
     }
   },
   watch: {

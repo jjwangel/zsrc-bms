@@ -43,7 +43,7 @@
                         <Icon type="ios-loop-strong"></Icon>
                         更多...
                       </a> -->
-                      <Table size="small" width="400px" @on-row-dblclick="handleShowDetail" :loading="this.refreshing" :border="false" :height="200" ref="table-fz" :columns="col_fz" :data="data_fz">
+                      <Table style="cursor: pointer;" size="small" width="400px" @on-row-dblclick="handleShowDetail" :loading="this.refreshing" :border="false" :height="200" ref="table-fz" :columns="col_fz" :data="data_fz">
                         <template slot-scope="{ row, index }" slot="latestDebtTotal">
                           <span>{{ formatMoney(row.latestDebtTotal) }}</span>
                         </template>
@@ -59,7 +59,7 @@
                         <Icon type="ios-loop-strong"></Icon>
                         更多...
                       </a> -->
-                      <Table size="small" @on-row-dblclick="handleShowDetail" :loading="this.refreshing" :border="false" :height="200" ref="table-sx" :columns="col_sx" :data="data_sx">
+                      <Table style="cursor: pointer;" size="small" @on-row-dblclick="handleShowDetail" :loading="this.refreshing" :border="false" :height="200" ref="table-sx" :columns="col_sx" :data="data_sx">
                       </Table>
                     </Card>
                   </Col>

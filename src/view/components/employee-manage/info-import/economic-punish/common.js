@@ -51,6 +51,11 @@ export const mixinInfo = {
           tooltip: true
         },
         {
+          title: '导入员工工号',
+          key: 'impName',
+          tooltip: true
+        },
+        {
           title: '操作',
           slot: 'action',
           width: 150,

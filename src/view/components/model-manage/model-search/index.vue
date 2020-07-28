@@ -143,6 +143,8 @@ export default {
     },
     searchAllMain () {
       const condition = {
+        page: 1,
+        pageSize: 10000,
         orderBy: 'v_riskid'
       }
 
