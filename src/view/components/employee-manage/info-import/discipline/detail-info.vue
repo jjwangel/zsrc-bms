@@ -33,8 +33,8 @@
           </FormItem>
         </Col>
         <Col span="8">
-          <FormItem label="是否解除" prop="isFree" class="info_title">
-            <Input v-model="formData.isFree" :readonly="true"></Input>
+          <FormItem label="是否解除" prop="isFreeText" class="info_title">
+            <Input v-model="formData.isFreeText" :readonly="true"></Input>
           </FormItem>
         </Col>
         <Col span="8">

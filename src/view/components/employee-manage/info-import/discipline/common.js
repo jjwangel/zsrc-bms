@@ -62,7 +62,7 @@ export const mixinInfo = {
         },
         {
           title: '是否解除',
-          key: 'isFree',
+          key: 'isFreeText',
           tooltip: true
         },
         {
