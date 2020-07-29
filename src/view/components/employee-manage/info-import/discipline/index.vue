@@ -241,7 +241,7 @@ export default {
       this.data_dp_rd[rowIndex].partPush = data.partPush
       this.data_dp_rd[rowIndex].bz = data.bz
       this.data_dp_rd[rowIndex].updateUser = data.updateUser
-      this.data_dp_rd[rowIndex].updateName = data.updateName
+      this.data_dp_rd[rowIndex].updateUserName = data.updateUserName
       this.data_dp_rd[rowIndex].updateTime = data.updateTime
 
       this.data_saving = false

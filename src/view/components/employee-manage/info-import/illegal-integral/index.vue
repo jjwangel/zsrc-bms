@@ -240,7 +240,7 @@ export default {
       this.data_ii_rd[rowIndex].hocaAdu = data.hocaAdu
       this.data_ii_rd[rowIndex].bz = data.bz
       this.data_ii_rd[rowIndex].updateUser = data.updateUser
-      this.data_ii_rd[rowIndex].updateName = data.updateName
+      this.data_ii_rd[rowIndex].updateUserName = data.updateUserName
       this.data_ii_rd[rowIndex].updateTime = data.updateTime
 
       this.data_saving = false

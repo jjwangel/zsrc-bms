@@ -236,7 +236,7 @@ export default {
       this.data_ep_rd[rowIndex].pushOrg = data.pushOrg
       this.data_ep_rd[rowIndex].bz = data.bz
       this.data_ep_rd[rowIndex].updateUser = data.updateUser
-      this.data_ep_rd[rowIndex].updateName = data.updateName
+      this.data_ep_rd[rowIndex].updateUserName = data.updateUserName
       this.data_ep_rd[rowIndex].updateTime = data.updateTime
 
       this.data_saving = false

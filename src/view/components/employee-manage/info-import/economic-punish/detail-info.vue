@@ -52,8 +52,8 @@
       </FormItem>
       <Row :gutter="20">
         <Col span="8">
-          <FormItem label="导入员工工号" prop="impName" class="info_title">
-            <Input v-model="formData.impName" :readonly="true"></Input>
+          <FormItem label="导入员工工号" prop="createUser" class="info_title">
+            <Input v-model="formData.createUser" :readonly="true"></Input>
           </FormItem>
         </Col>
         <Col span="8">
@@ -156,7 +156,7 @@ export default {
           })
           this.$emit('saveSuccess', this.formData._index, Object.assign({}, data, {
             updateUser: this.employeeNo(),
-            updateName: this.userName(),
+            updateUserName: this.userName(),
             updateTime: getFormatDate('yyyy-MM-dd hh:mm:ss')
           }))
           this.dataSaving = false
