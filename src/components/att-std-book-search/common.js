@@ -18,8 +18,7 @@ export const mixinInfo = {
         },
         {
           title: '采取措施',
-          key: 'dispose',
-          tooltip: 'true'
+          key: 'dispose'
         },
         {
           title: '跟进情况登记',
@@ -27,8 +26,7 @@ export const mixinInfo = {
         },
         {
           title: '下一步计划',
-          key: 'nextPlan',
-          tooltip: 'true'
+          key: 'nextPlan'
         },
         // {
         //   title: '经办人',
