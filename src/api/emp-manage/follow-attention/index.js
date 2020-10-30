@@ -3,7 +3,7 @@
  * @Date: 2019-11-23 11:00:49
  * @Description: 关注人员跟进情况登记
  * @Last Modified by: jjw
- * @Last Modified time: 2019-11-26 17:16:02
+ * @Last Modified time: 2020-10-30 20:15:35
  */
 
 import baseAPI from '../../base'
@@ -82,5 +82,16 @@ export const getFocusPersonFollows = (formData) => {
  */
 export const deleteFocusPersonFollow = async (formData) => {
   const res = await baseAPI.deleteDataByOne(`/focuspersonfollow/${formData.id}`)
+  return res
+}
+
+/**
+ * @description 更新关注人员跟进更新处置建议
+ * @param {*} formData
+ * @returns
+ */
+export const modifyFollowSuggest = async (formData) => {
+  let data = { ...formData }
+  const res = await baseAPI.modifyData('/focuspersonfollow/advise', data)
   return res
 }

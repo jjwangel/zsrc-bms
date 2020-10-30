@@ -36,7 +36,7 @@
 
       <Table size="small" :height="windowHeight" @on-row-dblclick="handleShowDetail" :stripe="true" border ref="table-sa" :loading="this.loadData" :columns="cols" :data="dataSet">
         <template slot-scope="{ row, index }" slot="action">
-          <Button type="success" size="small">建议</Button>
+          <Button @click="handleShowDetail (row, index)" type="success" size="small">建议</Button>
         </template>
 
         <div slot="footer" style="width:100%;text-align: center">
@@ -53,10 +53,11 @@
       </Drawer>
     </Card>
 
-    <Modal v-model="showVerifyFollow" scrollable title="关注人员跟进登记流程" width="1000" :styles="{top: '10px'}"
-      :mask-closable="true"
-      :footer-hide="true">
-      <FollowAuditView :rowData="this.selFollowRow" actionType="view"></FollowAuditView>
+    <Modal v-model="showFollowSuggest" :loading="dataSaving" scrollable title="关注人员跟进处置建议" width="1000" :styles="{top: '10px'}"
+      ok-text="提交"
+      :mask-closable="false"
+      @on-ok="handleSaveChange">
+      <FollowSuggest @saveCancel="handleSaveCancel" @saveSuccess="handleSaveSuccess" :saveNow="saveNow" :rowData="this.selFollowRow"></FollowSuggest>
     </Modal>
   </div>
 </template>
@@ -64,12 +65,12 @@
 <script>
 import { getInstEmpList, getInstList } from '@/api/base'
 import { mixinInfo } from './common.js'
-import FollowAuditView from '_c/att-follow/follow-audit-view'
+import FollowSuggest from '_c/att-follow/follow-suggest'
 import { getFocusPersonFollows } from '@/api/emp-manage/follow-attention'
 
 export default {
   components: {
-    FollowAuditView
+    FollowSuggest
   },
   mixins: [ mixinInfo ],
   data () {
@@ -97,8 +98,10 @@ export default {
       dataSet: [],
       deptEmpList: [],
       loadData: false,
+      dataSaving: true,
       showSelectEmp: false,
-      showVerifyFollow: false,
+      showFollowSuggest: false,
+      saveNow: false,
       windowHeight: 0
     }
   },
@@ -126,11 +129,6 @@ export default {
     },
     handleDateChange (val) {
       this.formData.createDate = val
-    },
-    handleCreateAttention () {
-      this.actionType = 'create'
-      this.actionTitle = '关注跟进复核/审批'
-      this.showAttentionAction = true
     },
     handleChgPageSize (size, current) {
       if (current) this.pageData.current = current
@@ -181,8 +179,8 @@ export default {
       })
     },
     handleShowDetail (row, index) {
-      this.showVerifyFollow = true
-      this.selFollowRow = Object.assign({}, row, { _index: index, relatedId: row.id })
+      this.showFollowSuggest = true
+      this.selFollowRow = Object.assign({}, row, { _index: index })
     },
     handleSelectEmp () {
       this.showSelectEmp = true
@@ -198,6 +196,26 @@ export default {
           this.showSelectEmp = false
         }
       }
+    },
+    handleSaveChange () {
+      this.saveNow = true
+      this.$nextTick(() => {
+        this.saveNow = false
+      })
+    },
+    handleSaveCancel () {
+      this.dataSaving = false
+      this.$nextTick(() => {
+        this.dataSaving = true
+      })
+    },
+    handleSaveSuccess (data) {
+      this.dataSet[data.index].disposeAdvise = data.disposeAdvise
+      this.dataSaving = false
+      this.showFollowSuggest = false
+      this.$nextTick(() => {
+        this.dataSaving = true
+      })
     },
     setWindowHeight () {
       this.windowHeight = window.innerHeight - 230
