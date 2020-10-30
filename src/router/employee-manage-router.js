@@ -173,6 +173,16 @@ export default [
             component: () => import('@/view/components/employee-manage/att-follow/sponsor-follow/index.vue')
           },
           {
+            path: 'follow_deal_suggest',
+            name: 'bms_employeemng_focusfollow_disposeadvise',
+            meta: {
+              icon: 'ios-copy-outline',
+              title: '跟进处置建议',
+              hideInMenu: false
+            },
+            component: () => import('@/view/components/employee-manage/att-follow/deal-suggest/index.vue')
+          },
+          {
             path: 'follow_sch_search',
             name: 'bms_employeemng_focusfollow_progressquery',
             meta: {
