@@ -71,7 +71,7 @@
     </div>
 
     <Modal v-model="showFollowDetail"
-      scrollable title="详细信息" width="700"
+      scrollable title="详细信息" width="900"
       :mask-closable="true"
       :footer-hide="true"
       :styles="{top: '10px'}">

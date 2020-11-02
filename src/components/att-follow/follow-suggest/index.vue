@@ -169,8 +169,6 @@ export default {
 
       getFocusPersonFollowInfo(condition).then(res => {
         if (res.data.code === '000000') {
-          this.formData = Object.assign({}, res.data.data)
-          this.files = this.formData.credentialFiles
           condition = {
             id: res.data.data.adjustFlowId
           }
@@ -213,6 +211,7 @@ export default {
             content: '处置建议保存成功！',
             duration: 5
           })
+          console.log(this.formData._index)
           this.$emit('saveSuccess', { index: this.formData._index, disposeAdvise: this.formData.disposeAdvise })
         } else {
           this.$emit('saveCancel')

@@ -28,6 +28,10 @@ export const mixinInfo = {
           title: '下一步计划',
           key: 'nextPlan'
         },
+        {
+          title: '处置建议',
+          key: 'disposeAdvise'
+        },
         // {
         //   title: '经办人',
         //   key: 'creatorName',
