@@ -84,7 +84,7 @@ export default {
         employeeNo: '',
         employeeName: '',
         approveStatus: 1,
-        existAdvise: 1,
+        existAdvise: 0,
         createDate: [],
         deptCode: []
       },
@@ -210,7 +210,7 @@ export default {
       })
     },
     handleSaveSuccess (data) {
-      this.dataSet[data.index].disposeAdvise = data.disposeAdvise
+      this.dataSet.splice(data.index, 1)
       this.dataSaving = false
       this.showFollowSuggest = false
       this.$nextTick(() => {

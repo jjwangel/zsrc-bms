@@ -211,13 +211,11 @@ export default {
             content: '处置建议保存成功！',
             duration: 5
           })
-          console.log(this.formData._index)
           this.$emit('saveSuccess', { index: this.formData._index, disposeAdvise: this.formData.disposeAdvise })
         } else {
           this.$emit('saveCancel')
         }
       }).catch(() => {
-        console.log(3)
         this.$emit('saveCancel')
       })
     },

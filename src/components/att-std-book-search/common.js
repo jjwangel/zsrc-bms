@@ -11,7 +11,7 @@ export const mixinInfo = {
           }
         },
         {
-          title: '登记日期',
+          title: '跟进登记日期',
           key: 'createDate',
           width: 110,
           tooltip: 'true'
@@ -31,7 +31,7 @@ export const mixinInfo = {
         {
           title: '处置建议',
           key: 'disposeAdvise'
-        },
+        }
         // {
         //   title: '经办人',
         //   key: 'creatorName',
@@ -64,12 +64,12 @@ export const mixinInfo = {
         //   key: 'approveComment',
         //   tooltip: 'true'
         // },
-        {
-          title: '审批日期',
-          key: 'approveDate',
-          width: 110,
-          tooltip: 'true'
-        }
+        // {
+        //   title: '审批日期',
+        //   key: 'approveDate',
+        //   width: 110,
+        //   tooltip: 'true'
+        // }
       ]
     }
   }

@@ -47,7 +47,7 @@ router.beforeEach((to, from, next) => {
   // 判断地址是否带token进来
   if (to.query.token) {
     const token = to.query.token
-    console.log(token)
+    // console.log(token)
     verifyToken({ token }).then(res => {
       if (res.data.code === '000000') {
         store.dispatch('getUserInfo').then(user => {

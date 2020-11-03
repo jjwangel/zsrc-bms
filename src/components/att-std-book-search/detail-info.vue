@@ -8,7 +8,7 @@
           </FormItem>
         </Col>
         <Col span="8">
-          <FormItem label="登记日期" prop="createDate" class="info_title">
+          <FormItem label="跟进登记日期" prop="createDate" class="info_title" :label-width="100">
             <Input v-model="formData.createDate" readonly></Input>
           </FormItem>
         </Col>
@@ -23,9 +23,6 @@
       </FormItem>
       <FormItem label="下一步计划" prop="nextPlan" style="margin-left: 10px;" class="info_title">
         <Input type="textarea" show-word-limit :maxlength="500" v-model="formData.nextPlan" :rows="2" :autosize='{ minRows: 3, maxRows: 3 }' readonly></Input>
-      </FormItem>
-      <FormItem label="处置建议" prop="disposeAdvise" style="margin-left: 10px;" class="info_title">
-        <Input type="textarea" show-word-limit :maxlength="500" v-model="formData.disposeAdvise" :rows="2" :autosize='{ minRows: 3, maxRows: 3 }' readonly></Input>
       </FormItem>
     </Form>
 
@@ -55,7 +52,25 @@
       <FormItem label="意见内容" prop="approveComment" style="margin-left: 10px;" class="info_title">
         <Input type="textarea" show-word-limit :maxlength="1000" v-model="formData.approveComment" :rows="2" :autosize='{ minRows: 4, maxRows: 4 }' readonly></Input>
       </FormItem>
+      <FormItem label="处置建议（合规与风险管理部）" prop="disposeAdvise" style="margin-left: 10px;" class="info_title">
+        <Input type="textarea" show-word-limit :maxlength="500" v-model="formData.disposeAdvise" :rows="2" :autosize='{ minRows: 3, maxRows: 3 }' readonly></Input>
+      </FormItem>
     </Form>
+    <Form ref="form4" :show-message="false" :model="formData" :label-width="120">
+      <Row>
+        <Col span="8">
+          <FormItem label="处置建议经办人" prop="creatorName" class="info_title" :label-width="110">
+            <Input v-model="formData.creatorName" readonly></Input>
+          </FormItem>
+        </Col>
+        <Col span="8">
+          <FormItem label="处置建议日期" prop="createDate" class="info_title" :label-width="100">
+            <Input v-model="formData.createDate" readonly></Input>
+          </FormItem>
+        </Col>
+      </Row>
+    </Form>
+
   </div>
 </template>
 
