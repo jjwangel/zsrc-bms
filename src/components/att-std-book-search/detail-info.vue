@@ -56,16 +56,16 @@
         <Input type="textarea" show-word-limit :maxlength="500" v-model="formData.disposeAdvise" :rows="2" :autosize='{ minRows: 3, maxRows: 3 }' readonly></Input>
       </FormItem>
     </Form>
-    <Form ref="form4" :show-message="false" :model="formData" :label-width="120">
+    <Form ref="form4" :show-message="false" :model="formData" :label-width="130">
       <Row>
         <Col span="8">
-          <FormItem label="处置建议经办人" prop="creatorName" class="info_title" :label-width="110">
-            <Input v-model="formData.creatorName" readonly></Input>
+          <FormItem label="处置建议经办人" prop="disposeAdviseName" class="info_title" :label-width="120">
+            <Input v-model="formData.disposeAdviseName" readonly></Input>
           </FormItem>
         </Col>
         <Col span="8">
-          <FormItem label="处置建议日期" prop="createDate" class="info_title" :label-width="100">
-            <Input v-model="formData.createDate" readonly></Input>
+          <FormItem label="处置建议日期" prop="disposeAdviseDate" class="info_title" :label-width="120">
+            <Input v-model="formData.disposeAdviseDate" readonly></Input>
           </FormItem>
         </Col>
       </Row>

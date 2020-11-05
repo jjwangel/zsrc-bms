@@ -156,6 +156,14 @@ export const verifyToken = (data) => {
   })
 }
 
+export const finishFlow = (data) => {
+  return axios.request({
+    url: '/flow/finish',
+    data,
+    method: 'put'
+  })
+}
+
 // /**
 //  * @description 下载上传文件
 //  * @param {*} formData
@@ -185,6 +193,7 @@ export default {
   resetLoginPwd,
   getEmployeesDetail,
   getUserOperationAuth,
-  verifyToken
+  verifyToken,
+  finishFlow
   // getDownloadFile
 }

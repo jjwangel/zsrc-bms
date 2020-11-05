@@ -77,7 +77,7 @@
 
     <Form ref="form3" :rules="rules" :show-message="false" :model="formData" label-position="top">
       <FormItem label="处置建议" prop="disposeAdvise" style="margin-left: 10px;" class="info_title">
-        <Input type="textarea" show-word-limit :maxlength="500" v-model="formData.disposeAdvise" :rows="2" :autosize='{ minRows: 4, maxRows: 4 }'></Input>
+        <Input type="textarea" show-word-limit :readonly="this.actionType === 'view'" :maxlength="500" v-model="formData.disposeAdvise" :rows="2" :autosize='{ minRows: 4, maxRows: 4 }'></Input>
       </FormItem>
     </Form>
     <Divider style="margin-top: 10px;margin-bottom: 10px;" />
@@ -127,6 +127,7 @@ import { modifyFollowSuggest, getFocusPersonFollowInfo, getFocusPersonAdjustFlow
 
 export default {
   props: [
+    'actionType',
     'rowData',
     'saveNow'
   ],
@@ -173,9 +174,11 @@ export default {
             id: res.data.data.adjustFlowId
           }
 
+          this.formData = Object.assign({}, this.formData, res.data.data, { createDate: res.data.data.createTime.split(' ')[0], approveDate: res.data.data.approveTime.split(' ')[0] })
+
           getFocusPersonAdjustFlowDetail(condition).then(res => {
             if (res.data.code === '000000') {
-              this.formData = Object.assign({}, this.formData, res.data.data, { createDate: this.rowData.createDate, approveDate: this.rowData.approveDate })
+              this.formData = Object.assign({}, this.formData, res.data.data)
             }
           }).catch(() => {
 

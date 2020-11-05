@@ -25,6 +25,12 @@
       @on-ok="handleFollowSaveChange">
       <FollowAuditView @saveCancel="handleFollowSaveCancel" @saveSuccess="handleFollowSaveSuccess" :saveNow="saveFollowNow" :rowData="this.selFollowRow" :actionType="this.flag === 1 ? 'create' : 'view'"></FollowAuditView>
     </Modal>
+
+    <Modal v-model="showFollowSuggest" scrollable title="关注人员跟进处置建议" width="1000" :styles="{top: '10px'}"
+      :mask-closable="true"
+      :footer-hide="true">
+      <FollowSuggest :rowData="this.selFollowSuggestRow" actionType="view"></FollowSuggest>
+    </Modal>
   </div>
 </template>
 
@@ -35,10 +41,14 @@ import '@/assets/bms_icons/iconfont.css'
 import { getFlowsList } from '@/api/emp-manage/process-manage'
 import AttentionAuditView from '_c/chg-attention/attention-audit-view'
 import FollowAuditView from '_c/att-follow/follow-audit-view'
+import FollowSuggest from '_c/att-follow/follow-suggest'
+import { finishFlow } from '@/api/base'
+
 export default {
   components: {
     AttentionAuditView,
-    FollowAuditView
+    FollowAuditView,
+    FollowSuggest
   },
   mixins: [mixinInfo],
   props: [
@@ -51,8 +61,10 @@ export default {
       loadData: false,
       selRow: {},
       selFollowRow: {},
+      selFollowSuggestRow: {},
       showVerifyAttention: false,
       showVerifyFollow: false,
+      showFollowSuggest: false,
       dataSaving: true,
       saveNow: false,
       saveFollowNow: false
@@ -101,6 +113,23 @@ export default {
         case 2:
           this.showVerifyFollow = true
           this.selFollowRow = Object.assign({}, row, { _index: index })
+          break
+        case 3:
+          this.showFollowSuggest = true
+          this.selFollowSuggestRow = Object.assign({}, { id: row.relatedId, _index: index })
+
+          const condition = {
+            id: row.id
+          }
+          finishFlow(condition).then(res => {
+            if (res.data.code === '000000') {
+              this.handleSearchRd()
+            } else {
+              console.log(res.data.message)
+            }
+          }).catch(() => {
+
+          })
           break
       }
     },
