@@ -11,16 +11,6 @@ export default [
     component: Main,
     children: [
       {
-        path: 'model_para',
-        name: 'model_para',
-        meta: {
-          icon: 'md-analytics',
-          title: '参数维护',
-          hideInMenu: false
-        },
-        component: () => import('@/view/components/model-manage/model-para/index.vue')
-      },
-      {
         path: 'model_search',
         name: 'bms_modelmng_dataquery',
         meta: {
@@ -29,6 +19,16 @@ export default [
           hideInMenu: false
         },
         component: () => import('@/view/components/model-manage/model-search/index.vue')
+      },
+      {
+        path: 'model_para_mng',
+        name: 'bms_modelmng_infomng',
+        meta: {
+          icon: 'md-cube',
+          title: '模型信息管理',
+          hideInMenu: false
+        },
+        component: () => import('@/view/components/model-manage/model-para-mng/index.vue')
       },
       {
         path: 'model2',
