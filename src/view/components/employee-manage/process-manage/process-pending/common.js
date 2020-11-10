@@ -22,6 +22,8 @@ export const mixinInfo = {
                 break
               case 2: text = '关注人员情况跟进登记'
                 break
+              case 3: text = '关注人员处置建议'
+                break
             }
 
             return h('p', text)

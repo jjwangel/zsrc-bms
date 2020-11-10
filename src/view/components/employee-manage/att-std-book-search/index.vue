@@ -60,7 +60,7 @@
       </Drawer>
     </Card>
 
-    <Modal v-model="showFocusBookRecord" scrollable title="个人关注台账" width="1000" :styles="{top: '10px'}"
+    <Modal v-model="showFocusBookRecord" scrollable title="个人关注台账" width="1050" :styles="{top: '10px'}"
       :mask-closable="true"
       :footer-hide="true">
       <AttStdBookContent :rowData="this.selRow"></AttStdBookContent>

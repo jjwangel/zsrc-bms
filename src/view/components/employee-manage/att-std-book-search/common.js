@@ -94,6 +94,11 @@ export const mixinInfo = {
           title: '下一步计划',
           key: 'nextPlan',
           tooltip: 'true'
+        },
+        {
+          title: '处置建议',
+          key: 'disposeAdvise',
+          tooltip: 'true'
         }
       ]
     }

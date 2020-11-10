@@ -7,6 +7,7 @@
             <Select v-model="formData.type" clearable style="width:200px" :disable="this.loadData">
               <Option :value="1">关注人员调整</Option>
               <Option :value="2">关注人员情况跟进登记</Option>
+              <Option :value="3">关注人员处置建议</Option>
             </Select>
           </FormItem>
           <FormItem label="接收时间" prop="recDate" class="info_title" :label-width="80">
@@ -45,6 +46,12 @@
       :footer-hide="true">
       <FollowAuditView :rowData="this.selFollowRow" :actionType="this.actionType"></FollowAuditView>
     </Modal>
+
+    <Modal v-model="showFollowSuggest" scrollable title="关注人员跟进处置建议" width="1000" :styles="{top: '10px'}"
+      :mask-closable="true"
+      :footer-hide="true">
+      <FollowSuggest :rowData="this.selFollowSuggestRow" actionType="view"></FollowSuggest>
+    </Modal>
   </div>
 </template>
 
@@ -53,11 +60,13 @@ import { mixinInfo } from './common.js'
 import { getFlowsList } from '@/api/emp-manage/process-manage'
 import AttentionAuditView from '_c/chg-attention/attention-audit-view'
 import FollowAuditView from '_c/att-follow/follow-audit-view'
+import FollowSuggest from '_c/att-follow/follow-suggest'
 
 export default {
   components: {
     AttentionAuditView,
-    FollowAuditView
+    FollowAuditView,
+    FollowSuggest
   },
   mixins: [ mixinInfo ],
   data () {
@@ -79,9 +88,11 @@ export default {
       dataSet: [],
       selRow: {},
       selFollowRow: {},
+      selFollowSuggestRow: {},
       loadData: false,
       showVerifyAttention: false,
       showVerifyFollow: false,
+      showFollowSuggest: false,
       actionType: '', // view || create || modify
       windowHeight: 0
     }
@@ -103,6 +114,10 @@ export default {
         case 2:
           this.showVerifyFollow = true
           this.selFollowRow = Object.assign({}, row, { _index: index })
+          break
+        case 3:
+          this.showFollowSuggest = true
+          this.selFollowSuggestRow = Object.assign({}, { id: row.relatedId, _index: index })
           break
       }
     },

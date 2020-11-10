@@ -29,7 +29,7 @@ export const mixinInfo = {
           key: 'nextPlan'
         },
         {
-          title: '处置建议',
+          title: '处置建议（合规与风险管理部）',
           key: 'disposeAdvise'
         }
         // {
