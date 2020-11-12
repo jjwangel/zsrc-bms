@@ -28,10 +28,7 @@
         :height="windowHeight"
         @on-row-dblclick="handelShowModelInfo">
         <template slot-scope="{ row, index }" slot="action">
-          <ButtonGroup>
-            <Button @click="handleModifyModelInfo (row, index)" type="success" size="small">信息编辑</Button>
-            <Button @click="handleModifyModelPara (row, index)" type="primary" size="small">参数设置</Button>
-          </ButtonGroup>
+          <Button @click="handelModifyModelInfo (row, index)" type="primary" size="small">信息编辑</Button>
         </template>
         <div slot="footer" style="width:100%;text-align: center">
           <Page :total="pageData.total" :current.sync="pageData.current"
@@ -41,14 +38,26 @@
         </div>
       </Table>
     </Card>
+
+    <Modal v-model="showModelInfo" :loading="dataSaving" scrollable title="模型信息" width="1000" :styles="{top: '10px'}"
+      ok-text="提交"
+      :mask-closable="this.actionType === 'view'"
+      :footer-hide="this.actionType === 'view'"
+      @on-ok="handleSaveChange">
+      <ModelParaMng @saveCancel="handleSaveCancel" @saveSuccess="handleSaveSuccess" :saveNow="saveNow" :rowData="this.selModelRow" :actionType="this.actionType"></ModelParaMng>
+    </Modal>
   </div>
 </template>
 
 <script>
 import { getModelBaseInfoList } from '@/api/model-manage/model-search'
 import { mixinInfo } from './common.js'
+import ModelParaMng from '_c/model-manage/para-manage'
 
 export default {
+  components: {
+    ModelParaMng
+  },
   mixins: [mixinInfo],
   data () {
     return {
@@ -71,8 +80,13 @@ export default {
         current: 1,
         size: 10
       },
+      showModelInfo: false,
+      dataSaving: true,
       searching: false,
+      selModelRow: {},
       data_model_main: [],
+      saveNow: false,
+      actionType: '', // view || create || modify
       windowHeight: 0
     }
   },
@@ -135,17 +149,34 @@ export default {
       this.formData.ctlDis = ''
       this.formData.riskDis = ''
     },
+    handleSaveChange () {
+      this.saveNow = true
+      this.$nextTick(() => {
+        this.saveNow = false
+      })
+    },
+    handleSaveCancel () {
+      this.dataSaving = false
+      this.$nextTick(() => {
+        this.dataSaving = true
+      })
+    },
+    handleSaveSuccess (data) {
+      this.dataSaving = false
+      this.showFollowSuggest = false
+      this.$nextTick(() => {
+        this.dataSaving = true
+      })
+    },
     handelShowModelInfo (row, index) {
-      console.log(row)
-      console.log(index)
+      this.actionType = 'view'
+      this.selModelRow = Object.assign({}, row, { _index: index })
+      this.showModelInfo = true
     },
-    handleModifyModelInfo (row, index) {
-      console.log(row)
-      console.log(index)
-    },
-    handleModifyModelPara (row, index) {
-      console.log(row)
-      console.log(index)
+    handelModifyModelInfo (row, index) {
+      this.actionType = 'modify'
+      this.selModelRow = Object.assign({}, row, { _index: index })
+      this.showModelInfo = true
     },
     handleSelectModelChg (item) {
       if (item) {

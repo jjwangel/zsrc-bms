@@ -22,14 +22,14 @@ export const mixinInfo = {
           tooltip: true
         },
         {
-          title: '模型启用日期',
-          key: 'freq',
+          title: '模型创建日期',
+          key: 'createTime',
           tooltip: true
         },
         {
           title: '操作',
           slot: 'action',
-          width: 200,
+          width: 110,
           align: 'center'
         }
       ]
