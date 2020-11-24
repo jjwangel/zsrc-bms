@@ -56,6 +56,27 @@
           <CoerceInfo :load-detail="this.load_rpt_detail" :selOption="this.sel_option" :rptDate="this.report_date" :action="this.action"></CoerceInfo>
         </TabPane>
       </Tabs>
+
+      <Table size="small" :loading="this.refreshing" :stripe="true" border ref="filelist" :columns="col_file" :data="data_file" style="margin-top: 10px;">
+        <template slot-scope="{ row, index }" slot="action">
+          <Button type="success" :to="base_url + 'empcredstau/download?id=' + row.id" target="_blank" size="small">下载</Button>
+        </template>
+      </Table>
+
+      <div style="margin: 10px; text-align:center;">
+        <Upload :action="this.file_upload_url" ref="upCredit"
+          :with-credentials="true"
+          :data="uploadData"
+          :on-format-error="handleFileFormatErr"
+          :on-success="handleUploadSuccess"
+          :show-upload-list="false"
+          :before-upload="handleBefUpload"
+          :on-error="handleUploadErr"
+          :format="['rar','zip','pdf']">
+          <Button size="small" type="success" icon="md-cloud-upload" :disabled="this.dataSaving || this.action === 'view'">上传征信报告</Button>
+        </Upload>
+      </div>
+
     </Card>
 
     <Modal v-model="show_create_rpt" :loading="data_saving" scrollable  width="300" ok-text="确定" :mask-closable="false"
@@ -74,6 +95,7 @@
 <script>
 import { getEmpCreditByManualList, delCreditByManual,
   addCreditByManual, copyCreditByManual } from '@/api/self-info/info-fill'
+import { getCreditFile } from '@/api/emp-manage/credit-verify'
 import { getFormatDate, getStartToLastDate, formatSelectOption } from '@/libs/j-tools.js'
 import { mapGetters } from 'vuex'
 import { getSelectOptionData } from '@/api/base'
@@ -81,8 +103,9 @@ import LiabilitiesInfo from './components/liabilities-info'
 import BadnessRecord from './components/badness-record'
 import GuaranteeInfo from './components/guarantee-info'
 import CoerceInfo from './components/coerce-info'
+import config from '@/config'
 
-import { col_credit } from './common.js'
+import { col_credit, col_file } from './common.js'
 
 export default {
   props: ['loadData'],
@@ -108,15 +131,25 @@ export default {
           return date && date.valueOf() > Date.now()
         }
       },
+      uploadData: {
+        employeeNo: '',
+        credDate: ''
+      },
       data_saving: true,
       sel_option: {},
       report_date: '', // 保存详细报告中的报告日期
+      refreshing: false,
+      file_upload_url: '',
+      base_url: '',
       searching: false,
       load_rpt_detail: false,
       show_credit_detail: false,
       show_create_rpt: false,
+      dataSaving: false,
       col_credit,
-      data_credit: []
+      data_credit: [],
+      col_file,
+      data_file: []
     }
   },
   methods: {
@@ -172,7 +205,7 @@ export default {
             this.data_saving = false
             this.show_create_rpt = false
             this.action = 'modify'
-            this.searchRptDetail(this.formRpt.new_rpt_date)
+            this.searchRptDetail({ credDate: this.formRpt.new_rpt_date })
             this.$nextTick(() => {
               this.data_saving = true
             })
@@ -220,7 +253,7 @@ export default {
             this.data_saving = false
             this.show_create_rpt = false
             this.action = 'modify'
-            this.searchRptDetail(this.formRpt.new_rpt_date)
+            this.searchRptDetail({ credDate: this.formRpt.new_rpt_date })
             this.$nextTick(() => {
               this.data_saving = true
             })
@@ -308,17 +341,36 @@ export default {
     },
     handleModifyDetail (row, index) {
       this.action = 'modify'
-      this.searchRptDetail(row.credDate)
+      this.searchRptDetail(row)
     },
     handleShowDetail (row, index) {
       this.action = 'view'
-      this.searchRptDetail(row.credDate)
+      this.searchRptDetail(row)
     },
-    searchRptDetail (rptDate) {
-      this.report_date = rptDate
+    searchRptDetail (row) {
+      this.uploadData.employeeNo = row.employeeNo
+      this.uploadData.credDate = row.credDate
+      this.report_date = row.credDate
       this.load_rpt_detail = true
       this.show_credit_detail = true
       this.forceTab = 'liabilities_info'
+      if (this.data_file.length > 0) this.data_file.splice(0, 1)
+      getCreditFile({ id: row.id }).then(res => {
+        if (res.data.code === '000000') {
+          const data = res.data.data
+          if (data.fileName && data.fileName !== '') {
+            this.data_file.push({
+              id: data.id,
+              fileName: data.fileName,
+              impName: data.loadName,
+              loadDatetime: data.loadDatetime
+            })
+          }
+        }
+      }).catch(() => {
+
+      })
+
       this.$nextTick(function () {
         this.load_rpt_detail = false
       })
@@ -352,10 +404,71 @@ export default {
         this.data_credit = []
         this.searching = false
       })
+    },
+    handleBefUpload (file) {
+      this.$Modal.confirm({
+        title: '上传征信文件（请再次检查征信报告，确认为员工本人的征信后开始上传）',
+        content: `确定上传文件：${file.name} 吗？`,
+        width: 650,
+        onOk: () => {
+          this.dataSaving = true
+          this.$refs.upCredit.post(file)
+        }
+      })
+      return false
+    },
+    handleFileFormatErr (file) {
+      this.$Notice.warning({
+        title: '文格式错误',
+        desc: file.name + ' 不是 rar、zip、pdf 等格式'
+      })
+      this.dataSaving = false
+    },
+    handleUploadSuccess (res, file) {
+      if (res.code === '000000') {
+        if (this.data_file.length > 0) this.data_file.splice(0, 1)
+        this.data_file.push({
+          id: res.data.id,
+          fileName: res.data.fileName,
+          impName: res.data.loadName,
+          loadDatetime: res.data.loadDatetime
+        })
+
+        this.dataSaving = false
+        this.$Message.success({
+          content: '征信报告审核成功！',
+          duration: 3
+        })
+      } else {
+        this.dataSaving = false
+        if (res.code === '003101') {
+          this.$Message.warning({
+            content: '登录超时，请重新登录',
+            duration: 5
+          })
+          setToken('')
+          this.$router.push({
+            name: 'login'
+          })
+        } else {
+          this.$Message.error({
+            content: `上传征信报告失败：${res.message}(${res.code})`,
+            duration: 3
+          })
+        }
+      }
+    },
+    handleUploadErr () {
+      this.$Message.error({
+        content: '上传征信报告失败！',
+        duration: 3
+      })
     }
   },
   mounted () {
     this.formRpt.rpt_date = getFormatDate('yyyy-MM-dd')
+    this.base_url = (process.env.NODE_ENV === 'production' ? config.baseUrl.pro : config.baseUrl.dev)
+    this.file_upload_url = this.base_url + config.fileUploadUrl.creditUpload
   },
   watch: {
     loadData (val) {

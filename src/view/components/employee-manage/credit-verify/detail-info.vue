@@ -7,6 +7,7 @@
         <span style='font-weight:bold;color: #464c5b'>{{ this.formData.employeeNo }}</span>
         <Divider type="vertical" />
         <span style='font-weight:bold;color: #464c5b'>{{ this.formData.name }}</span>
+        <Button style="margin-left: 10px" type="primary" icon="md-remove-circle" :disabled="!this.disableUnaudit || this.data_file.length === 0" @click='handleAuditCredit'>审核通过 </Button>
         <Button style="margin-left: 10px" type="error" icon="md-remove-circle" :disabled="this.disableUnaudit" @click='handleUnauditCredit'>撤销审核 </Button>
       </div>
 
@@ -59,7 +60,7 @@
 
 <script>
 import { col_debt, col_badrec, col_assu, col_force, col_file } from './common.js'
-import { getEmpCreditDetailInfo, getCreditFile, unauditCredit } from '@/api/emp-manage/credit-verify'
+import { getEmpCreditDetailInfo, getCreditFile, unauditCredit, auditCredit } from '@/api/emp-manage/credit-verify'
 import { setToken } from '@/libs/util'
 import config from '@/config'
 export default {
@@ -109,6 +110,15 @@ export default {
         }
       })
     },
+    handleAuditCredit () {
+      this.$Modal.confirm({
+        title: '审核通过征信报告',
+        content: `确定通过吗？`,
+        onOk: () => {
+          this.doAuditCredit()
+        }
+      })
+    },
     doUnauditCredit () {
       if (this.dataSaving) return
       this.disUnaudit = false
@@ -149,6 +159,28 @@ export default {
         this.dataSaving = false
       })
     },
+    doAuditCredit () {
+      if (this.dataSaving) return
+      this.dataSaving = true
+
+      const condition = {
+        id: this.formData.id
+      }
+
+      auditCredit(condition).then(res => {
+        if (res.data.code === '000000') {
+          this.formData.credStatu = 2
+          this.$emit('verifySuccess', this.formData._index)
+          this.dataSaving = false
+          this.$Message.success({
+            content: '征信报告审核成功！',
+            duration: 3
+          })
+        }
+      }).catch(() => {
+        this.dataSaving = false
+      })
+    },
     handleRefreshData () {
       this.refreshing = true
 
@@ -178,23 +210,21 @@ export default {
         }
 
         this.data_file = []
-        if (this.formData.credStatu === 2) {
-          getCreditFile({ id: this.formData.id }).then(res => {
-            if (res.data.code === '000000') {
-              const data = res.data.data
-              if (data.fileName && data.fileName !== '') {
-                this.data_file.push({
-                  id: data.id,
-                  fileName: data.fileName,
-                  impName: data.loadName,
-                  loadDatetime: data.loadDatetime
-                })
-              }
+        getCreditFile({ id: this.formData.id }).then(res => {
+          if (res.data.code === '000000') {
+            const data = res.data.data
+            if (data.fileName && data.fileName !== '') {
+              this.data_file.push({
+                id: data.id,
+                fileName: data.fileName,
+                impName: data.loadName,
+                loadDatetime: data.loadDatetime
+              })
             }
-          }).catch(() => {
+          }
+        }).catch(() => {
 
-          })
-        }
+        })
 
         this.refreshing = false
       }).catch(error => {
@@ -271,7 +301,7 @@ export default {
 
   mounted () {
     this.base_url = (process.env.NODE_ENV === 'production' ? config.baseUrl.pro : config.baseUrl.dev)
-    this.file_upload_url = this.base_url + config.fileUploadUrl.creditImport
+    this.file_upload_url = this.base_url + config.fileUploadUrl.creditUploadAndAudit
   },
   watch: {
     rowData (val) {

@@ -37,3 +37,32 @@ export const col_credit = [
     align: 'center'
   }
 ]
+
+export const col_file = [
+  {
+    type: 'index',
+    width: 60,
+    align: 'center'
+  },
+  {
+    title: '附件名称',
+    key: 'fileName',
+    tooltip: true
+  },
+  {
+    title: '上传员工',
+    key: 'impName',
+    tooltip: true
+  },
+  {
+    title: '上传日期',
+    key: 'loadDatetime',
+    tooltip: true
+  },
+  {
+    title: '操作',
+    slot: 'action',
+    width: 100,
+    align: 'center'
+  }
+]
