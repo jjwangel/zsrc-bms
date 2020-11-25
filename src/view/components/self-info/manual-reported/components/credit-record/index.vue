@@ -74,6 +74,7 @@
           :on-error="handleUploadErr"
           :format="['rar','zip','pdf']">
           <Button size="small" type="success" icon="md-cloud-upload" :disabled="this.dataSaving || this.action === 'view'">上传征信报告</Button>
+          <p>（只能上传rar、zip、pdf 等文件格式）</p>
         </Upload>
       </div>
 
@@ -205,7 +206,7 @@ export default {
             this.data_saving = false
             this.show_create_rpt = false
             this.action = 'modify'
-            this.searchRptDetail({ credDate: this.formRpt.new_rpt_date })
+            this.searchRptDetail({ id: res.data.data.id, employeeNo: this.employeeNo(), credDate: this.formRpt.new_rpt_date })
             this.$nextTick(() => {
               this.data_saving = true
             })
@@ -253,7 +254,7 @@ export default {
             this.data_saving = false
             this.show_create_rpt = false
             this.action = 'modify'
-            this.searchRptDetail({ credDate: this.formRpt.new_rpt_date })
+            this.searchRptDetail({ id: res.data.data.id, employeeNo: this.employeeNo(), credDate: this.formRpt.new_rpt_date })
             this.$nextTick(() => {
               this.data_saving = true
             })
@@ -436,7 +437,7 @@ export default {
 
         this.dataSaving = false
         this.$Message.success({
-          content: '征信报告审核成功！',
+          content: '征信报告上传成功！',
           duration: 3
         })
       } else {
