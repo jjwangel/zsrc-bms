@@ -40,25 +40,20 @@
       </Table>
 
       <div style="margin: 20px; text-align:center;">
-        <Row>
-          <Col span="2" offset=10>
-            <Button style="margin-left: 10px" type="primary" icon="md-checkbox-outline" :disabled="!this.disableUnaudit || this.data_file.length === 0" @click='handleAuditCredit'>审核通过 </Button>
-          </Col>
-          <Col span="2">
-            <Upload :action="this.file_upload_url" ref="upCredit"
-            :with-credentials="true"
-            :data="uploadData"
-            :on-format-error="handleFileFormatErr"
-            :on-success="handleUploadSuccess"
-            :show-upload-list="false"
-            :before-upload="handleBefUpload"
-            :on-error="handleUploadErr"
-            :format="['rar','zip','pdf']">
+        <Upload :action="this.file_upload_url" ref="upCredit"
+          :with-credentials="true"
+          :data="uploadData"
+          :on-format-error="handleFileFormatErr"
+          :on-success="handleUploadSuccess"
+          :show-upload-list="false"
+          :before-upload="handleBefUpload"
+          :on-error="handleUploadErr"
+          :format="['rar','zip','pdf']">
+          <ButtonGroup>
+            <Button style="margin-left: 10px" type="success" icon="md-checkbox-outline" :disabled="!this.disableUnaudit || this.data_file.length === 0" @click='handleAuditCredit'>审核通过 </Button>
             <Button type="primary" icon="md-cloud-upload" :disabled="this.dataSaving || this.disableAudit">审核通过并上传征信报告</Button>
-          </Upload>
-          </Col>
-        </Row>
-
+          </ButtonGroup>
+        </Upload>
       </div>
 
     </Card>
