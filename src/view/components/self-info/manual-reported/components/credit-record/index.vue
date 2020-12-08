@@ -196,6 +196,7 @@ export default {
             })
             this.data_credit.push({
               id: res.data.data.id,
+              employeeNo: this.employeeNo(),
               credDate: this.formRpt.new_rpt_date,
               debtBal: 0,
               overdue: '否',
