@@ -50,7 +50,7 @@
           </Row>
           <Row :gutter="20">
             <Col span="12">
-              <!-- <FormItem label="担保贷款到期日期" prop="loanEndDate" class="info_title">
+              <!-- <FormItem label="担保贷款发放日期" prop="loanEndDate" class="info_title">
                 <DatePicker type="date" :editable="false" style="width:100%;" :value="formData.loanEndDate" @on-change="handleEndChange" :clearable="false" :disabled="this.operate==='view'"></DatePicker>
               </FormItem> -->
             </Col>

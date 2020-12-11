@@ -98,7 +98,7 @@ export const col_assu = [
     tooltip: true
   },
   // {
-  //   title: '担保贷款到期日期',
+  //   title: '担保贷款发放日期',
   //   key: 'loanEndDate',
   //   tooltip: true
   // },
