@@ -163,7 +163,7 @@ export default {
     },
     handleSaveSuccess (data) {
       this.dataSaving = false
-      this.showFollowSuggest = false
+      this.showModelInfo = false
       this.$nextTick(() => {
         this.dataSaving = true
       })
